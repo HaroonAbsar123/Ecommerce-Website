@@ -1,0 +1,14 @@
+.mainContainer{
+    height: max-content;
+    flex: 1;
+    background: linear-gradient(to left, rgb(255, 244, 236), bisque);
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    padding-top: 6rem;
+}
+
+.secondContainer{
+    padding-left: 2rem;
+}
+

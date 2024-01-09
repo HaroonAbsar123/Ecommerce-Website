@@ -1,0 +1,25 @@
+.mainContainer{
+    background-image: url("../../../Assets/Home3.png");
+    height: 25rem;
+    width: 100%;
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    overflow: hidden;
+    margin-top: 3rem;
+
+}
+
+
+.textContainer{
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    font-size: 2rem;
+    color: #ffffff;
+
+}

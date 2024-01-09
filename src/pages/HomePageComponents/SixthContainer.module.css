@@ -1,0 +1,28 @@
+
+
+.mainContainer{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 6rem;
+
+}
+
+.secondContainer{
+        flex: 1;
+        min-width: 22%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin: 1rem;
+        justify-content: space-around;
+        
+}
+
+
+.title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }

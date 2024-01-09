@@ -1,0 +1,35 @@
+.home{
+    height: 100rem;
+    width: 100%;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+
+.mainImage{
+    height: 100vh;
+    min-height: 35rem;
+    max-height: 70rem;
+    width: 100%;
+    background: linear-gradient(to left, rgb(255, 244, 236), bisque);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex: 1;
+    padding-top: 3rem;
+}
+
+.mainImageComponent{
+    flex: 1;
+}
+
+.mainProductImage{
+    height: auto;
+    width: 80%;
+}
+
+.mainImageText{
+    padding: 5rem
+}
+
+

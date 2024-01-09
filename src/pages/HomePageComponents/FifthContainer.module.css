@@ -1,0 +1,151 @@
+.mainContainer{
+    background-color: rgb(231, 244, 255);
+    flex: 1;
+    height: max-content;
+    
+}
+
+
+.innerContainer{
+    padding: 5rem;
+    flex: 1;
+    text-align: center;
+}
+
+.heading{
+    margin-top: 0rem;
+    font-size: 4rem;
+}
+
+
+.columnsContainer {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Creates 3 equal-width columns */
+    grid-gap: 20px; /* Adds a gap between columns */
+  }
+  
+  .column {
+    height: 30rem;
+    overflow: hidden;
+  }
+
+  .imageFirst {
+    background-image: url("../../Assets/Home6.png");
+    height: 100%;
+    width: 100%;
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    transform: translateY(-2rem);
+    position: relative; /* Add position relative to create stacking context for pseudo-element */
+  }
+  
+  .imageFirst::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Dark tint color with transparency */
+    opacity: 0; /* Initially transparent */
+    transition: opacity 0.3s ease-in-out; /* Add transition property for smooth effect */
+  }
+  
+  .imageFirst:hover::before {
+    opacity: 1; /* Show the dark tint on hover */
+  }
+  
+  .imageFirstText {
+    position: absolute;
+    top: 50%;
+    bottom: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 90%;
+  }
+
+  .imageFirstSecond {
+    position: absolute;
+    top: 50%;
+    bottom: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 90%;
+  }
+
+
+
+
+  .imageSecond {
+    background-image: url("../../Assets/Home5.png");
+    height: 100%;
+    width: 100%;
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    transform: translateY(2rem);
+    position: relative; /* Add position relative to create stacking context for pseudo-element */
+  }
+  
+  .imageSecond::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Dark tint color with transparency */
+    opacity: 0; /* Initially transparent */
+    transition: opacity 0.3s ease-in-out; /* Add transition property for smooth effect */
+  }
+  
+  .imageSecond:hover::before {
+    opacity: 1; /* Show the dark tint on hover */
+  }
+
+
+
+  .imageThird {
+    background-image: url("../../Assets/Home6.png");
+    height: 100%;
+    width: 100%;
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    transform: translateY(-2rem);
+    position: relative; /* Add position relative to create stacking context for pseudo-element */
+  }
+  
+  .imageThird::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Dark tint color with transparency */
+    opacity: 0; /* Initially transparent */
+    transition: opacity 0.3s ease-in-out; /* Add transition property for smooth effect */
+  }
+  
+  .imageThird:hover::before {
+    opacity: 1; /* Show the dark tint on hover */
+  }

@@ -1,0 +1,36 @@
+.mainContainer{
+    flex: 1;
+    text-align: center;
+    padding-bottom: 4rem;
+}
+
+.innerContainer{
+    padding: 3rem;
+    flex: 1;
+}
+
+.heading{
+    font-size: 3rem;
+}
+
+
+.secondContainer{
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    flex: 1;
+    padding: 1rem
+}
+
+
+.productsContainer {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Creates 4 equal-width columns */
+    align-items: center; /* Centers the grid vertically */
+    justify-content: center; /* Centers the grid horizontally */
+    flex: 1;
+  }
+  
+  
+
+

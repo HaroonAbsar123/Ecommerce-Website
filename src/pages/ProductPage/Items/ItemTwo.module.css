@@ -1,0 +1,19 @@
+.container {
+    display: table;
+    width: 100%;
+  }
+  
+  .row {
+    display: table-row;
+  }
+  
+  .cell {
+    display: table-cell;
+    padding: 1rem;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .cell:first-child {
+    border-top: 1px solid #ccc;
+  }
+  

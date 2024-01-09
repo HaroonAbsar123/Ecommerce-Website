@@ -1,0 +1,70 @@
+
+.mainContainer{
+    background-color: white;
+    width: 65%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    height: 100%;
+    
+}
+
+.secondContainer{
+    padding: 3rem;
+}
+
+
+
+.cartItem{
+    /* border-bottom: 1px solid #ccc; */
+    height: 7rem;
+    padding-top: 1rem;
+}
+
+.imageContainer{
+    height: 6rem;
+    width: 6rem;
+    overflow: hidden;
+}
+
+
+
+
+
+
+.inputContainer{
+    margin-top: 3rem;
+    height: 3rem;
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex: 1;
+    overflow: hidden;
+    border: 1px solid black
+  }
+
+.input{
+    flex: 3;
+    height: 100%;
+    width: 100%;
+    border: none;
+    padding: 0.5rem
+    
+  }
+
+  .input:focus {
+    outline: none; /* Add outline property to remove the default focus outline */
+  }
+
+  .button {
+    flex: 2;
+    background-color: black;
+    height: 100%;
+    width: 100%;
+    border: none;
+    color: white;
+    transition: transform 0.3s ease-in-out; /* Add transition property for smooth effect */
+  }
+  
+  .button:hover {
+    transform: translateX(3px); /* Translate the button text by 3px to the right on hover */
+  }

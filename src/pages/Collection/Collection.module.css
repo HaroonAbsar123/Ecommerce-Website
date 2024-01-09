@@ -1,0 +1,32 @@
+.home{
+    height: max-content;
+    width: 100%;
+    user-select: none;
+    -webkit-user-select: none;
+    
+}
+.content{
+
+    padding: 5rem;
+    
+}
+
+.mainContentBox{
+}
+
+.draggableComponent {
+    /* Define the styles for the draggable component */
+    border: 2px solid #ccc;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .dragging {
+    /* Define the styles for the component when being dragged */
+    opacity: 0.5;
+  }
+  
+  .active {
+    /* Define the styles for the component when it is a valid drop target */
+    background-color: lightblue;
+  }

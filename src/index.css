@@ -1,13 +1,122 @@
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap");
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  flex: 1;
+  max-width: 2200px;
+  min-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: "Raleway", serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: linear-gradient(to left, rgb(255, 255, 255), rgb(255, 255, 255));
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+
+
+
+.mainButton {
+
+  border: none;
+  padding: 1rem;
+  min-width: 10rem;
+  min-height: 2rem;
+  font-size: large;
+  color: rgb(0, 0, 0);
+  background-color: rgb(255, 255, 255);
+  cursor: pointer;
 }
+
+.mainButton:hover {
+  background-color: black;
+  color: white;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+
+.secondaryButton {
+
+  border: none;
+  padding: 1rem;
+  min-width: 10rem;
+  min-height: 2rem;
+  font-size: large;
+  color: black;
+  background-color: rgb(255, 255, 255);
+  cursor: pointer;
+  border: none;
+}
+
+.secondaryButton:hover {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out;
+}
+
+
+.para {
+  font-size: 1rem;
+  color: #505050;
+}
+
+
+.title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.navButton{
+  height: 3rem;
+  width: 100%;
+  border: none;
+  font-size: 1.2rem;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.navButton:hover{
+  border: none;
+  cursor: pointer;
+}
+
+.navButton:focus{
+  border: none;
+  cursor: pointer;
+}
+
+
+.navLinkUnderline {
+  position: relative;
+  display: inline-block;
+  color: #505050;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.navLinkUnderline::after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #505050; /* Replace with your desired color */
+  transform: scaleX(0); /* Start with no underline */
+  transform-origin: left;
+  transition: transform 0.3s ease-in-out; /* Add smooth transition */
+}
+
+.navLinkUnderline:hover::after {
+  transform: scaleX(1); /* Expand the underline to full width on hover */
+}
+
+
+
+.nolinkstyle {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+

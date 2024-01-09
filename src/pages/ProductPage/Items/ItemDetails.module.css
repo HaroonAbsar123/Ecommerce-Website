@@ -1,0 +1,247 @@
+.mainContainer{
+    flex: 1;
+    width: 100%;
+}
+
+.secondContainer{
+    padding-right: 2rem;
+}
+
+.itemDetails {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 1;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    margin-top: 0px;
+  }
+  
+  .price {
+    margin-bottom: 1rem;
+  }
+  
+  .color {
+    display: flex;
+    margin-bottom: 1rem;
+    flex-direction: column;
+    font-size: 1.2rem;
+  }
+
+  .colorTitles{
+    margin-bottom: 1rem;
+  }
+
+  .colorButtons{
+    display: flex;
+    margin-bottom: 1rem;
+    align-items: center;
+    max-width: 110px;
+    justify-content: space-between;
+  }
+  
+  .colorOption {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .colorOption.active{
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  
+  .size {
+    display: flex;
+    margin-bottom: 1rem;
+    flex-direction: column;
+    font-size: 1.2rem;
+  }
+  
+  .sizeOption {
+    border: none;
+    margin-right: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    cursor: pointer;
+    min-width: 50px;
+    min-height: 50px;
+    background-color: transparent;
+    border: 1px solid #ccc;
+    font-size: 1.2rem;
+  }
+  
+  .sizeOption:hover,
+  .sizeOption.active {
+    border: 2px solid black
+  }
+  
+  .availability {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+  }
+  
+  .quantity {
+    display: flex;
+    margin-bottom: 1rem;
+    flex-direction: column;
+    font-size: 1.2rem;
+    flex: 1;
+    width: 100%;
+    
+  }
+  
+  .addToCartButton{
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    border: 1px solid black;
+    height: 50px;
+  }
+
+  .buyNowButton {
+    padding: 0.5rem 1rem;
+    background-color: rgb(0, 0, 0);
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    color: white;
+    width: 100%;
+    border: 1px solid black;
+    height: 50px;
+  }
+  
+  .addToCartButton:hover{
+    background-color: rgb(255, 255, 255);
+  }
+
+
+  .buyNowButton:hover {
+    background-color: rgb(24, 24, 24);
+  }
+  
+  .addToCartButton:disabled{
+    color: lightgray;
+    border-color: lightgray;
+    cursor: not-allowed;
+  }
+
+  .buyNowButton:disabled {
+    background-color: lightgray;
+    border-color: lightgray;
+    cursor: not-allowed;
+  }
+  
+
+
+
+
+  .productPrice {
+    font-size: 1.5rem;
+    color: #888;
+
+  }
+  
+  .regularPrice {
+    font-size: 1.5rem;
+    color: #888;
+    margin-right: 1rem;
+    text-decoration: line-through;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  .discountedPrice {
+    font-size: 1.5rem;
+    color: red;
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  .priceContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+
+
+
+
+
+  .quantityContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: black;
+    justify-content: space-between;
+    text-align: center;
+    overflow: hidden;
+    max-height: 50px;
+    width: 180px;
+    color: white;
+    margin-right: 2rem;
+  }
+
+  .disabled {
+    background-color: lightgray;
+    border-color: lightgray;
+    cursor: not-allowed;
+  }
+
+
+  .quantityContainer p{
+    font-size: 1.2rem;
+
+
+  }
+
+  .quantityTitle{
+    margin-bottom: 1rem;
+  }
+
+  .quantityContainer button{
+    border: none;
+    background-color: transparent;
+    font-size: 1rem;
+    height: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    color: white
+  }
+
+
+  .quantityContainer button:disabled {
+    background-color: lightgray;
+    border-color: lightgray;
+    cursor: not-allowed;
+  }
+
+  .quantityContainer button:hover{
+    border: none;
+    opacity: 0.7;
+  }
+
+
+  .buttonsContainer{
+    flex-direction: row;
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+
+  }

@@ -1,0 +1,109 @@
+.mainContainer{
+    flex: 1;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 2200px;
+    justify-content: space-around;
+    padding-left: 5rem;
+    padding-right: 5rem;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #ccc;
+    -webkit-user-select: none;
+    user-select: none;
+    z-index: 100;
+}
+
+
+.secondContainer{
+    flex-direction: row;
+    display: flex;
+    padding-top: 1rem;
+}
+
+.First{
+    flex: 1;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.Second {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.innerContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.columnsContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 2rem;
+  flex: 1;
+  align-self: center; /* Add this line to center align the grid within .Second */
+}
+
+.column {
+  height: 100%;
+  overflow: hidden;
+  flex: 1;
+}
+
+
+.title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+
+
+
+
+  .imageContainer{
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 1300px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+
+  .logoImage{
+    height: 3rem;
+    width: 3rem;
+  }
+
+
+
+  .endLine{
+    height: 3rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    flex: 1;
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    -webkit-user-select: none;
+    user-select: none;
+    justify-content: flex-end;
+    max-width: 2200px;
+    margin-left: auto;
+    margin-right: auto;
+    border-top: 1px solid #ccc;
+    box-shadow: 0 8px 30px -20px rgba(83, 83, 83, 0.4);
+  }

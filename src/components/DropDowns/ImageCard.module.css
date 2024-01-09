@@ -1,0 +1,35 @@
+.productCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    background-color: #ffffff;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    max-height: 700px;
+    max-width: 300px;
+    overflow: hidden;
+  }
+
+
+  .productImageContainer{
+    width: 100%;
+    height: 20rem;
+  }
+  
+  
+  
+  .productImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    margin-bottom: 0.5rem;
+
+  }
+  
+  .productTitle {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }

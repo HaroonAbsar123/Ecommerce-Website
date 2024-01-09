@@ -1,0 +1,125 @@
+.mainContainer {
+    flex: 1;
+    height: max-content;
+    animation: signatureEffect 1s ease-out;
+    background: linear-gradient(to left, rgb(255, 244, 236), bisque);
+    padding-top: 1rem;
+    padding-right: 3rem;
+    padding-left: 3rem;
+    padding-bottom: 1rem;
+    position: relative;
+    overflow-x: hidden;
+  }
+  
+  .innerContainer {
+    flex: 1;
+    text-align: center;
+  }
+  
+  @keyframes signatureEffect {
+    0% {
+      opacity: 0;
+      transform: translateX(-100px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  .heading {
+    font-size: 4rem;
+  }
+  
+  .columnsContainer {
+    display: flex;
+    overflow-x: none;
+    padding-right: 3rem;
+    padding-left: 3rem;
+    justify-content: space-between;
+  }
+  
+  .column {
+    flex: 0 0 auto;
+    width: calc(25% - 1rem); /* Adjust the width as needed */
+    height: 30rem;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .imageFirst {
+    height: 100%;
+    width: 100%;
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    position: relative;
+  }
+  
+  .imageFirst::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    opacity: 0.1;
+    transition: opacity 0.3s ease-in-out;
+  }
+  
+  .imageFirst:hover::before {
+    opacity: 1;
+  }
+  
+  .imageFirstText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #ffffff;
+    font-size: 1.7rem;
+    font-weight: bold;
+    width: 90%;
+  }
+  
+  .scrollButton {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-size: 2rem;
+    color: #000000;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
+  
+  .scrollButton.left {
+    left: 1rem; /* Adjust the left position as needed */
+    transition: left 0.5s ease-in-out;
+  }
+  
+  .scrollButton.right {
+    right: 1rem; /* Adjust the right position as needed */
+    transition: right 0.5s ease-in-out;
+  }
+  
+  .scrollButton:hover {
+    transform: scaleX(2rem);
+  }
+  
+  .scrollButton.left:hover {
+    left: 0.5rem; /* Adjust the left position on hover */
+  }
+  
+  .scrollButton.right:hover {
+    right: 0.5rem; /* Adjust the right position on hover */
+  }
+  

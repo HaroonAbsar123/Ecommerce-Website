@@ -1,0 +1,17 @@
+.mainContainer{
+    padding-top: 5rem;
+    background: linear-gradient(to left, rgb(231, 244, 255), white);
+    height: max-content;
+    display: flex;
+}
+
+.secondContainer{
+    padding: 3rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex: 1
+}
+
+
+
