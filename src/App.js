@@ -20,6 +20,7 @@ import { faHeadset } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from "react";
 import './App.css';
+import NavBar from "./components/Navbar";
 
 
 function App() {
@@ -30,7 +31,7 @@ function App() {
     <React.Fragment>
       <ProductContextProvider>
         
-      <Header />
+      <NavBar />
       <ScrollToTop />
         
       <Routes>
@@ -57,7 +58,7 @@ function App() {
           onClick={() => setChatClosed(false)}
         >
           <div>
-            <FontAwesomeIcon icon={faHeadset} size="2x" />
+            <FontAwesomeIcon icon={faHeadset} size="1x" />
           </div>
         </div>
       ) : (
@@ -66,7 +67,7 @@ function App() {
           onClick={() => setChatClosed(true)}
         >
           <div>
-             <FontAwesomeIcon icon={faHeadset} size="2x" />
+             <FontAwesomeIcon icon={faHeadset} size="1x" />
           </div>
         </div>
       )}

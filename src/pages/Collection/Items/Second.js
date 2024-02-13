@@ -8,6 +8,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleArrowRight, faCircleArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { NavLink } from 'react-router-dom';
 
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
+import Slider from "react-slick";
+
 function Second() {
   const [items, setItems] = useState([
     { id: 1, image: Image1, title: 'sofas' },
@@ -16,41 +21,52 @@ function Second() {
     { id: 4, image: Image4, title: 'cushions' },
   ]);
 
-
-
-  const scrollRight = () => {
-    setItems((prevItems) => {
-      const lastItem = prevItems[prevItems.length - 1];
-      return [lastItem, ...prevItems.slice(0, prevItems.length - 1)];
-    });
-  };
-
-  const scrollLeft = () => {
-    setItems((prevItems) => {
-      const firstItem = prevItems[0];
-      return [...prevItems.slice(1), firstItem];
-    });
-  };
-
+  const [slidesToShow, setSlidesToShow] = useState(4);
   useEffect(() => {
-    const interval = setInterval(() => {
-      scrollRight();
-    }, 3000);
+    const handleResize = () => {
+      if (window.innerWidth < 600) {
+          setSlidesToShow(1);
+      } else if (window.innerWidth < 1000) {
+          setSlidesToShow(2);
+      } else if (window.innerWidth < 1300) {
+          setSlidesToShow(3);
+      }  else{
+        setSlidesToShow(4);
+    }
+  };
+  
 
+    // Set initial value
+    handleResize();
+
+    // Add event listener to listen for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Remove event listener on cleanup
     return () => {
-      clearInterval(interval);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
+  var settings = {
+
+    dots: true,
+    infinite: true,
+    slidesToShow: slidesToShow,
+    slidesToScroll: 1,
+    autoplay: true,
+    speed: 500,
+    autoplaySpeed: 2000,
+    cssEase: "linear",
+  };
+
   return (
     <div className={classes.mainContainer}>
-      <div className={classes.innerContainer}>
-        <div className={classes.columnsContainer}>
+    <Slider {...settings}>
           {items.map((item, index) => (
             <div
               key={item.id}
               className={classes.column}
-              style={{ animationDelay: `${index * 0.5}s` }}
             >
               <div
                 className={classes.imageFirst}
@@ -65,15 +81,7 @@ function Second() {
               </div>
             </div>
           ))}
-        </div>
-      </div>
-
-      <button className={`${classes.scrollButton} ${classes.left}`} onClick={scrollLeft}>
-      <FontAwesomeIcon icon={faCircleArrowLeft} size="2x" />
-      </button>
-      <button className={`${classes.scrollButton} ${classes.right}`} onClick={scrollRight}>
-      <FontAwesomeIcon icon={faCircleArrowRight} size="2x" />
-      </button>
+          </Slider>
     </div>
   );
 }

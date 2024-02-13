@@ -84,8 +84,8 @@ function FirstCard({Products}) {
             {
               Products.length > 0 ?
               <div  style={{ width: "100%", flex: 1, display: 'flex', justifyContent: 'flex-end', textAlign: 'right', paddingBottom: '1rem', borderBottom: '1px solid #ccc'  }}>
-            <span style={{ flex: 1, textAlign: 'left' }}>Action</span>
-              <span style={{ flex: 1 }}>Products</span>
+            {/* <span style={{ flex: 0.5, textAlign: 'left' }}>Action</span> */}
+              <span style={{ flex: 1 }}>Product</span>
               <span style={{ flex: 1 }}>Price</span>
               <span style={{ flex: 1 }}>Quantity</span>
               <span style={{ flex: 1 }}>Total</span>
@@ -112,7 +112,7 @@ function FirstCard({Products}) {
             </div>
             <div className={classes.cartItem} key={product.cartID} style={{ width: "100%", flex: 1, display: 'flex', justifyContent: 'flex-end', textAlign: 'right', flexDirection: 'row', alignItems: 'center' }}>
                 
-                <span style={{ flex: 2, display: 'flex', flexDirection: 'row', alignItems: 'center' }}><div  style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flex: 1 }}> 
+                <span style={{ flex: 1, display: 'flex', flexDirection: 'row', alignItems: 'center' }}><div  style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flex: 1 }}> 
                 <button onClick={() => {CartRemoveItem(product.cartID)}} style={{margin: '0.5rem', background: 'none', border: 'none'}}>
                     <FontAwesomeIcon icon={faCircleXmark} size="1.5x" style={{fontSize: '1.2rem'}} />
                 </button>
@@ -122,24 +122,22 @@ function FirstCard({Products}) {
               <span style={{ flex: 1 }}>{product.price}</span>
 
               <span style={{ flex: 1 }}>
-
-                <button onClick={() => {CartAddItemHandler(product.cartID)}}>+</button>
-                {product.selectedQuantity}
-                <button onClick={() => {CartRemoveItemHandler(product.cartID)}}>-</button>
-                
+                <button style={{padding: '10px'}} onClick={() => {CartAddItemHandler(product.cartID)}}>+</button>
+                <span style={{marginRight: '5px', marginLeft: '5px'}}>{product.selectedQuantity}</span>
+                <button style={{padding: '10px'}} onClick={() => {CartRemoveItemHandler(product.cartID)}}>-</button>
 
                 </span>
 
-              <span style={{ flex: 1 }}>{product.selectedQuantity*product.price}</span>
+              <span style={{ flex: 1 }}>${product.selectedQuantity*product.price}</span>
 
               <span style={{ flex: 1 }}> <Link to={`/collection/${product.product.category}/${product.product.id}`}><button style={{background: 'none', border: 'none'}}>
               <FontAwesomeIcon icon={faEye} size="1.5x" style={{fontSize: '1.2rem'}} />
                 </button></Link></span>
               
             </div>
-            <div style={{borderBottom: '1px solid #ccc',width: "100%", flex: 1, display: 'flex', justifyContent: 'space-between', textAlign: 'right' }}>
-              <p style={{marginTop: '0px'}} className="para">color: {product.selectedColor}</p>
-              <p style={{marginTop: '0px'}} className="para">size: {product.selectedSize}</p>
+            <div style={{borderBottom: '1px solid #ccc',width: "100%", flex: 1, display: 'flex', justifyContent: 'flex-end', textAlign: 'right' }}>
+              {/* <p style={{marginTop: '0px'}} className="para">color: {product.selectedColor}</p> */}
+              {/* <p style={{marginTop: '0px'}} className="para">size: {product.selectedSize}</p> */}
               <p style={{marginTop: '0px'}} className="para">id: {product.product.id}</p>
             </div>
             </>

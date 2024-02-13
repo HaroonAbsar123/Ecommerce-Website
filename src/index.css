@@ -3,7 +3,6 @@ body {
   margin: 0;
   flex: 1;
   max-width: 2200px;
-  min-width: 1100px;
   margin-left: auto;
   margin-right: auto;
   font-family: "Raleway", serif !important;
@@ -18,13 +17,14 @@ body {
 .mainButton {
 
   border: none;
-  padding: 1rem;
+  padding: 15px;
   min-width: 10rem;
   min-height: 2rem;
   font-size: large;
   color: rgb(0, 0, 0);
   background-color: rgb(255, 255, 255);
   cursor: pointer;
+  border-radius: 0px;
 }
 
 .mainButton:hover {
@@ -37,7 +37,7 @@ body {
 .secondaryButton {
 
   border: none;
-  padding: 1rem;
+  padding: 15px;
   min-width: 10rem;
   min-height: 2rem;
   font-size: large;
@@ -45,6 +45,7 @@ body {
   background-color: rgb(255, 255, 255);
   cursor: pointer;
   border: none;
+  border-radius: 0px;
 }
 
 .secondaryButton:hover {

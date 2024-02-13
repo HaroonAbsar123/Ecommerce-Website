@@ -1,13 +1,14 @@
 .mainContainer{
     flex: 1;
     height: max-content;
-    animation: signatureEffect 1s ease-out;
+    /* animation: signatureEffect 1s ease-out; */
     background: linear-gradient(to left, rgb(255, 244, 236), bisque);
-    padding-top: 6rem;
+    padding-top: 5rem;
     padding-right: 3rem;
     padding-left: 3rem;
-    padding-bottom: 1rem;
+    padding-bottom: 3rem;
 }
+
 
 
 .innerContainer{
@@ -18,11 +19,30 @@
     align-items: center;
 }
 
-
 .innerHeading{
-    flex: 1.3;
-    text-align: left;
+  flex: 1;
+  text-align: left;
+  padding: 10px
 }
+
+@media (max-width: 1300px) {
+  .innerContainer {
+      flex-direction: column;
+}
+.innerHeading{
+  text-align: center;
+  padding: 10px;
+  padding-bottom: 30px;
+}
+.mainContainer{
+  
+  padding-right: 10px;
+  padding-left: 10px;
+}
+}
+
+
+
 
 
 
@@ -57,8 +77,22 @@
     height: 25rem;
     width: 25rem;
     overflow: hidden;
-    margin-right: 1rem;
-    /* border: 1px solid #ccc; */
+  }
+
+  @media (max-width: 1200px) {
+    .column {
+      height: 20rem;
+      width: 20rem;
+      overflow: hidden;
+    }
+  }
+
+  @media (max-width: 360px) {
+    .column {
+      height: 17rem;
+      width: 17rem;
+      overflow: hidden;
+    }
   }
 
   .imageFirst {

@@ -13,6 +13,7 @@ import Image9 from '../../../Assets/Products/Product1.png';
 import Image10 from '../../../Assets/Products/Product2.png';
 import Image11 from '../../../Assets/Home5.png';
 import Image12 from '../../../Assets/Home6.png';
+import styles from './Third.module.css';
 
 
 function srcset(image, size, rows = 1, cols = 1) {
@@ -26,12 +27,13 @@ function srcset(image, size, rows = 1, cols = 1) {
 
 export default function Third() {
   return (
-    <div style={{padding: '5rem'}}>
+    <div className={styles.container}>
+      <div style={{flex: 1}}>
     <ImageList
-      sx={{ width: "100%", height: "50rem" }}
+      sx={{ width: "100%", height: "25rem" }}
       variant="quilted"
       cols={4}
-      rowHeight={400}
+      rowHeight={300}
     >
       {itemData.map((item) => (
         <ImageListItem key={item.img} cols={item.cols || 1} rows={item.rows || 1}>
@@ -43,6 +45,14 @@ export default function Third() {
         </ImageListItem>
       ))}
     </ImageList>
+    </div>
+
+    <div className={styles.innerContainer}>
+      <div style={{flex: 1}}>
+          <h2 className={styles.heading}>Luxury Interior Products</h2>
+          <p className="para">Donec a mattis elit sed fermentum tellus mauris</p>
+          </div>
+        </div>
     </div>
   );
 }

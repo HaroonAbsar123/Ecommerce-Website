@@ -31,7 +31,6 @@ function Category(){
     return(
 
         <div className={classes.mainContainer}>
-                Category
                 <One category={category} />
                 <Two  />
 

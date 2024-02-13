@@ -1,35 +1,79 @@
 .home{
-    height: 100rem;
-    width: 100%;
     -webkit-user-select: none;
     user-select: none;
 }
 
 
 .mainImage{
-    height: 100vh;
-    min-height: 35rem;
-    max-height: 70rem;
-    width: 100%;
+    height: max-content;
+    flex: 1;
     background: linear-gradient(to left, rgb(255, 244, 236), bisque);
     display: flex;
     flex-direction: row;
     align-items: center;
     flex: 1;
-    padding-top: 3rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-top: 6rem;
+    padding-bottom: 2rem;
+}
+
+.mainHeading{
+    font-size: 5rem;
+    margin-bottom: 0rem;
+    margin-top: 0px;
+    padding-top: 0px;
 }
 
 .mainImageComponent{
     flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .mainProductImage{
     height: auto;
     width: 80%;
+    min-width: 300px;
 }
 
 .mainImageText{
-    padding: 5rem
+    padding: 10px;
+    padding-left: 50px;
+    padding-bottom: 30px;
 }
 
+@media (max-width: 900px) {
+    .mainHeading{
+        font-size: 4rem;
+
+    }
+    .mainImage{
+        flex-direction: column;
+    }
+    .mainImageText{
+        flex: 1;
+        text-align: center;
+        margin-bottom: 20px;
+        padding: 10px
+    }
+    
+  }
+
+  @media (max-width: 1200px) {
+    .mainHeading{
+        font-size: 4.5rem;
+    }
+    
+  }
+
+
+  
+@media (max-width: 700px) {
+    .mainHeading{
+        font-size: 3.5rem;
+    }
+    
+  }
 

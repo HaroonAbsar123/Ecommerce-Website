@@ -6,12 +6,21 @@
 }
 
 .secondContainer{
-    padding: 3rem;
+    padding: 1rem;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    flex: 1
+    flex: 1;
+    gap: 1rem;
 }
 
 
 
+@media (max-width: 900px) {
+    
+    .secondContainer{
+        padding: 10px;
+        gap: 10px;
+        flex-direction: column;
+    }
+  }

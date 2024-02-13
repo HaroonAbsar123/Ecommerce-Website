@@ -7,9 +7,10 @@
 
 
 .innerContainer{
-    padding: 5rem;
+    padding: 40px;
     flex: 1;
     text-align: center;
+    padding-top: 50px;
 }
 
 .heading{
@@ -23,6 +24,8 @@
     grid-template-columns: repeat(4, 1fr); /* Creates 3 equal-width columns */
     grid-gap: 20px; /* Adds a gap between columns */
   }
+
+
   
   .column {
     height: 30rem;
@@ -148,4 +151,37 @@
   
   .imageThird:hover::before {
     opacity: 1; /* Show the dark tint on hover */
+  }
+
+
+
+  @media (max-width: 1000px) {
+    .columnsContainer {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    .innerContainer{
+      padding: 20px;
+      padding-top: 50px;
+    }
+    .heading{
+      font-size: 3.5rem;
+    }
+  }
+
+  @media (max-width: 700px) {
+    .columnsContainer {
+        grid-template-columns: repeat(1, 1fr);
+      }
+    .imageFirst{
+    transform: translateY(0rem);
+    }
+    .imageSecond{
+      transform: translateY(0rem);
+      }
+    .imageThird{
+      transform: translateY(0rem);
+    }
+    .heading{
+      font-size: 3rem;
+    }
   }

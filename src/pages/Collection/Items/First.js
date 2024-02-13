@@ -9,7 +9,7 @@ function First(){
         <div className={classes.mainContainer}>
 
             <div className={classes.TextContainer}>
-                <div className={classes.innerTextContainer}>
+                <div >
                    <div className={classes.Text}> Refined Relaxation</div>
                     <div>
                     <button className="mainButton">Shop Now</button>

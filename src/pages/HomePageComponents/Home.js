@@ -27,7 +27,7 @@ function Home(){
 
                 <div className={classes.mainImageComponent}>
                     <div className={classes.mainImageText}>
-                    <h2 style={{fontSize: '5rem', marginBottom: '0rem'}}>Renovate your Interior</h2>
+                    <h2 className={classes.mainHeading}>Renovate your Interior</h2>
                     <p>Fill your home with our premium quality furnitures</p>
                     <button onClick={() => {navigate("/collection")}}  className='mainButton'>Shop Now</button>
                     </div>

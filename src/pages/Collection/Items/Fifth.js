@@ -1,6 +1,6 @@
 import React from "react";
 import classes from './Fifth.module.css';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 
 import Image1 from '../../../Assets/Products/Product1.png';
@@ -51,6 +51,23 @@ function Fifth(){
         setfourthHovered(false);
     };
 
+    const [isMobile, setIsMobile] = useState(false);
+    useEffect(() => {
+      const handleResize = () => {
+        setIsMobile(window.innerWidth < 900);
+      };
+  
+      // Set initial value
+      handleResize();
+  
+      // Add event listener to listen for window resize
+      window.addEventListener('resize', handleResize);
+  
+      // Remove event listener on cleanup
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, []);
 
     return(
         
@@ -69,7 +86,7 @@ function Fifth(){
                     </div>
 
 
-
+                <div style={{flex: 2, display: 'flex', justifyContent:'center', alignItems: 'center', flexWrap: isMobile? "wrap" : 'nowrap', gap: '1rem'}}>
                         <div className={classes.columnsContainer}>
       <div className={classes.column}>
       
@@ -108,18 +125,6 @@ function Fifth(){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
       <div className={classes.columnsContainer}>
       <div className={classes.column}>
       <div className={classes.imageFirst} style={{ backgroundImage: `url(${Image3})` }} onMouseEnter={thirdHoverEnter} onMouseLeave={thirdHoverExit}>
@@ -154,6 +159,7 @@ function Fifth(){
 
       </div>
 
+      </div>
 
 
                 </div>

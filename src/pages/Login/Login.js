@@ -214,7 +214,7 @@ function Login() {
             onClick={loginWithGoogle}
             type="button"
           >
-            Login with <img style={{ height: "30px" }} src={GoogleImage} />
+            Login with <img style={{ height: "30px", marginLeft: '5px' }} src={GoogleImage} />
             oogle
           </button>
         </div>
@@ -655,7 +655,7 @@ function Login() {
             margin: isMobile ? "3vh" : "5vh",
             padding: isMobile ? "2vh" : "1vh",
             boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.4)",
-            marginTop: '8rem'
+            marginTop: '5rem'
           }}
         >
 

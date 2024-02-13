@@ -27,6 +27,25 @@
     grid-template-columns: repeat(4, 1fr); /* Creates 3 equal-width columns */
     grid-gap: 10px; /* Adds a gap between columns */
     padding: 3rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 1200px) {
+    .columnsContainer {
+        grid-template-columns: repeat(3, 1fr);
+      }
+  }
+  
+  @media (max-width: 900px) {
+    .columnsContainer {
+        grid-template-columns: repeat(2, 1fr);
+      }
+  }
+
+  @media (max-width: 500px) {
+    .columnsContainer {
+        grid-template-columns: repeat(1, 1fr);
+      }
   }
   
   .column {

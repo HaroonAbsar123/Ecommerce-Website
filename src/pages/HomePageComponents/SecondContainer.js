@@ -30,18 +30,37 @@ useEffect(() => {
   setMainProducts(mainProductsArray);
 }, [products]);
 
+const [isMobile, setIsMobile] = useState(false);
+useEffect(() => {
+  const handleResize = () => {
+    setIsMobile(window.innerWidth < 1100);
+  };
+
+  // Set initial value
+  handleResize();
+
+  // Add event listener to listen for window resize
+  window.addEventListener('resize', handleResize);
+
+  // Remove event listener on cleanup
+  return () => {
+    window.removeEventListener('resize', handleResize);
+  };
+}, []);
+
 
 
     return(
         <div className={classes.mainContainer}>
 
+      {!isMobile && 
             <div className={classes.firstHalf}>
 
                 <div className={classes.firstHalfContainer}>
                 </div>
 
             </div>
-
+          }
             <div className={classes.secondHalf}>
 
             <h1 className={classes.secondHalfTitle}>Renovate your interior with moduler design</h1>

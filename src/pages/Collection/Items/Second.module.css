@@ -1,32 +1,19 @@
 .mainContainer {
     flex: 1;
     height: max-content;
-    animation: signatureEffect 1s ease-out;
     background: linear-gradient(to left, rgb(255, 244, 236), bisque);
-    padding-top: 1rem;
+    padding-top: 2rem;
     padding-right: 3rem;
     padding-left: 3rem;
-    padding-bottom: 1rem;
+    padding-bottom: 3rem;
     position: relative;
-    overflow-x: hidden;
   }
   
   .innerContainer {
     flex: 1;
     text-align: center;
   }
-  
-  @keyframes signatureEffect {
-    0% {
-      opacity: 0;
-      transform: translateX(-100px);
-    }
-    100% {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-  
+
   .heading {
     font-size: 4rem;
   }

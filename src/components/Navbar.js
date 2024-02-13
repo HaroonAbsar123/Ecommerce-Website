@@ -1,123 +1,242 @@
-import React, { useState } from "react";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
-import Container from "react-bootstrap/Container";
+import React, {useState, useEffect, useContext} from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+import AdbIcon from '@mui/icons-material/Adb';
 import logo from "../Assets/logo.png";
-import Button from "react-bootstrap/Button";
-import { Link } from "react-router-dom";
-import { CgGitFork } from "react-icons/cg";
-import { ImBlog } from "react-icons/im";
-import {
-  AiFillStar,
-  AiOutlineHome,
-  AiOutlineFundProjectionScreen,
-  AiOutlineUser,
-} from "react-icons/ai";
-import './Navbar.css';
+import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Sidebar from './Sidebar';
+import ProductContext from '../Context/ProductContext';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
-import { CgFileDocument } from "react-icons/cg";
+const pages = ['Home', 'Collection', 'Contact'];
+const settings = ['Profile', 'Cart', 'Logout'];
 
-function NavBar() {
-  const [expand, updateExpanded] = useState(false);
-  const [navColour, updateNavbar] = useState(false);
+function Navbar() {
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const navigate=useNavigate();
+  const {cart, setIsUserLoggedIn, setUserDetails, setUserType, userDetails, isUserLoggedIn} = useContext(ProductContext);
 
-  function scrollHandler() {
-    if (window.scrollY >= 20) {
-      updateNavbar(true);
-    } else {
-      updateNavbar(false);
+
+  const [totalItems, setTotalItems] = useState(0);
+
+  useEffect(() => {
+    // Update the totalItems whenever the cart changes
+    const newTotalItems = cart.reduce(
+      (total, item) => total + item.selectedQuantity,
+      0
+    );
+    setTotalItems(newTotalItems);
+
+  }, [cart]);
+
+  const [showSidebar, setShowSidebar] = useState(false);
+
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 900);
+    };
+
+    // Set initial value
+    handleResize();
+
+    // Add event listener to listen for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Remove event listener on cleanup
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+
+  const handleCloseNavMenu = (item) => {
+    
+    if (item !== "check") {
+    if(item==="Home"){
+      
+    navigate(`/`)
     }
+     else if(item==="Collection"){
+      
+      setShowSidebar(true)
+      }
+      else if(item==="Contact"){
+    navigate(`/contact`)
   }
+}
+    setAnchorElNav(null);
 
-  window.addEventListener("scroll", scrollHandler);
+  };
+
+  const handleCloseUserMenu = (item) => {
+    setAnchorElUser(null);
+  
+    if (item !== "check") {
+      if (item === "Logout") {
+        LogoutHandler();
+      } else {
+        navigate(`/${item.toLowerCase()}`);
+      }
+    }
+  };
+  
+
+  const LogoutHandler = () => {
+    try {
+      localStorage.clear();
+      setIsUserLoggedIn(false);
+      setUserDetails('');
+      setUserType('');
+      navigate('/login', { replace: true });
+    } catch (error) {
+      console.error('Error occurred during logout:', error);
+    }
+  };
 
   return (
-    <Navbar
-      expanded={expand}
-      fixed="top"
-      expand="lg"
-      className={navColour ? "sticky" : "navbar"}
-    >
-      <Container>
-        <Navbar.Brand href="/" className="d-flex">
-          <img src={logo} className="img-fluid logo" width={"100%"} alt="brand" />
-        </Navbar.Brand>
-        <Navbar.Toggle
-          aria-controls="responsive-navbar-nav"
-          onClick={() => {
-            updateExpanded(expand ? false : "expanded");
-          }}
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </Navbar.Toggle>
-        <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="ms-auto" defaultActiveKey="#home">
-            <Nav.Item>
-              <Nav.Link as={Link} to="/" onClick={() => updateExpanded(false)}>
-                <AiOutlineHome style={{ marginBottom: "2px" }} /> Home
-              </Nav.Link>
-            </Nav.Item>
+    <>
+    <AppBar position="fixed" style={{background: "#fff"}}>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          {!isMobile && 
+        <NavLink to={"/"}>
+              <img src={logo} alt="logo" style={{margin: '10px', maxHeight: '30px', marginRight: '20px'}}/>
+            </NavLink>
+            }
 
-            <Nav.Item>
-              <Nav.Link
-                as={Link}
-                to="/about"
-                onClick={() => updateExpanded(false)}
-              >
-                <AiOutlineUser style={{ marginBottom: "2px" }} /> About
-              </Nav.Link>
-            </Nav.Item>
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="#1e1e1e"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={() => handleCloseNavMenu("check")}
+              sx={{
+                display: { xs: 'block', md: 'none' },
+              }}
+            >
+              {pages.map((page) => (
+                <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
+                  <Typography textAlign="center" style={{color: '#1e1e1e'}}>{page}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
 
-            <Nav.Item>
-              <Nav.Link
-                as={Link}
-                to="/project"
-                onClick={() => updateExpanded(false)}
-              >
-                <AiOutlineFundProjectionScreen
-                  style={{ marginBottom: "2px" }}
-                />{" "}
-                Projects
-              </Nav.Link>
-            </Nav.Item>
+          {isMobile && 
+          <div style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
+        <NavLink to={"/"}>
+              <img src={logo} alt="logo" style={{margin: '10px', maxHeight: '30px', marginRight: '20px'}}/>
+            </NavLink>
+            </div>
+            }
 
-            <Nav.Item>
-              <Nav.Link
-                as={Link}
-                to="/resume"
-                onClick={() => updateExpanded(false)}
-              >
-                <CgFileDocument style={{ marginBottom: "2px" }} /> Resume
-              </Nav.Link>
-            </Nav.Item>
-
-            <Nav.Item>
-              <Nav.Link
-                href="https://soumyajitblogs.vercel.app/"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <ImBlog style={{ marginBottom: "2px" }} /> Blogs
-              </Nav.Link>
-            </Nav.Item>
-
-            <Nav.Item className="fork-btn">
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            {pages.map((page) => (
               <Button
-                href="https://github.com/soumyajit4419/Portfolio"
-                target="_blank"
-                className="fork-btn-inner"
+                key={page}
+                onClick={() => handleCloseNavMenu(page)}
+                sx={{ my: 2, color: '#1e1e1e', display: 'block' }}
               >
-                <CgGitFork style={{ fontSize: "1.2em" }} />{" "}
-                <AiFillStar style={{ fontSize: "1.1em" }} />
+                {page}
               </Button>
-            </Nav.Item>
-          </Nav>
-        </Navbar.Collapse>
+            ))}
+          </Box>
+
+              {isUserLoggedIn ?
+              
+          <Box sx={{ flexGrow: 0 }}>
+<IconButton onClick={() => {navigate("/cart")}} style={{marginRight: '5px', fontSize: '15px'}} color="#1e1e1e" aria-label="add to shopping cart">
+  {totalItems}
+  <AddShoppingCartIcon />
+</IconButton>
+
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: '45px' }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={() => handleCloseUserMenu("check")}
+            >
+              {settings.map((setting) => (
+                <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
+                  <Typography textAlign="center">{setting}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+
+          :
+<div>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={() => {navigate("/login")}}
+                color="#1e1e1e"
+              >
+                <AccountCircle style={{height: '30px', width: '30px'}} />
+              </IconButton>
+            </div>
+        }
+        </Toolbar>
       </Container>
-    </Navbar>
+    </AppBar>
+    <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar}/>
+    </>
   );
 }
-
-export default NavBar;
+export default Navbar;
