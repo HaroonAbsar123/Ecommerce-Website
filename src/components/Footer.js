@@ -21,6 +21,7 @@ function Footer() {
             <p className="para"><span onClick={() => {navigate("/collection")}} className="navLinkUnderline">Collection</span></p>
             <p className="para"><span onClick={() => {navigate("/contact")}} className="navLinkUnderline">Contact</span></p>
             <p className="para"><span onClick={() => {navigate("/login")}} className="navLinkUnderline">Login</span></p>
+            <p className="para"><span onClick={() => {navigate("/register")}} className="navLinkUnderline">Register</span></p>
           </div>
 
           <div className={classes.column}>

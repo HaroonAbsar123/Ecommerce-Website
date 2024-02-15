@@ -18,23 +18,11 @@
   }
 
 
-  @media (max-width: 1000px) {
-    
-    .listContainer{
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
 
-  @media (max-width: 600px) {
+  @media (max-width: 700px) {
     
     .listContainer{
       grid-template-columns: repeat(2, 1fr);
-    }
-  }
-  @media (max-width: 420px) {
-    
-    .listContainer{
-      grid-template-columns: repeat(1, 1fr);
     }
   }
   
@@ -53,8 +41,11 @@
     color: #000000;
     cursor: pointer;
     transition: background-color 0.3s ease-in-out;
+    font-size: 3rem;
   }
+
   
+
   .prevButton:disabled,
   .nextButton:disabled {
     cursor: not-allowed;
@@ -66,4 +57,25 @@
     font-size: 1.2rem;
     font-weight: bold;
   }
+
+  @media (max-width: 900px) {
+    
+    .prevButton,
+  .nextButton {
+    font-size: 2.5rem;
+  }
+  }
+
+  @media (max-width: 600px) {
+    
+    .prevButton,
+  .nextButton {
+    font-size: 2rem;
+  }
+  .pageInfo {
+    margin: 0 0.5rem;
+    font-size: 1rem;
+  }
+  }
+  
   

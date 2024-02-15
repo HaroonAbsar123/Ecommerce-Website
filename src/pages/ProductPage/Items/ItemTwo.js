@@ -38,7 +38,7 @@ function ItemTwo({Products}){
       });
 
     return(
-        <div style={{marginTop: '3rem', paddingLeft: '3rem', paddingRight: '3rem'}}>
+        <div className={classes.mainContainer}>
         <ThemeProvider theme={theme}>
     <Box sx={{ width: '100%', typography: 'body1' }}>
       <TabContext value={value}>
@@ -101,18 +101,18 @@ return (
         <div className="para" style={{ display: "table-cell", padding: "1rem", borderBottom: "1px solid #ccc", width: "10%" }}>Sizes:</div>
         <div className="para" style={{ display: "table-cell", padding: "1rem", borderBottom: "1px solid #ccc", width: "90%" }}>{Array.from(sizes).join(", ")}</div>
       </div>
-      <div style={{ display: "table-row" }}>
+      {/* <div style={{ display: "table-row" }}>
         <div className="para" style={{ display: "table-cell", padding: "1rem", borderBottom: "1px solid #ccc", width: "10%" }}>Colors:</div>
         <div className="para" style={{ display: "table-cell", padding: "1rem", borderBottom: "1px solid #ccc", width: "90%" }}>{Products.specs.map((spec) => spec.color).join(", ")}</div>
-      </div>
+      </div> */}
       <div style={{ display: "table-row" }}>
         <div className="para" style={{ display: "table-cell", padding: "1rem", borderBottom: "1px solid #ccc", width: "10%" }}>Type:</div>
         <div className="para" style={{ display: "table-cell", padding: "1rem", borderBottom: "1px solid #ccc", width: "90%" }}>{Products.category}</div>
       </div>
-      <div style={{ display: "table-row" }}>
+      {/* <div style={{ display: "table-row" }}>
         <div className="para" style={{ display: "table-cell", padding: "1rem", borderBottom: "1px solid #ccc", width: "10%" }}>Pack of:</div>
         <div className="para" style={{ display: "table-cell", padding: "1rem", borderBottom: "1px solid #ccc", width: "90%" }}>{Products.packof}</div>
-      </div>
+      </div> */}
     </div>
   );
   

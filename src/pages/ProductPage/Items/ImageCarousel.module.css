@@ -10,6 +10,16 @@
   -webkit-user-select: none;
 }
 
+@media (max-width: 900px) {
+    
+  .mainContainer{
+   flex-direction: column;
+   padding: 10px;
+   margin-bottom: 20px;
+  
+  }
+}
+
   .mainImage {
     display: flex;
     flex-direction: column;
@@ -21,6 +31,7 @@
     cursor: move;
     background-color: white;
     max-width: 40rem;
+    max-height: 25rem;
   }
   
   
@@ -81,13 +92,14 @@
   .zoomInButton {
     background-color: rgb(0, 0, 0);;
     color: rgb(255, 255, 255);
-    padding: 10px 20px;
+    padding: 5px;
     border: none;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
     flex: 1;
     border-radius: 0px;
+    height: 30px;
   }
   
   .zoomInButton:hover {
@@ -95,15 +107,16 @@
   }
   
   .zoomOutButton {
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(0, 0, 0);;
     color: rgb(255, 255, 255);
-    padding: 10px 20px;
+    padding: 5px;
     border: none;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
     flex: 1;
     border-radius: 0px;
+    height: 30px;
   }
   
   .zoomOutButton:hover {
@@ -111,15 +124,16 @@
   }
   
   .resetButton {
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(0, 0, 0);;
     color: rgb(255, 255, 255);
-    padding: 10px 20px;
+    padding: 5px;
     border: none;
     font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
     flex: 1;
     border-radius: 0px;
+    height: 30px;
   }
   
   .resetButton:hover {

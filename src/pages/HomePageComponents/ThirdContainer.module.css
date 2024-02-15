@@ -12,6 +12,10 @@
 
 }
 
+.text{
+    font-weight: bold;
+}
+
 
 .textContainer{
     flex-direction: column;
@@ -33,5 +37,8 @@
     height: max-content;
     padding-top: 50px;
     padding-bottom: 70px;
+    }
+    .text{
+        font-size: 2rem;
     }
   }

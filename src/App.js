@@ -21,6 +21,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from "react";
 import './App.css';
 import NavBar from "./components/Navbar";
+import Register from "./pages/Register/Register";
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
         <Route path="/collection/:category/:id" Component={ProductPage} />
 
         <Route path="/login" Component={Login} />
+        <Route path="/register" Component={Register} />
         <Route path="/cart" Component={Cart} />
 
         <Route path="/contact" Component={ContactUs} />

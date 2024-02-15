@@ -79,9 +79,9 @@ function Fifth(){
 
 
                     <div className={classes.innerHeading}>
-                    <img src={Logo} alt="logo" style={{maxWidth: '15rem', marginBottom: '0px', paddingBottom: '0px'}}/>
-                    <h2 style={{fontSize: '4rem', marginBottom: '0rem', marginTop: '1.5rem'}}>Premium Collections</h2>
-                    <p className="para" style={{fontSize: '1.5rem'}}>Molestie vitae massa felis, aliquam lectus at. Ultricies et, quis sit fermentum aliquam et.</p>
+                    <img src={Logo} alt="logo" className={classes.image}/>
+                    <h2 className={classes.heading}>Premium Collections</h2>
+                    <p className="para">Molestie vitae massa felis, aliquam lectus at. Ultricies et, quis sit fermentum aliquam et.</p>
                     <button onClick={() => {navigate("/contact")}} className="mainButton">Contact Us</button>
                     </div>
 

@@ -54,9 +54,9 @@ function FifthContainer(){
         {
                 firstHovered && 
                 <div className={classes.imageFirstText}>
-                    <h2>Sofas</h2>
+                    <h2 className={classes.headingSecond}>Sofas</h2>
                     <Link to={'/collection/sofas'}>
-                    <button className="secondaryButton">Shop Now</button>
+                    <button  className={classes.secondaryButton}>Shop Now</button>
                     </Link>
                     </div>
             }
@@ -68,9 +68,9 @@ function FifthContainer(){
       {
                 secondHovered && 
                 <div className={classes.imageFirstSecond}>
-                    <h2>ArmChairs</h2>
+                    <h2 className={classes.headingSecond}>ArmChairs</h2>
                     <Link to={'/collection/armchairs'}>
-                    <button className="secondaryButton">Shop Now</button>
+                    <button  className={classes.secondaryButton}>Shop Now</button>
                     </Link>
                     </div>
             }
@@ -83,9 +83,9 @@ function FifthContainer(){
       {
                 thirdHovered && 
                 <div className={classes.imageFirstText}>
-                    <h2>Lamps</h2>
+                    <h2 className={classes.headingSecond}>Lamps</h2>
                     <Link to={'/collection/lamps'}>
-                    <button className="secondaryButton">Shop Now</button>
+                    <button  className={classes.secondaryButton}>Shop Now</button>
                     </Link>
                     </div>
             }
@@ -99,9 +99,9 @@ function FifthContainer(){
       {
                 fourthHovered && 
                 <div className={classes.imageFirstSecond}>
-                    <h2>Cushions</h2>
+                    <h2 className={classes.headingSecond}>Cushions</h2>
                     <Link to={'/collection/cushions'}>
-                    <button className="secondaryButton">Shop Now</button>
+                    <button className={classes.secondaryButton}>Shop Now</button>
                     </Link>
                     </div>
             }

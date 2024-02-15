@@ -59,6 +59,8 @@
   
   .heading {
     font-size: 5rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0;
 
   }
   
@@ -79,18 +81,68 @@
     overflow: hidden;
   }
 
+  .image{
+    max-width: 15rem;
+    margin-bottom: 0px; 
+    padding-bottom: 0px;
+  }
+
   @media (max-width: 1200px) {
     .column {
       height: 20rem;
       width: 20rem;
       overflow: hidden;
     }
+    .heading{
+      font-size: 3rem;
+    }
   }
 
-  @media (max-width: 360px) {
+  @media (max-width: 900px) {
     .column {
-      height: 17rem;
-      width: 17rem;
+      height: 15rem;
+      width: 15rem;
+      overflow: hidden;
+    }
+    .heading{
+      font-size: 2rem;
+    }
+    .image{
+      max-width: 12rem;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .column {
+      height: 12rem;
+      width: 12rem;
+      overflow: hidden;
+    }
+    .image{
+      max-width: 10rem;
+    }
+  }
+
+  
+  @media (max-width: 500px) {
+    .column {
+      height: 10rem;
+      width: 10rem;
+      overflow: hidden;
+    }
+  }
+
+  @media (max-width: 370px) {
+    .column {
+      height: 8rem;
+      width: 8rem;
+      overflow: hidden;
+    }
+  }
+  @media (max-width: 300px) {
+    .column {
+      height: 6rem;
+      width: 6rem;
       overflow: hidden;
     }
   }

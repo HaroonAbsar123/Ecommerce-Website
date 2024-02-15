@@ -56,6 +56,17 @@ body {
 }
 
 
+
+@media (max-width: 900px) {
+    
+  .mainButton{
+    padding: 10px;
+    min-width: 8rem;
+    min-height: 1.7rem;
+    font-size: large;
+  }
+}
+
 .para {
   font-size: 1rem;
   color: #505050;

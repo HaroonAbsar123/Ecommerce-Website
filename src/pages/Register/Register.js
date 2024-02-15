@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./Login.module.css";
+import styles from "./Register.module.css";
 import { useState } from "react";
 import { useEffect } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
@@ -18,9 +18,9 @@ import GoogleImage from "../../Assets/R.png";
 
 import AboveLogo from "../../Assets/logo.png";
 
-function Login() {
+function Register() {
   const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
 
   const { setIsUserLoggedIn, setUserDetails, setUserType } =
     useContext(ProductContext);
@@ -263,7 +263,7 @@ function Login() {
           Don't have an account?{" "}
           <span
             onClick={() => {
-              navigate("/register");
+              setIsLogin(false);
             }}
             style={{ color: "#912d27", cursor: "pointer" }}
           >
@@ -277,41 +277,36 @@ function Login() {
   const loginWithGoogle = async () => {
     try {
       const auth = getAuth(); // Import getAuth from firebase/auth if needed
-  
+
       // Create a GoogleAuthProvider instance
       const provider = new GoogleAuthProvider();
-  
+
       // Sign in with Google using a popup window
       const userCredential = await signInWithPopup(auth, provider);
-  
+
       // Obtain the user's UID (userId) from Google Sign-In
       const userId = userCredential.user.uid;
-  
+
       // Query Firestore to get the user's type and additional data based on UID
       const userListRef = collection(db, "userList");
       const q = query(userListRef, where("userId", "==", userId));
       const querySnapshot = await getDocs(q);
-  
+
       if (querySnapshot.size === 1) {
         // Assuming each user has a unique document in "userList" based on UID
-        querySnapshot.forEach(async (doc) => {
+        querySnapshot.forEach((doc) => {
+          const userType = doc.data().type;
           const userData = doc.data(); // Additional user data
-  
-          // Update user's name, image, and phone number
-          await updateDoc(doc.ref, {
-            userName: userCredential.user.displayName,
-            image: userCredential.user.photoURL,
-            phone: userCredential.user.phoneNumber,
-          });
-  
+
           // Store data in Local Storage
           localStorage.setItem("userId", userId);
           localStorage.setItem("isLoggedIn", "true");
-  
+
           // Update context state
           setIsUserLoggedIn(true);
           setUserDetails(userData); // Set user details in context
-  
+          setUserType(userType); // Set user type in context
+
           // Navigate to home page
           navigate("/", { replace: true });
           console.log("User logged in successfully with Google");
@@ -324,7 +319,7 @@ function Login() {
       alert("Error logging in user with Google");
     }
   };
-  
+
   const LogInOtherMethods = (props) => (
     <div className={styles.iconGroup}>
       <Google onClick={loginWithGoogle} />
@@ -354,18 +349,38 @@ function Login() {
 
       // If user doesn't exist, create a new document in the "userList" collection
       if (querySnapshot.empty) {
-        await addDoc(userListRef, {
+         await addDoc(userListRef, {
           userId,
           userName: userCredential.user.displayName,
           email: userCredential.user.email,
           type: "user",
+          image: userCredential.user.photoURL,
+          phone: userCredential.user.phoneNumber
         });
 
-        console.log("User signed up successfully with Google");
-        setIsLogin(true);
+        const userData={
+          userId,
+          userName: userCredential.user.displayName,
+          email: userCredential.user.email,
+          type: "user",
+          image: userCredential.user.photoURL,
+          phone: userCredential.user.phoneNumber
+        }
+
+          // Store data in Local Storage
+          localStorage.setItem("userId", userId);
+          localStorage.setItem("isLoggedIn", "true");
+  
+          // Update context state
+          setIsUserLoggedIn(true);
+          setUserDetails(userData); // Set user details in context
+  
+          // Navigate to home page
+          navigate("/", { replace: true });
       } else {
         console.log("User already exists in the database");
-        setIsLogin(true); // You may want to handle this case differently based on your use case
+        // Navigate to home page
+        navigate("/", { replace: true });
       }
     } catch (error) {
       console.error("Error signing up user with Google: ", error);
@@ -458,11 +473,25 @@ function Login() {
             userName: signUpUserName,
             email: signUpEmail,
             type: "user",
-            status: "pending",
+            // status: "pending",
           });
 
+          const userData={
+            userId,
+            userName: signUpUserName,
+            email: signUpEmail,
+            type: "user",
+          }
+          // Store data in Local Storage
+          localStorage.setItem("userId", userId);
+          localStorage.setItem("isLoggedIn", "true");
+  
+          // Update context state
+          setIsUserLoggedIn(true);
+          setUserDetails(userData); // Set user details in context
+          // Navigate to home page
+          navigate("/", { replace: true });
           console.log("User signed up successfully");
-          setIsLogin(true);
         } catch (error) {
           console.error("Error signing up user: ", error);
           alert("Error signing up user");
@@ -715,7 +744,7 @@ function Login() {
           Already have an account?{" "}
           <span
             onClick={() => {
-              setIsLogin(true);
+              navigate("/login");
             }}
             style={{ color: "#912d27", cursor: "pointer" }}
           >
@@ -807,7 +836,7 @@ function Login() {
             src={AboveLogo}
             alt="Logo"
           />
-          <p style={{fontSize: !isMobile ? '1.2rem' : '1rem', textAlign: 'justify'}}>
+          <p style={{fontSize: !isMobile ? '1.3rem' : '1rem', textAlign: 'justify'}}>
             At IntelliCart, we believe that every piece of
             furniture tells a story. By logging in or signing up, you'll unlock
             a world of exclusive offers, personalized recommendations, and
@@ -868,4 +897,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;

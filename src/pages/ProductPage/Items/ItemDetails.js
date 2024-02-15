@@ -102,7 +102,7 @@ function ItemDetails({Products}) {
           ))}
           </div>
         </div> */}
-        {/* <div className={classes.size}>
+        <div className={classes.size}>
             <div className={classes.colorTitles}>
             <b>Size:</b> {selectedSize}
           </div>
@@ -118,7 +118,7 @@ function ItemDetails({Products}) {
             </button>
           ))}
           </div>
-        </div> */}
+        </div>
         <div className={classes.availability} style={isOutOfStock ? { color: 'red' } : {}}>
         <b>Availability:</b> {isOutOfStock ? "Out of Stock" : `In Stock`}
         </div>

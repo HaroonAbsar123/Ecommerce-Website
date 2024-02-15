@@ -27,7 +27,7 @@ useEffect(() => {
   }
 
   // Update the state with all the hot products
-  setMainProducts(mainProductsArray);
+  setMainProducts(mainProductsArray.slice(0,2));
 }, [products]);
 
 const [isMobile, setIsMobile] = useState(false);

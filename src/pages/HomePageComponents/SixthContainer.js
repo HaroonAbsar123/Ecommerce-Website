@@ -14,7 +14,7 @@ function SixthContainer(){
         <div className={classes.mainContainer}>
 
             <div className={classes.secondContainer}>
-            <FontAwesomeIcon icon={faShippingFast} size="3x" />
+            <FontAwesomeIcon icon={faShippingFast} />
                 <div>
                     <h2 className={classes.title}>Free Shipping</h2>
                     <p className="para">Get free shipping over $1499</p>
@@ -23,17 +23,17 @@ function SixthContainer(){
             </div>
 
             <div className={classes.secondContainer}>
-            <FontAwesomeIcon icon={faMoneyBill} size="3x" />
+            <FontAwesomeIcon icon={faMoneyBill}  />
                 <div>
 
-                    <h2 className={classes.title}>Quick Payment</h2>
-                    <p className="para">Online Quick Payment easily</p>
+                    <h2 className={classes.title}>Easy Payment</h2>
+                    <p className="para">Easily pay on item delivery</p>
                 </div>
 
             </div>
 
             <div className={classes.secondContainer}>
-            <FontAwesomeIcon icon={faCartShopping} size="3x" />
+            <FontAwesomeIcon icon={faCartShopping} />
                 <div>
 
                     <h2 className={classes.title}>Easy Return</h2>
@@ -43,7 +43,7 @@ function SixthContainer(){
             </div>
 
             <div className={classes.secondContainer}>
-            <FontAwesomeIcon icon={faHeadset} size="3x" />
+            <FontAwesomeIcon icon={faHeadset}/>
                 <div>
 
                     <h2 className={classes.title}>24/7 Support</h2>

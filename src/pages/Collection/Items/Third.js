@@ -49,8 +49,8 @@ export default function Third() {
 
     <div className={styles.innerContainer}>
       <div style={{flex: 1}}>
-          <h2 className={styles.heading}>Luxury Interior Products</h2>
-          <p className="para">Donec a mattis elit sed fermentum tellus mauris</p>
+          <h2 className={styles.heading}>Top-Notch Products</h2>
+          <p className="para">Experience the epitome of quality with our handpicked selection of top-notch products. From exquisite furniture pieces to stylish decor items, each product is curated to elevate your living space. Donec a mattis elit sed fermentum tellus mauris. Explore our collection today and redefine your home decor style!</p>
           </div>
         </div>
     </div>

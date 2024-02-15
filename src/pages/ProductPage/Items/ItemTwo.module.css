@@ -2,6 +2,21 @@
     display: table;
     width: 100%;
   }
+
+  .mainContainer{
+    margin-top: 3rem; 
+    padding-left: 3rem; 
+    padding-right: 3rem;
+  }
+
+  @media (max-width: 900px) {
+    
+    .mainContainer{
+     padding: 0px;
+     margin-top: 20px;
+    
+    }
+  }
   
   .row {
     display: table-row;

@@ -19,6 +19,7 @@ import Sidebar from './Sidebar';
 import ProductContext from '../Context/ProductContext';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import { BugReportTwoTone } from '@mui/icons-material';
 
 const pages = ['Home', 'Collection', 'Contact'];
 const settings = ['Profile', 'Cart', 'Logout'];
@@ -115,7 +116,7 @@ function Navbar() {
 
   return (
     <>
-    <AppBar position="fixed" style={{background: "#fff"}}>
+    <AppBar position="fixed" style={{background: "#fff", userSelect: 'none', WebkitUserSelect: 'none'}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           {!isMobile && 
@@ -183,53 +184,56 @@ function Navbar() {
 
               {isUserLoggedIn ?
               
-          <Box sx={{ flexGrow: 0 }}>
-<IconButton onClick={() => {navigate("/cart")}} style={{marginRight: '5px', fontSize: '15px'}} color="#1e1e1e" aria-label="add to shopping cart">
-  {totalItems}
-  <AddShoppingCartIcon />
-</IconButton>
-
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              <Box sx={{ flexGrow: 0 }}>
+              <IconButton onClick={() => {navigate("/cart")}} style={{marginRight: '5px', fontSize: '15px'}} color="#1e1e1e" aria-label="add to shopping cart">
+                {totalItems}
+                <AddShoppingCartIcon />
               </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={() => handleCloseUserMenu("check")}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+            
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Profile" src={userDetails.image} />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={() => handleCloseUserMenu("check")}
+              >
+                {settings.map((setting) => (
+                  <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
+                    <Typography textAlign="center">{setting}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+            
 
           :
-<div>
-              <IconButton
-                size="large"
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={() => {navigate("/login")}}
-                color="#1e1e1e"
+<div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
+<Button
+               onClick={() => {navigate("/login")}}
+                sx={{ my: 2, color: '#1e1e1e', display: 'block' }}
               >
-                <AccountCircle style={{height: '30px', width: '30px'}} />
-              </IconButton>
+                Login
+              </Button>
+              <Button
+               onClick={() => {navigate("/register")}}  style={{backgroundColor: '#1e1e1e', }}
+                sx={{ my: 2, display: 'block', color: 'white' }}
+              >
+                Register
+              </Button>
             </div>
         }
         </Toolbar>

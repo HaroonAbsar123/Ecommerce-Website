@@ -46,7 +46,7 @@ function GridView({ Products, category }) {
                     disabled={currentPage === 1}
                     onClick={goToPreviousPage}
                 >
-                    <FontAwesomeIcon icon={faArrowCircleLeft} size="3x" />
+                    <FontAwesomeIcon icon={faArrowCircleLeft}/>
                 </button>
                 <span className={classes.pageInfo}>
                     Page {currentPage} of {totalPages}
@@ -56,7 +56,7 @@ function GridView({ Products, category }) {
                     disabled={currentPage === totalPages}
                     onClick={goToNextPage}
                 >
-                    <FontAwesomeIcon icon={faArrowCircleRight} size="3x" />
+                    <FontAwesomeIcon icon={faArrowCircleRight} />
                 </button>
             </div>
         </div>

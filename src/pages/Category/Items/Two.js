@@ -46,29 +46,30 @@ function Two() {
   }
 
   useEffect(() => {
-
+    if (!products[category]) {
+      return;
+    }
+  
     let currentArray = products[category];
-
-    if(category==='hot'){
-       
-      currentArray=[];
-
-      for (const category in products) {
-        const categoryProducts = products[category]?.filter((item) => item?.hot === true);
-        currentArray.push(...categoryProducts);
+  
+    if (category === 'hot') {
+      currentArray = [];
+  
+      for (const categoryKey in products) {
+        if (Object.prototype.hasOwnProperty.call(products, categoryKey)) {
+          const categoryProducts = products[categoryKey]?.filter((item) => item?.hot === true);
+          currentArray.push(...categoryProducts);
+        }
       }
-    
-      setCurremtItems(currentArray);
-
-    } else {
-    
+    }
+  
     setCurremtItems(currentArray);
-  }
   
     // Update the min and max prices whenever the Products or category changes
     setMinPrice(getMinPrice(currentArray));
     setMaxPrice(getMaxPrice(currentArray));
   }, [category, products]);
+  
 
   return (
     <div className={classes.mainContainer}>

@@ -18,6 +18,11 @@
     font-size: 4rem;
 }
 
+.headingSecond{
+  margin-top: 0rem;
+  font-size: 4rem;
+}
+
 
 .columnsContainer {
     display: grid;
@@ -154,24 +159,100 @@
   }
 
 
+  .secondaryButton {
 
-  @media (max-width: 1000px) {
-    .columnsContainer {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    .innerContainer{
-      padding: 20px;
-      padding-top: 50px;
+    border: none;
+    padding: 15px;
+    min-width: 10rem;
+    min-height: 2rem;
+    font-size: large;
+    color: black;
+    background-color: rgb(255, 255, 255);
+    cursor: pointer;
+    border: none;
+    border-radius: 0px;
+  }
+  
+  .secondaryButton:hover {
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out;
+  }
+
+
+
+
+  @media (max-width: 900px) {
+    .secondaryButton{
+      padding: 10px;
+      min-width: 8rem;
+      min-height: 1.7rem;
+      font-size: large;
     }
+    .columnsContainer {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .imageFirst{
+      transform: translateY(0rem);
+      }
+      .imageSecond{
+        transform: translateY(0rem);
+        }
+      .imageThird{
+        transform: translateY(0rem);
+      }
+  .innerContainer{
+    padding: 20px;
+    padding-top: 50px;
+  }
     .heading{
-      font-size: 3.5rem;
+      font-size: 2rem;
+    }
+    .headingSecond{
+      font-size: 2rem;
+    }
+
+    .column{
+      height: 20rem;
     }
   }
 
+  @media (max-width: 600px) {
+    
+    .column{
+      height: 15rem;
+    }
+    
+    .headingSecond{
+      font-size: 1.5rem;
+    }
+    .secondaryButton{
+      padding: 10px;
+      min-height: 1.5rem;
+      font-size: medium;
+      min-width: 100px;
+    }
+
+  }
+
+  @media (max-width: 400px) {
+    
+    .column{
+      height: 12rem;
+    }
+    .headingSecond{
+      font-size: 1rem;
+    }
+    .secondaryButton{
+      padding: 5px;
+      min-height: 1.2rem;
+      font-size: 1rem;
+      min-width: 20px;
+    }
+  }
+/* 
   @media (max-width: 700px) {
-    .columnsContainer {
-        grid-template-columns: repeat(1, 1fr);
-      }
     .imageFirst{
     transform: translateY(0rem);
     }
@@ -181,7 +262,4 @@
     .imageThird{
       transform: translateY(0rem);
     }
-    .heading{
-      font-size: 3rem;
-    }
-  }
+  } */

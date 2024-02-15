@@ -19,7 +19,7 @@
         justify-content: center;
         gap: 10px;
         min-width: 250px;
-        
+        font-size: 3rem;
 }
 
 
@@ -27,4 +27,22 @@
     font-size: 1.2rem;
     font-weight: bold;
     margin-bottom: 0.5rem;
+  }
+
+  @media (max-width: 900px) {
+    
+    .secondContainer{
+     font-size: 2rem;
+    }
+  }
+
+  
+  @media (max-width: 700px) {
+    
+    .secondContainer{
+     font-size: 1.5rem;
+    }
+    .title {
+        font-size: 1rem;
+      }
   }
