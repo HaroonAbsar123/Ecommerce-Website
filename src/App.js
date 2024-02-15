@@ -22,6 +22,7 @@ import { useState } from "react";
 import './App.css';
 import NavBar from "./components/Navbar";
 import Register from "./pages/Register/Register";
+import toast, { Toaster } from 'react-hot-toast';
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
     <React.Fragment>
       <ProductContextProvider>
         
+      <Toaster />
       <NavBar />
       <ScrollToTop />
         

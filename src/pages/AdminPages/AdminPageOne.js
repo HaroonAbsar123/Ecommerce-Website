@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProductContext from '../../Context/ProductContext';
 import { useContext } from 'react';
@@ -19,6 +19,7 @@ function AdminPageOne(){
           console.error('Error occurred during logout:', error);
         }
       };
+
 
     return(
 

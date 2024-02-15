@@ -24,13 +24,9 @@ function Second() {
   const [slidesToShow, setSlidesToShow] = useState(4);
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 600) {
-          setSlidesToShow(1);
-      } else if (window.innerWidth < 1000) {
+     if (window.innerWidth < 1000) {
           setSlidesToShow(2);
-      } else if (window.innerWidth < 1300) {
-          setSlidesToShow(3);
-      }  else{
+      } else{
         setSlidesToShow(4);
     }
   };
@@ -73,9 +69,9 @@ function Second() {
                 style={{ backgroundImage: `url(${item.image})` }}
               >
                 <div className={classes.imageFirstText}>
-                  <h2 >{item.title}</h2>
+                  <h2 className={classes.headingSecond} >{item.title}</h2>
                   <NavLink to={`/collection/${item.title}`}>
-                  <button className="secondaryButton">See more</button>
+                  <button className={classes.secondaryButton}>See more</button>
                   </NavLink>
                 </div>
               </div>

@@ -14,21 +14,27 @@ function SecondContainer(){
 
   const [mainProducts, setMainProducts] = useState([]);
 
-useEffect(() => {
-  // Collect all hot products in this array
-  const mainProductsArray = [];
-
-  for (const category in products) {
-    // Find the products with the specified id in the current category
-    const categoryProducts = products[category].filter((item) => item?.homePageItem === true);
-
-    // Add the hot products of the current category to the array
-    mainProductsArray.push(...categoryProducts);
-  }
-
-  // Update the state with all the hot products
-  setMainProducts(mainProductsArray.slice(0,2));
-}, [products]);
+  useEffect(() => {
+    // Collect all hot products in this array
+    const mainProductsArray = [];
+  
+    for (const category in products) {
+      console.log("category", category)
+      if (Array.isArray(products[category])) { // Check if products[category] is an array
+        // Find the products with the specified id in the current category
+        const categoryProducts = Array.isArray(products[category])
+        ? products[category].filter((item) => item?.homePageItem === true)
+        : [];
+  
+        // Add the hot products of the current category to the array
+        mainProductsArray.push(...categoryProducts);
+      }
+    }
+  
+    // Update the state with all the hot products
+    setMainProducts(mainProductsArray.slice(0, 2));
+  }, [products]);
+  
 
 const [isMobile, setIsMobile] = useState(false);
 useEffect(() => {

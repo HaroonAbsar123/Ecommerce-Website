@@ -1,16 +1,19 @@
 .mainContainer{
     background-image: url("../../../Assets/Home3.png");
-    height: 25rem;
-    width: 100%;
+    height: 30rem;
+    flex: 1;
     flex-direction: row;
     display: flex;
     align-items: center;
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
-    overflow: hidden;
-    margin-top: 3rem;
+    padding: 10px
 
+}
+
+.text{
+    font-weight: bold;
 }
 
 
@@ -21,21 +24,21 @@
     width: 100%;
     font-size: 2rem;
     color: #ffffff;
-
+    text-align: center;
 
 }
 
-
 @media (max-width: 900px) {
-    .mainContainer {
-        height: 20rem;
-      }
-
-      .textContainer{
+    .textContainer{
         font-size: 1.5rem;
-        color: #ffffff;
-        text-align: center;
-    
+    }
+    .mainContainer{
+        
+    height: max-content;
+    padding-top: 50px;
+    padding-bottom: 70px;
+    }
+    .text{
+        font-size: 2rem;
     }
   }
-  

@@ -16,13 +16,24 @@
 .cartItem{
     /* border-bottom: 1px solid #ccc; */
     height: 7rem;
-    padding-top: 1rem;
+    gap: 10px
+}
+
+
+@media (max-width: 900px) {
+  .cartItem{
+    /* border-bottom: 1px solid #ccc; */
+    height: max-content;
+}
+
 }
 
 .imageContainer{
-    height: 6rem;
-    width: 6rem;
+    height: 60px;
+    width: 60px;
     overflow: hidden;
+    border: '2px solid #1e1e1e';
+    border-radius: 5px;
 }
 
 
@@ -39,7 +50,9 @@
     align-items: center;
     flex: 1;
     overflow: hidden;
-    border: 1px solid black
+    border: 1px solid #1e1e1e;
+    overflow: hidden;
+    border-radius: 10px;
   }
 
 .input{
@@ -57,13 +70,23 @@
 
   .button {
     flex: 2;
-    background-color: black;
+    background-color: #1e1e1e;
     height: 100%;
     width: 100%;
     border: none;
     color: white;
     transition: transform 0.3s ease-in-out; /* Add transition property for smooth effect */
+    font-size: large;
+    text-overflow: clip;
+    white-space: nowrap;
   }
+
+  
+@media (max-width: 1150px) {
+  .button {
+    font-size: medium;
+  }
+}
   
   .button:hover {
     transform: translateX(3px); /* Translate the button text by 3px to the right on hover */

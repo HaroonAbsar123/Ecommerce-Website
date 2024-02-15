@@ -8,8 +8,8 @@ function One({ category }) {
   return (
     <div className={classes.mainContainer}>
       <div className={classes.secondContainer}>
-        <h2 style={{ fontSize: '3rem', marginBottom: '1rem', marginTop: '0rem' }}>
-          {capitalizedCategory}
+        <h2 className={classes.mainHeading}>
+          {capitalizedCategory === "Hot" ? "Hot Products" : capitalizedCategory}
         </h2>
       </div>
     </div>

@@ -25,13 +25,11 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    height: auto;
     overflow: hidden;
     justify-content: center;
     cursor: move;
     background-color: white;
-    max-width: 40rem;
-    max-height: 25rem;
+    height: 25rem;
   }
   
   
@@ -151,6 +149,7 @@
     align-items: center;
     margin-top: 1rem;
     color: white;
+    gap: 5px
   }
   
   .nextButton,

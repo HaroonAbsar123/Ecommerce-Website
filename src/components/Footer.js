@@ -42,7 +42,7 @@ function Footer() {
             <h2 className={classes.title}>Don't Miss Any Update</h2>
             <p className="para">Please enter email to keep up to date on our offers and products.</p>
             <div className={classes.inputContainer}>
-            <input className={classes.input} />
+            <input className={classes.input} placeholder="xyx@example.com" />
             <button className={classes.button}> <FontAwesomeIcon icon={faArrowRight} size="2x" /> </button>
             </div>
           </div>

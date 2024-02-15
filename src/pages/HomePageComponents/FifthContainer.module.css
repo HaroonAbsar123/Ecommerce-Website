@@ -20,7 +20,7 @@
 
 .headingSecond{
   margin-top: 0rem;
-  font-size: 4rem;
+  font-size: 3rem;
 }
 
 
@@ -181,7 +181,11 @@
   }
 
 
-
+  @media (max-width: 1200px) {
+    .headingSecond{
+      font-size: 2rem;
+    }
+  }
 
   @media (max-width: 900px) {
     .secondaryButton{

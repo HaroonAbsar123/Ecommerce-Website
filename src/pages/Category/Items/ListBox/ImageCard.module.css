@@ -38,16 +38,16 @@
   }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 500px) {
     
   .productCard{
-    height: 15rem;
+    height: 17rem;
   }
   .imageContainer {
-    height: 10rem;
+    height: 12rem;
   }
   .productImage {
-    height: 10rem;
+    height: 12rem;
   }
 }
 

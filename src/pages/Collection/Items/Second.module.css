@@ -9,6 +9,15 @@
     position: relative;
   }
   
+  
+@media (max-width: 900px) {
+    
+  .mainContainer {
+    padding-right: 2rem;
+    padding-left: 2rem;
+  }
+  
+}
   .innerContainer {
     flex: 1;
     text-align: center;
@@ -33,6 +42,85 @@
     overflow: hidden;
     position: relative;
   }
+
+  .headingSecond{
+    margin-top: 0rem;
+    font-size: 3rem;
+  }
+
+
+  .secondaryButton {
+
+    border: none;
+    padding: 15px;
+    min-width: 10rem;
+    min-height: 2rem;
+    font-size: large;
+    color: black;
+    background-color: rgb(255, 255, 255);
+    cursor: pointer;
+    border: none;
+    border-radius: 0px;
+  }
+  
+  .secondaryButton:hover {
+    background-color: transparent;
+    color: white;
+    border: 1px solid white;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out;
+  }
+
+  
+@media (max-width: 1300px) {
+  .column {
+    height: 25rem;
+  }
+
+}
+
+@media (max-width: 900px) {
+  .column {
+    height: 18rem;
+  }
+  .headingSecond{
+    font-size: 2rem;
+  }
+  .secondaryButton{
+    padding: 10px;
+    min-width: 8rem;
+    min-height: 1.7rem;
+    font-size: large;
+  }
+
+}
+
+@media (max-width: 600px) {
+  .secondaryButton{
+    padding: 10px;
+    min-height: 1.5rem;
+    font-size: medium;
+    min-width: 100px;
+  }
+  
+  .headingSecond{
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .column {
+    height: 15rem;
+  }
+  
+  .secondaryButton{
+    padding: 5px;
+    min-height: 1.2rem;
+    font-size: 1rem;
+    min-width: 20px;
+  }
+  
+
+}
   
   .imageFirst {
     height: 100%;

@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from "react";
 import classes from "./Two.module.css";
 import ListBox from "./ListBox/ListBox";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useContext } from "react";
 import ProductContext from "../../../Context/ProductContext";
 
+
+import Accordion from '@mui/material/Accordion';
+import AccordionActions from '@mui/material/AccordionActions';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Button from '@mui/material/Button';
+
 function Two() {
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
-
+  const navigate=useNavigate();
 
 
 
@@ -30,45 +38,85 @@ function Two() {
 
   // Helper functions to get the minimum and maximum price from the Products array
   function getMinPrice(products) {
+    if (products.length > 0) {
     return Math.min(
-      ...products.map(
+      ...products?.map(
         (product) => product?.discountedPrice || product?.price
       )
     );
+  } else {
+    return 0;
+  }
   }
 
   function getMaxPrice(products) {
-    return Math.max(
-      ...products.map(
-        (product) => product?.discountedPrice || product?.price
-      )
-    );
+    if (products.length > 0) {
+      return Math.max(
+        ...products.map(
+          (product) => product?.discountedPrice || product?.price
+        )
+      );
+    } else {
+      return 0;
+    }
   }
+  
 
   useEffect(() => {
-    if (!products[category]) {
-      return;
-    }
-  
-    let currentArray = products[category];
-  
+    let currentArray = [];
     if (category === 'hot') {
-      currentArray = [];
-  
-      for (const categoryKey in products) {
-        if (Object.prototype.hasOwnProperty.call(products, categoryKey)) {
-          const categoryProducts = products[categoryKey]?.filter((item) => item?.hot === true);
+      for (const cat in products) {
+        if (Array.isArray(products[cat])) {
+          // Find the products with hot === true in the current category
+          const categoryProducts = products[cat].filter((item) => item?.hot === true);
+          // Add the hot products of the current category to the array
           currentArray.push(...categoryProducts);
         }
       }
+    } else {
+      currentArray = products[category];
     }
   
+    // Check if currentArray is empty and category is not in products
+    if (!currentArray || currentArray.length === 0) {
+      setCurremtItems([]);
+      return;
+    }
+  
+    // Convert object to array
+    currentArray = Object.values(currentArray);
+  
+    console.log("currentArray", currentArray);
+  
+    setCurremtItems([]);
     setCurremtItems(currentArray);
   
     // Update the min and max prices whenever the Products or category changes
     setMinPrice(getMinPrice(currentArray));
     setMaxPrice(getMaxPrice(currentArray));
+  
+    // setMinPrice(0);
+    // setMaxPrice(10000);
   }, [category, products]);
+  
+  
+
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  const checkIsMobile = () => {
+    setIsMobile(window.innerWidth <= 900); // You can adjust the width threshold as needed
+  };
+
+  useEffect(() => {
+    checkIsMobile(); // Initial check
+    window.addEventListener("resize", checkIsMobile); // Add event listener
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", checkIsMobile);
+    };
+  }, []);
   
 
   return (
@@ -86,8 +134,12 @@ function Two() {
       </div>
 
       <div className={classes.Second}>
-        <div className={classes.navLinks}>
-          <h2 className="title">Collection</h2>
+            <div className={classes.navLinks}>
+{!isMobile ? 
+
+<>
+  <div className={classes.navLinks}>
+  <h2 className={classes.title}>Collection</h2>
 
           <NavLink to={'/collection/hot'}>
   <p className="navLinkUnderline">Hot</p>
@@ -109,9 +161,10 @@ function Two() {
   <p className="navLinkUnderline">Cushions</p>
 </NavLink>
 
-        </div>
-        {/* Filter component */}
-        <div className={classes.FilterContainer}>
+</div>
+
+{/* Filter component */}
+<div className={classes.FilterContainer}>
           <div className={classes.filterInputContainer}>
             <label htmlFor="minPrice" className={classes.filterText}>
               Min Price:
@@ -139,6 +192,102 @@ function Two() {
             />
           </div>
         </div>
+</>
+:
+<>
+<Accordion style={{backgroundColor: "bisque", borderRadius: '10px', marginBottom: '10px'}}>
+<AccordionSummary
+  expandIcon={<ExpandMoreIcon />}
+  aria-controls="panel1-content"
+  id="panel1-header"
+>
+  <div className={classes.title}>Collection</div>
+</AccordionSummary>
+<AccordionDetails>
+  <div>
+  <Button
+                onClick={() => navigate("/collection/hot")}
+                sx={{ color: '#1e1e1e', width: '100%',fontSize: '1rem', background: '#fff', marginBottom: '5px'   }}
+              >
+               Hot Products
+              </Button>
+
+              <Button
+                onClick={() => navigate("/collection/sofas")}
+                sx={{ color: '#1e1e1e', width: '100%', fontSize: '1rem', background: '#fff', marginBottom: '5px'  }}
+              >
+               Sofas
+              </Button>
+
+              <Button
+                onClick={() => navigate("/collection/armchairs")}
+                sx={{  color: '#1e1e1e', width: '100%', fontSize: '1rem', background: '#fff', marginBottom: '5px'  }}
+              >
+               Armchairs
+              </Button>
+              <Button
+                onClick={() => navigate("/collection/lamps")}
+                sx={{  color: '#1e1e1e', width: '100%', fontSize: '1rem', background: '#fff', marginBottom: '5px'  }}
+              >
+               Lamps
+              </Button>
+
+              <Button
+                onClick={() => navigate("/collection/cushions")}
+                sx={{ color: '#1e1e1e', width: '100%', fontSize: '1rem', background: '#fff',  }}
+              >
+               Cushions
+              </Button>
+
+</div>
+</AccordionDetails>
+</Accordion>
+
+
+<Accordion style={{backgroundColor: "bisque", borderRadius: '10px', marginBottom: '10px'}}>
+<AccordionSummary
+  expandIcon={<ExpandMoreIcon />}
+  aria-controls="panel1-content"
+  id="panel1-header"
+>
+  <div className={classes.title}>Price Range</div>
+</AccordionSummary>
+<AccordionDetails>
+  <div>
+ 
+  <div className={classes.filterInputContainer}>
+            <label htmlFor="minPrice" className={classes.filterText}>
+              Min Price:
+            </label>
+            <input
+              type="number"
+              id="minPrice"
+              value={minPrice}
+              min={getMinPrice(currentItems)}
+              max={maxPrice}
+              onChange={(e) => setMinPrice(e.target.value)}
+            />
+          </div>
+          <div className={classes.filterInputContainer}>
+            <label htmlFor="maxPrice" className={classes.filterText}>
+              Max Price:
+            </label>
+            <input
+              type="number"
+              id="maxPrice"
+              value={maxPrice}
+              min={minPrice}
+              max={getMaxPrice(currentItems)}
+              onChange={(e) => setMaxPrice(e.target.value)}
+            />
+          </div>
+
+</div>
+</AccordionDetails>
+</Accordion>
+</>
+}
+</div>
       </div>
     </div>
   );

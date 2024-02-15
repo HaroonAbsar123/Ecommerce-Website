@@ -1,7 +1,7 @@
 import React from "react";
 import classes from './SecondCard.module.css';
 import { useState, useEffect } from "react";
-import { Backdrop } from "@mui/material";
+import { Backdrop, Button } from "@mui/material";
 import Form from "./Form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
@@ -121,7 +121,7 @@ function SecondCard({Products}){
 
 
 
-            <button onClick={handleOpen} className="mainButton" style={{width: '100%', marginTop: '3rem', backgroundColor: 'black', color: 'white'}}>Proceed to Checkout</button>
+            <Button onClick={handleOpen} style={{width: '100%', backgroundColor: '#1e1e1e', color: 'white'}}>Proceed to Checkout</Button>
 
 
                 <Backdrop
@@ -131,7 +131,7 @@ function SecondCard({Products}){
                 >
                     
                     
-                    <div style={{width: '90%', backgroundColor: 'white', color: 'black', height: '100%', maxHeight: '70vh', marginTop: '5rem', overflow: 'hidden',   maxWidth: '2200px', minWidth: '1100px'}}>
+                    <div style={{width: '90%', backgroundColor: 'white', color: 'black', height: '100%', maxHeight: '70vh', marginTop: '5rem', overflow: 'hidden',   maxWidth: '2200px'}}>
                     <div style={{height: '10%', width: '100%', flex: 1, display: 'flex', justifyContent: 'space-between', flexDirection: 'row', borderBottom: '1px solid #ccc', alignItems: 'center'}}>
                         <h2 className="title" style={{fontSize: '2rem', margin: '0px', paddingLeft: '1rem'}}>Billing Details</h2>
                     <button onClick={handleClose} style={{background: 'none', border: 'none'}}><FontAwesomeIcon icon={faCircleXmark} size="1x" style={{fontSize: '2.5rem'}} /></button>

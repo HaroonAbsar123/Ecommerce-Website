@@ -94,9 +94,9 @@ function Fifth(){
         {
                 firstHovered && 
                 <div className={classes.imageFirstText}>
-                    <h2>Sofas</h2>
+                    <h2 className={classes.headingSecond}>Sofas</h2>
                     <NavLink to={'/collection/sofas'}>
-                    <button className="secondaryButton">See more</button>
+                    <button className={classes.secondaryButton}>See more</button>
                     </NavLink>
                     </div>
             }
@@ -108,9 +108,9 @@ function Fifth(){
       {
                 secondHovered && 
                 <div className={classes.imageFirstText}>
-                    <h2>Armchairs</h2>
+                    <h2 className={classes.headingSecond}>Armchairs</h2>
                     <NavLink to={'/collection/armchairs'}>
-                    <button className="secondaryButton">See more</button>
+                    <button className={classes.secondaryButton}>See more</button>
                     </NavLink>
                     </div>
             }
@@ -131,9 +131,9 @@ function Fifth(){
       {
                 thirdHovered && 
                 <div className={classes.imageFirstText}>
-                    <h2>Lamps</h2>
+                    <h2 className={classes.headingSecond}>Lamps</h2>
                     <NavLink to={'/collection/lamps'}>
-                    <button className="secondaryButton">See more</button>
+                    <button className={classes.secondaryButton}>See more</button>
                     </NavLink>
                     </div>
             }
@@ -147,9 +147,9 @@ function Fifth(){
       {
                 fourthHovered && 
                 <div className={classes.imageFirstText}>
-                    <h2>Cushions</h2>
+                    <h2 className={classes.headingSecond}>Cushions</h2>
                     <NavLink to={'/collection/cushions'}>
-                    <button className="secondaryButton">See more</button>
+                    <button className={classes.secondaryButton}>See more</button>
                     </NavLink>
                     </div>
             }

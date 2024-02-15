@@ -17,15 +17,20 @@ useEffect(() => {
   const hotProductsArray = [];
 
   for (const category in products) {
+    if (Array.isArray(products[category])) { 
+
     // Find the products with the specified id in the current category
-    const categoryProducts = products[category].filter((item) => item?.hot === true);
+    const categoryProducts = Array.isArray(products[category])
+        ? products[category].filter((item) => item?.hot === true)
+        : [];
 
     // Add the hot products of the current category to the array
     hotProductsArray.push(...categoryProducts);
   }
+  }
 
   // Update the state with all the hot products
-  setHotProducts(hotProductsArray);
+  setHotProducts(hotProductsArray?.slice(0,8));
 }, [products]);
 
 

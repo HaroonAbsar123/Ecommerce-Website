@@ -21,6 +21,9 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { BugReportTwoTone } from '@mui/icons-material';
 
+import CircularProgress from '@mui/material/CircularProgress';
+import { Modal } from '@mui/material';
+
 const pages = ['Home', 'Collection', 'Contact'];
 const settings = ['Profile', 'Cart', 'Logout'];
 
@@ -28,7 +31,7 @@ function Navbar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate=useNavigate();
-  const {cart, setIsUserLoggedIn, setUserDetails, setUserType, userDetails, isUserLoggedIn} = useContext(ProductContext);
+  const {cart, setIsUserLoggedIn, setUserDetails, setUserType, userDetails, isUserLoggedIn, loading} = useContext(ProductContext);
 
 
   const [totalItems, setTotalItems] = useState(0);
@@ -240,6 +243,43 @@ function Navbar() {
       </Container>
     </AppBar>
     <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar}/>
+
+
+
+    <Modal
+      open={loading}
+      aria-labelledby="modal-modal-title"
+      aria-describedby="modal-modal-description"
+    >
+      <div
+          style={{
+            position: "fixed",
+            top: "0",
+            left: "0",
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center", // center the modal content vertically and horizontally
+            
+        backdropFilter: 'blur(10px)', // Adjust the blur intensity as needed
+        WebkitBackdropFilter: 'blur(10px)', // For Safari support,
+          }}
+        >
+        <div style={{flexDirection: 'column'}}
+          >
+         
+             <img src={logo} alt="logo" style={{margin: '10px', maxHeight: '60px'}}/>
+  
+             <div style={{flex: 1, display: 'flex', justifyContent: 'center'}}>
+     <CircularProgress sx={{
+    color: 'white',
+  }}
+/>
+     </div>
+        </div>
+        </div>
+    </Modal>
     </>
   );
 }

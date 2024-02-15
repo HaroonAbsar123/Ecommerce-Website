@@ -1,14 +1,35 @@
-.mainContainer{
-    height: max-content;
-    flex: 1;
-    background: linear-gradient(to left, rgb(255, 244, 236), bisque);
-    flex-direction: row;
-    display: flex;
-    align-items: center;
-    padding-top: 5rem;
+.mainContainer {
+  height: max-content;
+  flex: 1;
+  background: linear-gradient(to left, rgb(255, 244, 236), bisque);
+  flex-direction: row;
+  display: flex;
+  align-items: center;
+  padding-top: 5rem;
 }
 
-.secondContainer{
+.mainHeading {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  margin-top: 0rem;
+}
+
+.secondContainer {
     padding-left: 2rem;
+    flex: 1
+  }
+
+@media (max-width: 900px) {
+    .secondContainer {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        text-align: center;
+      }
+}
+
+@media (max-width: 500px) {
+    .mainHeading{
+        font-size: 2rem;
+    }
 }
 

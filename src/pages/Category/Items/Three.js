@@ -1,17 +1,17 @@
 import React from "react";
-import classes from './Three.module.css';
-import { NavLink } from "react-router-dom";
+import classes from './Three.module.css'
+import { Link } from "react-router-dom";
 
-function Three(){
+function ThirdContainer(){
 
 
     return(
         <div className={classes.mainContainer}>
             <div className={classes.textContainer}>
-                <h2 className={classes.text}>Checkout our Collection</h2>
-                <NavLink to={'/collection'}>
+                <h2 className={classes.text}>Checkout our collection</h2>
+                <Link to={'collection'}>
                 <button className="mainButton">Shop Now</button>
-                </NavLink>
+                </Link>
             </div>
                 
         </div>
@@ -19,4 +19,4 @@ function Three(){
 };
 
 
-export default Three;
+export default ThirdContainer;
