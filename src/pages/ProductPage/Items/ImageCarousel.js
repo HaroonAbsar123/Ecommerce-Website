@@ -14,10 +14,20 @@ import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import ProductContext from "../../../Context/ProductContext";
 import { Button } from "@mui/material";
 
+
+import dummyImage from '../../../Assets/displayImage.png';
+
 function ImageCarousel({ Products }) {
   const [selectedImage, setSelectedImage] = useState(Products.img[0]);
   const [startIndex, setStartIndex] = useState(0);
   const itemsPerPage = 4;
+
+  
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  const handleImageLoaded = () => {
+    setImageLoaded(true);
+  };
 
   const { id, category } = useParams();
   const { products } = useContext(ProductContext);
@@ -60,8 +70,30 @@ function ImageCarousel({ Products }) {
 
   const showButtons = Products.img.length > itemsPerPage;
 
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  const checkIsMobile = () => {
+    setIsMobile(window.innerWidth <= 900); // You can adjust the width threshold as needed
+  };
+
+  useEffect(() => {
+    checkIsMobile(); // Initial check
+    window.addEventListener("resize", checkIsMobile); // Add event listener
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", checkIsMobile);
+    };
+  }, []);
+
   return (
     <div className={classes.mainContainer}>
+
+{isMobile && 
+          <h2 className={classes.title}>{Products.title}</h2>
+}
+
       <div className={classes.mainImage}>
         <TransformWrapper>
           {({ zoomIn, zoomOut, resetTransform, ...rest }) => (
@@ -72,9 +104,7 @@ function ImageCarousel({ Products }) {
                     flex: 1,
                     backgroundColor: "#1e1e1e",
                     color: "white",
-                    borderBottomLeftRadius: "0px",
-                    borderBottomRightRadius: "0px",
-                    borderTopRightRadius: "0px",
+                    borderRadius: "0px",
                   }}
                   onClick={() => zoomIn()}
                 >
@@ -97,9 +127,7 @@ function ImageCarousel({ Products }) {
                     flex: 1,
                     backgroundColor: "#1e1e1e",
                     color: "white",
-                    borderTopLeftRadius: "0px",
-                    borderBottomLeftRadius: "0px",
-                    borderBottomRightRadius: "0px",
+                    borderRadius: "0px",
                   }}
                   onClick={() => resetTransform()}
                 >
@@ -107,29 +135,38 @@ function ImageCarousel({ Products }) {
                 </Button>
               </div>
               <TransformComponent >
-                <img
-                  src={selectedImage}
-                  className={classes.zoomImage}
-                  alt="image"
-                />
+              {!imageLoaded && <img src={dummyImage} alt={"Product Image"} className={classes.zoomImage} />}
+          <img
+            src={selectedImage}
+            alt={"Product Image"} 
+            className={`${classes.zoomImage} ${imageLoaded ? classes.showImage : classes.hideImage}`}
+            onLoad={handleImageLoaded}
+          />
               </TransformComponent>
             </React.Fragment>
           )}
         </TransformWrapper>
       </div>
       <div className={classes.thumbnailContainer}>
-        {displayedImages.map((image, index) => (
-          <div
-            key={index}
-            className={`${classes.thumbnail} ${
-              selectedImage === image ? classes.active : ""
-            }`}
-            onClick={() => handleImageClick(image)}
-          >
-            <img src={image} alt={`Product ${index + 1}`} />
-          </div>
-        ))}
-      </div>
+  {displayedImages.map((image, index) => (
+    <div
+      key={index}
+      className={`${classes.thumbnail} ${
+        selectedImage === image ? classes.active : ""
+      }`}
+      onClick={() => handleImageClick(image)}
+    >
+      {!imageLoaded && <img src={dummyImage} alt={`Product ${index + 1}`} />}
+      <img
+        src={image}
+        alt={`Product ${index + 1}`}
+        className={`${imageLoaded ? classes.showImage : classes.hideImage}`}
+        onLoad={handleImageLoaded}
+      />
+    </div>
+  ))}
+</div>
+
 
       {showButtons && (
         <div className={classes.buttonRow}>

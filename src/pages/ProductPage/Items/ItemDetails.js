@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import classes from "./ItemDetails.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -9,6 +9,7 @@ import { useContext } from "react";
 import ProductContext from "../../../Context/ProductContext";
 import { useNavigate } from "react-router-dom";
 import { Button, IconButton } from "@mui/material";
+import toast from "react-hot-toast";
 
 function ItemDetails({ Products }) {
   const [selectedColor, setSelectedColor] = useState(Products.specs[0].color);
@@ -56,17 +57,36 @@ function ItemDetails({ Products }) {
         `Added to cart \n chosen size: ${selectedSize} \n chosenColor: ${selectedColor} \n chosenQuantity: ${selectedQuantity}\n ${Product}`
       );
     } else {
+      toast("Please login to add items to cart")
       navigate("/login");
     }
   };
 
   const handleBuyNow = () => {
+    if (isUserLoggedIn) {
     handleAddToCart();
     navigate("/cart");
-
-    // Proceed with the purchase
-    console.log("Buy now");
+    } else {
+      toast("Please login to buy products")
+      navigate("/login");
+    }
   };
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  const checkIsMobile = () => {
+    setIsMobile(window.innerWidth <= 900); // You can adjust the width threshold as needed
+  };
+
+  useEffect(() => {
+    checkIsMobile(); // Initial check
+    window.addEventListener("resize", checkIsMobile); // Add event listener
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", checkIsMobile);
+    };
+  }, []);
 
   const getProductDetails = () => {
     const product = Products;
@@ -79,11 +99,16 @@ function ItemDetails({ Products }) {
     // const isOutOfStock = selectedAvailability.availability === false;
     const isOutOfStock = false;
 
+    
+
+
+
     return (
       <div className={classes.mainContainer}>
         <div className={classes.secondContainer}>
+          {!isMobile && 
           <h2 className={classes.title}>{product.title}</h2>
-
+}
           <div className={classes.price}>
             {product.discountedPrice ? (
               <div className={classes.priceContainer}>

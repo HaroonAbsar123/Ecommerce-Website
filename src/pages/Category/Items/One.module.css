@@ -5,18 +5,28 @@
   flex-direction: row;
   display: flex;
   align-items: center;
-  padding-top: 5rem;
 }
 
 .mainHeading {
   font-size: 3rem;
   margin-bottom: 1rem;
   margin-top: 0rem;
+  white-space: nowrap;
 }
 
 .secondContainer {
+  margin-top: 6rem;
     padding-left: 2rem;
-    flex: 1
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    max-height: 5rem;
+  }
+
+  .image {
+    width: 70%;
+    float: right;
+    transform:translateX("10%")
   }
 
 @media (max-width: 900px) {
@@ -25,11 +35,21 @@
         padding-right: 1rem;
         text-align: center;
       }
+
+      .image {
+        width: 100%;
+        transform:translateX("50%")
+      }
 }
+
+
 
 @media (max-width: 500px) {
     .mainHeading{
         font-size: 2rem;
+    }
+    .secondContainer {
+      max-height: 4rem;
     }
 }
 

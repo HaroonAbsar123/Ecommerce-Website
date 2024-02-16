@@ -14,6 +14,7 @@ import Image7 from "../Assets/Products/7.png";
 import Image8 from "../Assets/Products/8.png";
 import Image9 from "../Assets/Products/9.png";
 import { onValue, ref } from "firebase/database";
+import Cookies from 'universal-cookie';
 
 
 const initialCoupons = [
@@ -25,15 +26,22 @@ const initialCoupons = [
 ];
 
 function ProductContextProvider({ children }) {
+
+  
+  const cookies = new Cookies();
+
   const [cart, setCart] = useState([]);
   const [products, setProducts] = useState([]);
   const [coupons, setCoupons] = useState(initialCoupons);
   const [couponApplied, setCouponApplied] = useState({});
 
   function CartUpdateItem(product) {
+    
+    const updatedProduct = {...product, addedOn: new Date}
+
     const updatedCart = cart.map((item) =>
-      item.cartID === product.cartID
-        ? { ...item, selectedQuantity: product.selectedQuantity }
+      item.cartID === updatedProduct.cartID
+        ? { ...item, selectedQuantity: updatedProduct.selectedQuantity, addedOn: new Date }
         : item
     );
 
@@ -41,11 +49,13 @@ function ProductContextProvider({ children }) {
   }
 
   function CartAddItem(product) {
+    const updatedProduct = {...product, addedOn: new Date}
+
     const existingItemIndex = cart.findIndex(
       (item) =>
-        item.product.id === product.product.id &&
-        item.selectedColor === product.selectedColor &&
-        item.selectedSize === product.selectedSize
+        item.product.id === updatedProduct.product.id &&
+        item.selectedColor === updatedProduct.selectedColor &&
+        item.selectedSize === updatedProduct.selectedSize
     );
 
     if (existingItemIndex !== -1) {
@@ -55,14 +65,15 @@ function ProductContextProvider({ children }) {
           ? {
               ...item,
               selectedQuantity:
-                item.selectedQuantity + product.selectedQuantity,
+                item.selectedQuantity + updatedProduct.selectedQuantity,
+              addedOn: new Date
             }
           : item
       );
       setCart(updatedCart);
     } else {
       // Item with the same properties does not exist, add the new item to the cart
-      setCart([...cart, product]);
+      setCart([...cart, updatedProduct]);
     }
   }
 
@@ -100,38 +111,36 @@ function ProductContextProvider({ children }) {
   }, []);
 
 
-  // const updateData = async () => {
-  //   try {
-  //     const response = await fetch(
-  //       "https://ecommerce-791a1-default-rtdb.firebaseio.com/products.json", // Append "/products.json" to the URL to access the "Products" node.
-  //       {
-  //         method: "PUT",
-  //         body: JSON.stringify(Products), // Assuming "Products" is a valid object or array containing the data you want to update.
-  //         headers: { "Content-Type": "application/json" },
-  //       }
-  //     );
+  const updateData = async () => {
+    try {
+      const response = await fetch(
+        "https://ecommerce-791a1-default-rtdb.firebaseio.com/products.json", // Append "/products.json" to the URL to access the "Products" node.
+        {
+          method: "PUT",
+          body: JSON.stringify(items), // Assuming "Products" is a valid object or array containing the data you want to update.
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
-  //     if (!response.ok) {
-  //       throw new Error(
-  //         "Failed to update data in the Firebase Realtime Database."
-  //       );
-  //     }
+      if (!response.ok) {
+        throw new Error(
+          "Failed to update data in the Firebase Realtime Database."
+        );
+      }
 
-  //     console.log("Data Updated");
-  //   } catch (error) {
-  //     console.error("Error while updating data:", error);
-  //   }
-  // };
-
-  // updateData();
+      console.log("Data Updated");
+    } catch (error) {
+      console.error("Error while updating data:", error);
+    }
+  };
 
 
-  // _____________________________________________________________
+
 
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
   const [userDetails, setUserDetails] = useState("")
   const [userType, setUserType] = useState("")
-  const userId = localStorage.getItem('userId');
+  const userId = cookies.get("userId");
   const [isCartFetched, setIsCartFetched] = useState(false);
   const [loading, setLoading] = useState(true);
   
@@ -141,9 +150,12 @@ function ProductContextProvider({ children }) {
   }, []); // Run only once on component mount
 
   function fetchDataHandler() {
-    const localIsUserLoggedIn = localStorage.getItem('isLoggedIn');
+    // const localIsUserLoggedIn = localStorage.getItem('isLoggedIn');
 
-    if (localIsUserLoggedIn === 'true') {
+    const userId = cookies.get("userId");
+    const localIsUserLoggedIn = cookies.get("isLoggedIn");
+
+    if (localIsUserLoggedIn === true) {
       setIsUserLoggedIn(true);
 
       const userListRef = collection(db, 'userList');
@@ -194,8 +206,9 @@ const DEBOUNCE_DELAY = 1000; // Adjust the debounce delay as needed
 
     console.log("POSTING CART FETCHED");
 
-    const localIsUserLoggedIn = localStorage.getItem('isLoggedIn');
-    if (localIsUserLoggedIn !== 'true') return;
+    const localIsUserLoggedIn = cookies.get("isLoggedIn");
+
+    if (localIsUserLoggedIn !== true) return;
 
     const userListRef = collection(db, 'userList');
     const userDocQuery = query(userListRef, where('userId', '==', userId));
@@ -234,6 +247,9 @@ const DEBOUNCE_DELAY = 1000; // Adjust the debounce delay as needed
   }, [cart]);
 
 
+  
+  // updateData();
+
   return (
     <ProductContext.Provider
       value={{
@@ -256,7 +272,8 @@ const DEBOUNCE_DELAY = 1000; // Adjust the debounce delay as needed
         setUserDetails,
         setUserType,
         isUserLoggedIn,
-        loading
+        loading,
+        updateData
       }}
     >
       {children}
@@ -265,3 +282,320 @@ const DEBOUNCE_DELAY = 1000; // Adjust the debounce delay as needed
 }
 
 export default ProductContextProvider;
+
+
+const items = {
+  lamps: [
+  {
+    category: "lamps",
+    description: "Premium Lamp",
+    discountedPrice: 28,
+    homePageItem: true,
+    hot: true,
+    id: "rYzHjcbwygyA",
+    img: [
+      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FrYzHjcbwygyA%2FTu05zkVO62lN?alt=media&token=166e15b8-1c4c-409a-a6ac-9702903dd3cc",
+      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FrYzHjcbwygyA%2FCJR8sZNp8dYa?alt=media&token=59c0e9de-95bf-4646-9b53-7691877fcdee"
+    ],
+    packof: 1,
+    price: 30,
+    specs: [
+      {
+        available: [
+          {
+            availability: true,
+            size: "L"
+          }
+        ],
+        color: "red"
+      }
+    ],
+    title: "Lamp 3"
+  },
+  {
+    category: "lamps",
+    description: "Premium Lamp",
+    discountedPrice: 28,
+    homePageItem: true,
+    hot: true,
+    id: "rYzbdfb4wygyA",
+    img: [
+      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FrYzHjcbwygyA%2FTu05zkVO62lN?alt=media&token=166e15b8-1c4c-409a-a6ac-9702903dd3cc",
+      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FrYzHjcbwygyA%2FCJR8sZNp8dYa?alt=media&token=59c0e9de-95bf-4646-9b53-7691877fcdee"
+    ],
+    packof: 1,
+    price: 30,
+    specs: [
+      {
+        available: [
+          {
+            availability: true,
+            size: "L"
+          }
+        ],
+        color: "red"
+      }
+    ],
+    title: "Lamp 3"
+  },
+],
+cushions: [
+  {
+    category: "cushions",
+    description: "Premium Sofa",
+    discountedPrice: 145,
+    homePageItem: true,
+    hot: true,
+    id: "aVhrth34tdGFE",
+    img: [
+      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FV6v0uGBMXlYQ?alt=media&token=0560ec76-2737-44d5-975a-be45fd38e1c9",
+      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FgxvMNKQRpgIA?alt=media&token=f5e77b28-30f3-4dfa-a682-ad46b3038e30"
+    ],
+    packof: 1,
+    price: 150,
+    specs: [
+      {
+        available: [
+          {
+            availability: true,
+            size: "L"
+          },
+          {
+            availability: true,
+            size: "XL"
+          },
+          {
+            availability: true,
+            size: "XXL"
+          },
+          {
+            availability: true,
+            size: "XXXL"
+          },
+          {
+            availability: true,
+            size: "XXXXL"
+          }
+        ],
+        color: "Red"
+      }
+    ],
+    title: "Sofa 3"
+  },
+  {
+    category: "cushions",
+    description: "Premium Sofa",
+    discountedPrice: 145,
+    homePageItem: true,
+    hot: true,
+    id: "aVh23sdg35btdGFE",
+    img: [
+      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FV6v0uGBMXlYQ?alt=media&token=0560ec76-2737-44d5-975a-be45fd38e1c9",
+      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FgxvMNKQRpgIA?alt=media&token=f5e77b28-30f3-4dfa-a682-ad46b3038e30"
+    ],
+    packof: 1,
+    price: 150,
+    specs: [
+      {
+        available: [
+          {
+            availability: true,
+            size: "L"
+          },
+          {
+            availability: true,
+            size: "XL"
+          },
+          {
+            availability: true,
+            size: "XXL"
+          },
+          {
+            availability: true,
+            size: "XXXL"
+          },
+          {
+            availability: true,
+            size: "XXXXL"
+          }
+        ],
+        color: "Red"
+      }
+    ],
+    title: "Sofa 3"
+  }
+],
+armchairs: [
+  {
+    category: "armchairs",
+    description: "Premium Sofa",
+    discountedPrice: 145,
+    homePageItem: true,
+    hot: true,
+    id: "aVbg8m3o32GFE",
+    img: [
+      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FV6v0uGBMXlYQ?alt=media&token=0560ec76-2737-44d5-975a-be45fd38e1c9",
+      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FgxvMNKQRpgIA?alt=media&token=f5e77b28-30f3-4dfa-a682-ad46b3038e30"
+    ],
+    packof: 1,
+    price: 150,
+    specs: [
+      {
+        available: [
+          {
+            availability: true,
+            size: "L"
+          },
+          {
+            availability: true,
+            size: "XL"
+          },
+          {
+            availability: true,
+            size: "XXL"
+          },
+          {
+            availability: true,
+            size: "XXXL"
+          },
+          {
+            availability: true,
+            size: "XXXXL"
+          }
+        ],
+        color: "Red"
+      }
+    ],
+    title: "Sofa 3"
+  },
+  {
+    category: "armchairs",
+    description: "Premium Sofa",
+    discountedPrice: 145,
+    homePageItem: true,
+    hot: true,
+    id: "aVbg634dGFE",
+    img: [
+      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FV6v0uGBMXlYQ?alt=media&token=0560ec76-2737-44d5-975a-be45fd38e1c9",
+      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FgxvMNKQRpgIA?alt=media&token=f5e77b28-30f3-4dfa-a682-ad46b3038e30"
+    ],
+    packof: 1,
+    price: 150,
+    specs: [
+      {
+        available: [
+          {
+            availability: true,
+            size: "L"
+          },
+          {
+            availability: true,
+            size: "XL"
+          },
+          {
+            availability: true,
+            size: "XXL"
+          },
+          {
+            availability: true,
+            size: "XXXL"
+          },
+          {
+            availability: true,
+            size: "XXXXL"
+          }
+        ],
+        color: "Red"
+      }
+    ],
+    title: "Sofa 3"
+  }
+],
+sofas: [
+  {
+    category: "sofas",
+    description: "Premium Sofa",
+    discountedPrice: 145,
+    homePageItem: true,
+    hot: true,
+    id: "aVbg8m3odGFE",
+    img: [
+      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FV6v0uGBMXlYQ?alt=media&token=0560ec76-2737-44d5-975a-be45fd38e1c9",
+      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FgxvMNKQRpgIA?alt=media&token=f5e77b28-30f3-4dfa-a682-ad46b3038e30"
+    ],
+    packof: 1,
+    price: 150,
+    specs: [
+      {
+        available: [
+          {
+            availability: true,
+            size: "L"
+          },
+          {
+            availability: true,
+            size: "XL"
+          },
+          {
+            availability: true,
+            size: "XXL"
+          },
+          {
+            availability: true,
+            size: "XXXL"
+          },
+          {
+            availability: true,
+            size: "XXXXL"
+          }
+        ],
+        color: "Red"
+      }
+    ],
+    title: "Sofa 3"
+  },
+  {
+    category: "sofas",
+    description: "Premium Sofa",
+    discountedPrice: 145,
+    homePageItem: true,
+    hot: true,
+    id: "aVbg8m323GFE",
+    img: [
+      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FV6v0uGBMXlYQ?alt=media&token=0560ec76-2737-44d5-975a-be45fd38e1c9",
+      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FgxvMNKQRpgIA?alt=media&token=f5e77b28-30f3-4dfa-a682-ad46b3038e30"
+    ],
+    packof: 1,
+    price: 150,
+    specs: [
+      {
+        available: [
+          {
+            availability: true,
+            size: "L"
+          },
+          {
+            availability: true,
+            size: "XL"
+          },
+          {
+            availability: true,
+            size: "XXL"
+          },
+          {
+            availability: true,
+            size: "XXXL"
+          },
+          {
+            availability: true,
+            size: "XXXXL"
+          }
+        ],
+        color: "Red"
+      }
+    ],
+    title: "Sofa 3"
+  }
+],
+}
+

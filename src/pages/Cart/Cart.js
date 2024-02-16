@@ -19,28 +19,36 @@ import Image10 from "../../Assets/Products/Product2.png";
 import Image11 from "../../Assets/Home5.png";
 import Image12 from "../../Assets/Home6.png";
 import { useNavigate } from "react-router-dom";
+import Contact from "./Contact";
 
 function Cart() {
 const navigate=useNavigate();
 
-  const {cart} = useContext(ProductContext);
+  const {cart, isUserLoggedIn} = useContext(ProductContext);
 
     useEffect(() => {
-    // Fetch the 'isUserLoggedIn' value from local storage
-    const localIsUserLoggedIn = localStorage.getItem("isLoggedIn");
-    if (!localIsUserLoggedIn) {
+    if (!isUserLoggedIn) {
       navigate("/login", { replace: true });
     }
   }, []);
 
+  const sortedCart = [...cart].sort((a, b) => {
+    const dateA = new Date(a.addedOn.seconds * 1000 + a.addedOn.nanoseconds / 1000000);
+    const dateB = new Date(b.addedOn.seconds * 1000 + b.addedOn.nanoseconds / 1000000);
+    return dateB - dateA;
+  });
+
+    console.log("SORTED CART", sortedCart)
+
   return (
     <React.Fragment>
       <div className={classes.mainContainer}>
+        <Contact />
         <div className={classes.secondContainer}>
             
-          <FirstCard Products={cart} />
+          <FirstCard Products={sortedCart} />
 
-          <SecondCard Products={cart} />
+          <SecondCard Products={sortedCart} />
         </div>
       </div>
 

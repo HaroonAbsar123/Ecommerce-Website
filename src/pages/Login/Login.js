@@ -17,10 +17,13 @@ import LoginImage from "../../Assets/loginPageImage.png";
 import GoogleImage from "../../Assets/R.png";
 
 import AboveLogo from "../../Assets/logo.png";
+import Cookies from 'universal-cookie';
 
 function Login() {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
+
+  const cookies = new Cookies();
 
   const { setIsUserLoggedIn, setUserDetails, setUserType } =
     useContext(ProductContext);
@@ -84,8 +87,13 @@ function Login() {
               const userData = doc.data(); // Additional user data
 
               // Store data in Local Storage
-              localStorage.setItem("userId", userId);
-              localStorage.setItem("isLoggedIn", "true");
+              // localStorage.setItem("userId", userId);
+              // localStorage.setItem("isLoggedIn", "true");
+
+              
+  // Store data in cookies
+cookies.set("userId", userId, { secure: true, sameSite: 'strict' });
+cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
 
               // Update context state
               setIsUserLoggedIn(true);
@@ -298,16 +306,20 @@ function Login() {
           const userData = doc.data(); // Additional user data
   
           // Update user's name, image, and phone number
-          await updateDoc(doc.ref, {
-            userName: userCredential.user.displayName,
-            image: userCredential.user.photoURL,
-            phone: userCredential.user.phoneNumber,
-          });
+          // await updateDoc(doc.ref, {
+          //   userName: userCredential.user.displayName,
+          //   image: userCredential.user.photoURL,
+          //   phone: userCredential.user.phoneNumber,
+          // });
   
           // Store data in Local Storage
-          localStorage.setItem("userId", userId);
-          localStorage.setItem("isLoggedIn", "true");
-  
+          // localStorage.setItem("userId", userId);
+          // localStorage.setItem("isLoggedIn", "true");
+
+  // Store data in cookies
+cookies.set("userId", userId, { secure: true, sameSite: 'strict' });
+cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
+
           // Update context state
           setIsUserLoggedIn(true);
           setUserDetails(userData); // Set user details in context
@@ -787,51 +799,32 @@ function Login() {
             flex: 1,
             display: "flex",
             flexDirection: "column",
-            paddingTop: "5rem",
+            paddingTop: "6rem",
             background: "linear-gradient(to left, rgb(255, 244, 236), bisque)",
-            justifyContent: "space-between",
-            paddingBottom: isMobile? "1rem" : '0rem'
+            justifyContent: "center",
+            paddingBottom: "1rem"
           }}
         >
           
-          <div style={{
-            display: "flex",
-            flexDirection: "column",
-            flex: 1, paddingRight: isMobile? '20px' : '2rem',paddingLeft: isMobile? '20px' : '2rem'}}>
-          <img
-            style={{
-              maxWidth: "200px",
-              objectFit: "contain",
-              alignSelf: "center",
-            }}
-            src={AboveLogo}
-            alt="Logo"
-          />
-          <p style={{fontSize: !isMobile ? '1.2rem' : '1rem', textAlign: 'justify'}}>
-            At IntelliCart, we believe that every piece of
-            furniture tells a story. By logging in or signing up, you'll unlock
-            a world of exclusive offers, personalized recommendations, and
-            inspirational ideas to elevate your living space. Join our community
-            today to connect with fellow furniture lovers, and let's create
-            beautiful stories together!
-          </p>
-          </div>
+          <div >
           <img
             style={{
               maxWidth: "100%",
               maxHeight: "100%",
               objectFit: "contain",
+              filter: 'drop-shadow(15px, 5px, 5px, #1e1e1e)'
             }}
             src={LoginImage}
             alt="Image"
           />
+          </div>
         </div>
 
       }
         <div
           style={{
             flex: 1,
-            marginTop: '3rem',
+            marginTop: '4rem',
             display: "flex",
             flexDirection: "column",
             alignItems: "center", // Center content horizontally

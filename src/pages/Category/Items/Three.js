@@ -9,7 +9,7 @@ function ThirdContainer(){
         <div className={classes.mainContainer}>
             <div className={classes.textContainer}>
                 <h2 className={classes.text}>Checkout our collection</h2>
-                <Link to={'collection'}>
+                <Link to={'/collection'}>
                 <button className="mainButton">Shop Now</button>
                 </Link>
             </div>

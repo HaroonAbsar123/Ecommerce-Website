@@ -53,6 +53,8 @@
     align-items: center; /* Centers the grid vertically */
     justify-content: center; /* Centers the grid horizontally */
     flex: 1;
+    gap: 10px;
+    margin-bottom: 1rem;
   }
   
   

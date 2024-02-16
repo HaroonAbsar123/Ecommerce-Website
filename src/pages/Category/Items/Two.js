@@ -137,7 +137,14 @@ function Two() {
             <div className={classes.navLinks}>
 {!isMobile ? 
 
-<>
+<div style={{
+  background: 'rgba(255, 255, 255, 0.7)',
+  backdropFilter: 'blur(4px)', // Adjust the blur intensity as needed
+  WebkitBackdropFilter: 'blur(4px)', // For Safari support,
+  borderRadius: '10px',
+  padding: '10px',
+  boxShadow: "0 6px 8px rgba(0, 0, 0, 0.2)",
+}}>
   <div className={classes.navLinks}>
   <h2 className={classes.title}>Collection</h2>
 
@@ -192,14 +199,29 @@ function Two() {
             />
           </div>
         </div>
-</>
+</div>
 :
 <>
-<Accordion style={{backgroundColor: "bisque", borderRadius: '10px', marginBottom: '10px'}}>
+<div style={{
+  background: 'rgba(255, 255, 255, 0.7)',
+  backdropFilter: 'blur(4px)', // Adjust the blur intensity as needed
+  WebkitBackdropFilter: 'blur(4px)', // For Safari support,
+  borderRadius: '10px',
+  padding: '10px',
+  boxShadow: "0 6px 8px rgba(0, 0, 0, 0.2)",
+}}>
+  <Accordion style={{
+  background: 'rgba(255, 255, 255, 0)',
+  backdropFilter: 'blur(4px)', // Adjust the blur intensity as needed
+  WebkitBackdropFilter: 'blur(4px)', // For Safari support,
+  borderRadius: '10px',
+  marginBottom: '5px'
+}}>
 <AccordionSummary
   expandIcon={<ExpandMoreIcon />}
   aria-controls="panel1-content"
   id="panel1-header"
+  style={{padding: '0px', margin: '0px', marginLeft: '10px', marginRight: '10px'}}
 >
   <div className={classes.title}>Collection</div>
 </AccordionSummary>
@@ -243,19 +265,9 @@ function Two() {
 </AccordionDetails>
 </Accordion>
 
-
-<Accordion style={{backgroundColor: "bisque", borderRadius: '10px', marginBottom: '10px'}}>
-<AccordionSummary
-  expandIcon={<ExpandMoreIcon />}
-  aria-controls="panel1-content"
-  id="panel1-header"
->
-  <div className={classes.title}>Price Range</div>
-</AccordionSummary>
-<AccordionDetails>
-  <div>
- 
-  <div className={classes.filterInputContainer}>
+{/* Filter component */}
+<div className={classes.FilterContainer}>
+          <div className={classes.filterInputContainer}>
             <label htmlFor="minPrice" className={classes.filterText}>
               Min Price:
             </label>
@@ -281,10 +293,10 @@ function Two() {
               onChange={(e) => setMaxPrice(e.target.value)}
             />
           </div>
-
+        </div>
 </div>
-</AccordionDetails>
-</Accordion>
+
+
 </>
 }
 </div>

@@ -23,11 +23,14 @@ import { BugReportTwoTone } from '@mui/icons-material';
 
 import CircularProgress from '@mui/material/CircularProgress';
 import { Modal } from '@mui/material';
+import Cookies from 'universal-cookie';
 
 const pages = ['Home', 'Collection', 'Contact'];
 const settings = ['Profile', 'Cart', 'Logout'];
 
 function Navbar() {
+  
+  const cookies = new Cookies();
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate=useNavigate();
@@ -107,7 +110,9 @@ function Navbar() {
 
   const LogoutHandler = () => {
     try {
-      localStorage.clear();
+      cookies.remove("userId");
+      cookies.remove("isLoggedIn");
+
       setIsUserLoggedIn(false);
       setUserDetails('');
       setUserType('');
@@ -195,7 +200,7 @@ function Navbar() {
             
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Profile" src={userDetails.image} />
+                  <Avatar alt="User" src={userDetails.image} />
                 </IconButton>
               </Tooltip>
               <Menu

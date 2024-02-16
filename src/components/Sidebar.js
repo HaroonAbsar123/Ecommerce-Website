@@ -99,7 +99,6 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
 
   return (
     <div>
-      <Button onClick={toggleDrawer(true)}>Open Sidebar</Button>
       <SwipeableDrawer
         anchor={'right'}
         open={showSidebar}

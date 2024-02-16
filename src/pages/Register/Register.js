@@ -17,11 +17,13 @@ import LoginImage from "../../Assets/loginPageImage.png";
 import GoogleImage from "../../Assets/R.png";
 
 import AboveLogo from "../../Assets/logo.png";
+import Cookies from 'universal-cookie';
 
 function Register() {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(false);
 
+  const cookies = new Cookies();
   const { setIsUserLoggedIn, setUserDetails, setUserType } =
     useContext(ProductContext);
 
@@ -368,8 +370,12 @@ function Register() {
         }
 
           // Store data in Local Storage
-          localStorage.setItem("userId", userId);
-          localStorage.setItem("isLoggedIn", "true");
+          // localStorage.setItem("userId", userId);
+          // localStorage.setItem("isLoggedIn", "true");
+          
+  // Store data in cookies
+cookies.set("userId", userId, { secure: true, sameSite: 'strict' });
+cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
   
           // Update context state
           setIsUserLoggedIn(true);
@@ -483,8 +489,13 @@ function Register() {
             type: "user",
           }
           // Store data in Local Storage
-          localStorage.setItem("userId", userId);
-          localStorage.setItem("isLoggedIn", "true");
+          // localStorage.setItem("userId", userId);
+          // localStorage.setItem("isLoggedIn", "true");
+          
+
+  // Store data in cookies
+  cookies.set("userId", userId, { secure: true, sameSite: 'strict' });
+  cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
   
           // Update context state
           setIsUserLoggedIn(true);
@@ -811,50 +822,31 @@ function Register() {
       >
         
         {!isMobile && 
-        <div
-          style={{
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            paddingTop: "5rem",
-            background: "linear-gradient(to left, rgb(255, 244, 236), bisque)",
-            justifyContent: "space-between",
-            paddingBottom: isMobile? "1rem" : '0rem'
-          }}
-        >
-          
-          <div style={{
-            display: "flex",
-            flexDirection: "column",
-            flex: 1, paddingRight: isMobile? '20px' : '2rem',paddingLeft: isMobile? '20px' : '2rem'}}>
-          <img
-            style={{
-              maxWidth: "200px",
-              objectFit: "contain",
-              alignSelf: "center",
-            }}
-            src={AboveLogo}
-            alt="Logo"
-          />
-          <p style={{fontSize: !isMobile ? '1.3rem' : '1rem', textAlign: 'justify'}}>
-            At IntelliCart, we believe that every piece of
-            furniture tells a story. By logging in or signing up, you'll unlock
-            a world of exclusive offers, personalized recommendations, and
-            inspirational ideas to elevate your living space. Join our community
-            today to connect with fellow furniture lovers, and let's create
-            beautiful stories together!
-          </p>
-          </div>
-          <img
-            style={{
-              maxWidth: "100%",
-              maxHeight: "100%",
-              objectFit: "contain",
-            }}
-            src={LoginImage}
-            alt="Image"
-          />
-        </div>
+         <div
+         style={{
+           flex: 1,
+           display: "flex",
+           flexDirection: "column",
+           paddingTop: "6rem",
+           background: "linear-gradient(to left, rgb(255, 244, 236), bisque)",
+           justifyContent: "center",
+           paddingBottom: "1rem"
+         }}
+       >
+         
+         <div >
+         <img
+           style={{
+             maxWidth: "100%",
+             maxHeight: "100%",
+             objectFit: "contain",
+             filter: 'drop-shadow(15px, 5px, 5px, #1e1e1e)'
+           }}
+           src={LoginImage}
+           alt="Image"
+         />
+         </div>
+       </div>
 
       }
         <div

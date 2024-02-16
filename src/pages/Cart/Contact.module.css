@@ -1,0 +1,56 @@
+.mainContainer {
+    height: max-content;
+    flex: 1;
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+  }
+  
+  .mainHeading {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+    margin-top: 0rem;
+    white-space: nowrap;
+  }
+  
+  .secondContainer {
+    margin-top: 6rem;
+      padding-left: 2rem;
+      flex: 1;
+      display: flex;
+      justify-content: space-between;
+      max-height: 7rem;
+    }
+  
+    .image {
+      width: 70%;
+      float: right;
+      transform:translateX("10%")
+    }
+  
+  @media (max-width: 900px) {
+      .secondContainer {
+          padding-left: 1rem;
+          padding-right: 1rem;
+          max-height: 6rem;
+        }
+  
+        .image {
+          width: 100%;
+          transform:translateX("50%")
+        }
+
+        .mainHeading {
+            font-size: 4rem;
+          }
+  }
+  
+  
+  
+  @media (max-width: 500px) {
+      .mainHeading{
+          font-size: 3rem;
+      }
+  }
+  
+  

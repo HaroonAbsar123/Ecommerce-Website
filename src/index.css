@@ -21,14 +21,15 @@ body {
   min-width: 10rem;
   min-height: 2rem;
   font-size: large;
-  color: rgb(0, 0, 0);
+  color: #1e1e1e;
   background-color: rgb(255, 255, 255);
   cursor: pointer;
   border-radius: 0px;
+  box-shadow: inset 2px 3px 8px rgba(0, 0, 0, 0.2);
 }
 
 .mainButton:hover {
-  background-color: black;
+  background-color: #1e1e1e;
   color: white;
   transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
@@ -41,11 +42,13 @@ body {
   min-width: 10rem;
   min-height: 2rem;
   font-size: large;
-  color: black;
+  color: #1e1e1e;
   background-color: rgb(255, 255, 255);
   cursor: pointer;
   border: none;
   border-radius: 0px;
+  box-shadow: inset 2px 3px 8px rgba(0, 0, 0, 0.05);
+
 }
 
 .secondaryButton:hover {

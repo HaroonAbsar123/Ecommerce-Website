@@ -38,14 +38,35 @@
   
   @media (max-width: 900px) {
     .columnsContainer {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr); /* Adds a gap between columns */
+        padding: 2rem;
+        
       }
   }
 
   @media (max-width: 500px) {
     .columnsContainer {
-        grid-template-columns: repeat(1, 1fr);
+        grid-template-columns: repeat(1, 1fr); /* Adds a gap between columns */
+        padding: 1rem;
       }
+  }
+
+
+  .secondTitle {
+    font-size: 1rem;
+    color: #1e1e1e
+  }
+
+  .icon{
+    font-size: 2rem;
+    color: #1e1e1e;
+    transform: scale(1);
+    transition: color, transform 0.3s ease-in-out;
+    cursor: pointer;
+  }
+
+  .icon:hover{
+    transform: scale(1.05);
   }
   
   .column {

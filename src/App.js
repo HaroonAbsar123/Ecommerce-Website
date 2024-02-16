@@ -32,7 +32,6 @@ function App() {
   return (
     <React.Fragment>
       <ProductContextProvider>
-        
       <Toaster />
       <NavBar />
       <ScrollToTop />
@@ -42,7 +41,6 @@ function App() {
         <Route path="/collection" Component={Collection} />
         <Route path="/collection/:category" exact Component={Category} />
         <Route path="/profile" Component={Profile} />
-        <Route path="/add-products" Component={AddProducts} />
 
 
         <Route path="/collection/:category/:id" Component={ProductPage} />

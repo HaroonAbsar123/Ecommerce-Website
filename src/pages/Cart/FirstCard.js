@@ -12,6 +12,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { ImportContactsSharp } from "@mui/icons-material";
 
 
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+
+
 function FirstCard({Products}) {
 
 
@@ -75,6 +79,18 @@ function FirstCard({Products}) {
   
     CartUpdateItem(updatedItem);
   }
+
+  
+  const itemsPerPage = 4;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handleChangePage = (event, newPage) => {
+    setCurrentPage(newPage);
+  };
+  
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const displayedSessions = Products?.slice(startIndex, endIndex);
   
   
 
@@ -109,7 +125,7 @@ function FirstCard({Products}) {
             }
             
           </div>
-          {Products.map((product, index) => (
+          {displayedSessions.map((product, index) => (
             <>
             <div style={{marginBottom: '0px', flex: 1, paddingBottom: '0px'}}>
               <h2 style={{marginBottom: '0px', paddingBottom: '0px'}} className="title">{product.product.title}</h2>
@@ -162,6 +178,17 @@ function FirstCard({Products}) {
             </>
           ))}
 
+          {
+            Products.length > 0 && 
+            <div style={{flex: 1, alignItems: 'center', justifyContent: 'center', display: 'flex', marginTop: '2rem'}}>
+<Stack spacing={2}>
+      <Pagination  count={Math.ceil(Products?.length / itemsPerPage)}
+          page={currentPage}
+          onChange={handleChangePage} />
+    </Stack>
+    </div>
+          }
+
               {Products.length > 0 && Object.keys(couponApplied).length === 0 && 
 <div className={classes.inputContainer}>
             <input onChange={(e) => {setCouponInput(e.target.value)}} className={classes.input} placeholder="Coupon Code" />
@@ -180,7 +207,6 @@ function FirstCard({Products}) {
 export default FirstCard;
 
 
-//     {
 //       id: Math.floor(10000000 + Math.random() * 90000000),
 //       img: [Image1, Image2, Image3, Image4, Image5],
 //       title: "Furniture-1",

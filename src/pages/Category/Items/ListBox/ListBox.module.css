@@ -16,6 +16,7 @@
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     grid-gap: 0.5rem;
+    gap: 1.5rem;
   }
 
   @media (max-width: 1200px) {
@@ -24,7 +25,7 @@
       }
   }
   
-  @media (max-width: 700px) {
+  @media (max-width: 640px) {
     .listContainer {
         grid-template-columns: repeat(2, 1fr);
       }
@@ -50,9 +51,9 @@
     padding: 0.5rem 1rem;
     background-color: transparent;
     border: none;
-    color: #000000;
+    color: #1e1e1e;
     cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
+    transition: color 0.3s ease-in-out;
     font-size: 3rem;
   }
   

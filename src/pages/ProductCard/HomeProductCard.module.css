@@ -4,12 +4,22 @@
     align-items: center;
     /* width: 415px; */
     flex: 1;
-    background-color: #ffffff;
-    margin: 0.5rem;
     overflow: hidden;
     cursor: pointer;
+    
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    padding: 5px;
+    box-shadow: none;
+    transition: box-shadow 0.3s ease-in-out;
+}
 
-  }
+
+.productCard:hover{
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+}
+
 
 
 
@@ -123,6 +133,14 @@
     object-fit: cover; /* This property ensures the image fills the container without distortion */
     transform: scale(1.02);
     transition: transform 1s ease-in-out;
+  }
+
+  .showImage {
+    opacity: 1;
+  }
+  
+  .hideImage {
+    opacity: 0;
   }
   
 

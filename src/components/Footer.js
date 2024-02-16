@@ -5,6 +5,8 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import ProductContext from "../Context/ProductContext";
+import { faFacebook, faInstagram, faLinkedin, faWhatsapp } from "@fortawesome/free-brands-svg-icons";
+
 
 function Footer() {
   
@@ -45,14 +47,29 @@ function Footer() {
             <input className={classes.input} placeholder="xyx@example.com" />
             <button className={classes.button}> <FontAwesomeIcon icon={faArrowRight} size="2x" /> </button>
             </div>
+
+            <div style={{display: 'flex', gap: '10px', marginTop: '2rem', marginLeft: '5px'}}>
+
+              <FontAwesomeIcon icon={faFacebook}  className={classes.icon} />
+              
+              <FontAwesomeIcon icon={faInstagram}  className={classes.icon} />
+
+              
+              <FontAwesomeIcon icon={faWhatsapp} className={classes.icon} />
+              
+              <FontAwesomeIcon icon={faLinkedin}  className={classes.icon} />
+
+            </div>
+
+
           </div>
 
         </div>
 
         <div className={classes.innerFooter}>
             <div className={classes.innerFooterContent}>
-            <div className="title"> Payment Options </div>
-            <div className="title">Intellicart @2024</div>
+            <div className={classes.secondTitle}> © 2023-2024, intellicart.com </div>
+            <div className={classes.secondTitle}>Intellicart</div>
             </div>
           </div>
 
