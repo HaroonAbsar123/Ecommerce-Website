@@ -12,11 +12,11 @@ function HomeProductCard({ image, title, price, discountedPrice, category, id })
       <h3 className={classes.productTitle}>{title}</h3>
       {discountedPrice !== "" ? (
         <div className={classes.priceContainer}>
-          <p className={classes.regularPrice}>{price}</p>
-          <p className={classes.discountedPrice}>{discountedPrice}</p>
+          <p className={classes.regularPrice}>${price}</p>
+          <p className={classes.discountedPrice}>${discountedPrice}</p>
         </div>
       ) : (
-        <p className={classes.productPrice}>{price}</p>
+        <p className={classes.productPrice}>${price}</p>
       )}
     </div>
     </Link>

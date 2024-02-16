@@ -46,7 +46,7 @@ function ListBox({ Products, category }) {
             {currentItems.map((product, index) => (
               <div key={index}>
                 
-                  <ImageCard id={product.id} category={category} image={product.img[0]} price={product.price} title={product.title} discountedPrice={product.discountedPrice} />
+                  <ImageCard id={product.id} category={product.category} image={product.img[0]} price={product.price} title={product.title} discountedPrice={product.discountedPrice} />
                 
               </div>
             ))}

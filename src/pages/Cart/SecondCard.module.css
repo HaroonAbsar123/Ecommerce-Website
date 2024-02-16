@@ -8,3 +8,10 @@
 .secondContainer{
     padding: 3rem;
 }
+
+@media (max-width: 900px) {
+ 
+    .secondContainer{
+        padding: 1rem;
+      }
+  }

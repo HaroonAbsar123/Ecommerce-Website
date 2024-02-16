@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import classes from './FirstCard.module.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
-import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEye, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useContext } from "react";
 import ProductContext from "../../Context/ProductContext";
 import { Link } from "react-router-dom";
 import { Button, IconButton } from "@mui/material";
 
 import DeleteIcon from '@mui/icons-material/Delete';
+import { ImportContactsSharp } from "@mui/icons-material";
 
 
 function FirstCard({Products}) {
@@ -80,6 +81,8 @@ function FirstCard({Products}) {
     return (
       <div className={classes.mainContainer}>
         <div className={classes.secondContainer}>
+          
+        <div style={{ minWidth: '400px' }}>
           <div style={{ width: '100%', }}>
             <div style={{width: '100%', borderBottom: '1px solid #ccc', marginBottom: '1rem' }}>
             <h2 className="title">Item Cart</h2>
@@ -98,7 +101,7 @@ function FirstCard({Products}) {
               <div style={{ width: '100%', textAlign: 'center' }}>
             <h2 style={{marginBottom: '2rem', marginTop: '2rem'}} className="title">No Items in Cart</h2>
             <Link to={'/collection'} className="nolinkstyle">
-            <button style={{backgroundColor: 'black', color: 'white'}} className="mainButton">Checkout Our Collection</button>
+            <Button variant="contained" style={{ backgroundColor: '#1e1e1e', color: 'white'}}>Checkout Our Collection</Button>
             </Link>
 
             
@@ -129,9 +132,9 @@ function FirstCard({Products}) {
               </span>
 
               <span style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <Button variant="contained" style={{background: '#1e1e1e', color: '#fff', height: '30px'}} onClick={() => {CartAddItemHandler(product.cartID)}}>+</Button>
+                <IconButton style={{color: '#1e1e1e', fontSize: '1rem'}} onClick={() => {CartAddItemHandler(product.cartID)}}><FontAwesomeIcon icon={faPlus} /></IconButton>
                 <div style={{ color: '#1e1e1e', margin: '5px', marginRight: '10px', marginLeft: '10px'}}>{product.selectedQuantity}</div>
-                <Button variant="contained" style={{background: '#1e1e1e', color: '#fff', height: '30px'}} onClick={() => {CartRemoveItemHandler(product.cartID)}}>-</Button>
+                <IconButton style={{color: '#1e1e1e', fontSize: '1rem'}} onClick={() => {CartRemoveItemHandler(product.cartID)}}><FontAwesomeIcon icon={faMinus} /></IconButton>
 
                 </span>
 
@@ -166,8 +169,9 @@ function FirstCard({Products}) {
             </div>
             }
 
+</div>
+</div>
         </div>
-      </div>
     );
   }
 

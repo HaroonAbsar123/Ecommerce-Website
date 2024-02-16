@@ -1,14 +1,16 @@
 
-.mainContainer{
-    background-color: white;
-    flex: 2.5;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
-    height: 100%;
-    
+.mainContainer {
+  background-color: white;
+  flex: 2.5;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  height: 100%;
+  overflow-x: hidden;
 }
 
-.secondContainer{
-    padding: 3rem;
+.secondContainer {
+  padding: 3rem;
+  overflow-x: auto; /* enable horizontal scrollbar on secondContainer */
+  flex: 1;
 }
 
 
@@ -25,7 +27,9 @@
     /* border-bottom: 1px solid #ccc; */
     height: max-content;
 }
-
+.secondContainer{
+  padding: 1rem;
+}
 }
 
 .imageContainer{
@@ -43,8 +47,7 @@
 
 .inputContainer{
     margin-top: 3rem;
-    height: 3rem;
-    width: 50%;
+    max-width: 500px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -60,8 +63,8 @@
     height: 100%;
     width: 100%;
     border: none;
-    padding: 0.5rem
-    
+    padding: 0.5rem;
+    font-size: medium;
   }
 
   .input:focus {

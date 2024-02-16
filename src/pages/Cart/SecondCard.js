@@ -72,6 +72,7 @@ function SecondCard({Products}){
     return(
     <div className={classes.mainContainer}>
         <div className={classes.secondContainer}>
+          <div style={{flex: 1, overflow: 'auto'}}>
             <div style={{width: '100%', borderBottom: '1px solid #ccc'}}>
                 <h2 className="title">Cart Totals</h2>
             </div>
@@ -121,7 +122,7 @@ function SecondCard({Products}){
 
 
 
-            <Button onClick={handleOpen} style={{width: '100%', backgroundColor: '#1e1e1e', color: 'white'}}>Proceed to Checkout</Button>
+            <Button  variant="contained" onClick={handleOpen} style={{width: '100%', marginTop: '10px', backgroundColor: '#1e1e1e', color: 'white'}}>Proceed to Checkout</Button>
 
 
                 <Backdrop
@@ -150,7 +151,7 @@ function SecondCard({Products}){
                 </Backdrop>
 
 
-        </div>
+        </div></div>
     </div>
     );
 };

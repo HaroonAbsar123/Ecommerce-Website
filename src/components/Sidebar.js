@@ -10,7 +10,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import { faChair, faCouch, faHourglass, faMattressPillow, faWarehouse } from '@fortawesome/free-solid-svg-icons';
+import { faChair, faCouch, faFire, faHourglass, faMattressPillow, faWarehouse } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ProductContext from '../Context/ProductContext';
 import { useNavigate } from 'react-router-dom';
@@ -56,7 +56,7 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
               <Divider />
 
       <List style={{padding: '10px'}}>
-        {['Armchairs', 'Sofas', 'Lamps', 'Cushions'].map((text, index) => (
+        {["Hot Products", 'Armchairs', 'Sofas', 'Lamps', 'Cushions'].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton onClick={() => {
               if(text=="Armchairs"){
@@ -67,9 +67,16 @@ export default function Sidebar({ showSidebar, setShowSidebar }) {
                 navigate("/collection/lamps")
               } else if(text=="Cushions"){
                 navigate("/collection/cushions")
+              } else if(text=="Hot Products"){
+                navigate("/collection/hot")
               }
             }}>
+
               <ListItemIcon>
+
+              {text=="Hot Products" &&  
+      <FontAwesomeIcon icon={faFire} />}
+      
                 {text=="Armchairs" &&  
       <FontAwesomeIcon icon={faChair} />}
       

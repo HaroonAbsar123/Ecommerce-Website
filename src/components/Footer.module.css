@@ -58,7 +58,6 @@
 
 
   .inputContainer{
-    height: 3rem;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -67,6 +66,7 @@
     overflow: hidden;
     border: 1px solid #1e1e1e;
     border-radius: 10px;
+    background: transparent;
   }
 
 
@@ -76,7 +76,8 @@
     width: 100%;
     border: none;
     padding: 0.5rem;
-    font-size: large;
+    font-size: medium;
+    background: transparent;
   }
 
   .input:focus {
@@ -89,7 +90,7 @@
     height: 100%;
     width: 100%;
     border: none;
-    color: white;
+    color: rgb(238, 238, 238);
     transition: transform 0.3s ease-in-out; /* Add transition property for smooth effect */
     border-radius: 0px;
   }

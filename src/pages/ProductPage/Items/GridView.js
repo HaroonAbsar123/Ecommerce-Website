@@ -10,7 +10,7 @@ function GridView({ Products, category }) {
     const filteredProducts = Products;
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 4;
-    const totalPages = Math.ceil(filteredProducts?.length / itemsPerPage);
+    const totalPages = Math.ceil(filteredProducts?.length / itemsPerPage) > 0 ? Math.ceil(filteredProducts?.length / itemsPerPage) : 1;
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
 

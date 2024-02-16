@@ -69,8 +69,9 @@ function ProductPage() {
 
       <ItemTwo Products={currentItem} />
 
+    {relatedProducts?.length > 0 && 
       <GridView Products={relatedProducts} category={category} />
-
+    }
       <Footer />
     </div>
   );

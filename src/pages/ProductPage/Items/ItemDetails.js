@@ -8,7 +8,7 @@ import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { useContext } from "react";
 import ProductContext from "../../../Context/ProductContext";
 import { useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 
 function ItemDetails({ Products }) {
   const [selectedColor, setSelectedColor] = useState(Products.specs[0].color);
@@ -147,13 +147,14 @@ function ItemDetails({ Products }) {
             </div>
 
             <div className={classes.buttonsContainer}>
-              <div style={{ display: "flex" }}>
-                <Button
+              <div style={{ display: "flex", alignItems: 'center' }}>
+                <IconButton
                   disabled={isOutOfStock}
-                  variant="contained"
                   style={{
                     backgroundColor: isOutOfStock ? "#ccc" : "#1e1e1e",
                     color: "#fff",
+                    overflow: 'hidden',
+                    fontSize: '1rem'
                   }}
                   onClick={() => {
                     selectedQuantity > 1 &&
@@ -161,23 +162,24 @@ function ItemDetails({ Products }) {
                   }}
                 >
                   <FontAwesomeIcon icon={faMinus} size="1x" />
-                </Button>
-                <Button style={{ color: isOutOfStock ? "#ccc" : "#1e1e1e" }}>
+                </IconButton>
+                <div style={{ color: isOutOfStock ? "#ccc" : "#1e1e1e", marginLeft: '10px', marginRight: '10px' }}>
                   {selectedQuantity}
-                </Button>
-                <Button
+                </div>
+                <IconButton
                   disabled={isOutOfStock}
-                  variant="contained"
                   style={{
                     backgroundColor: isOutOfStock ? "#ccc" : "#1e1e1e",
                     color: "#fff",
+                    overflow: 'hidden',
+                    fontSize: '1rem'
                   }}
                   onClick={() => {
                     setSelectedQuantity(selectedQuantity + 1);
                   }}
                 >
                   <FontAwesomeIcon icon={faPlus} size="1x" />
-                </Button>
+                </IconButton>
               </div>
 
               <Button
