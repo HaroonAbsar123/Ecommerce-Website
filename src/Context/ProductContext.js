@@ -7,6 +7,12 @@ const ProductContext = createContext({
     cart: [],
     coupons: [],
     couponApplied: {}, 
+    isUserLoggedIn: {}, 
+    userDetails: {}, 
+    userType: {}, 
+    loading: {}, 
+    cartError: {}, 
+    showErrorModal: {}, 
     setCouponApplied: () => {},
     CartAddItem: (id) => {},
     CartRemoveItem: (id) => {},
@@ -17,7 +23,10 @@ const ProductContext = createContext({
     CartUpdateItem: () => {},
     setIsUserLoggedIn: () => {},
     setUserDetails: () => {},
-    setUserType: () => {}
+    setUserType: () => {},
+    updateData: () => {},
+    setCartError: () => {},
+    setShowErrorModal: () => {},
 
 })
 

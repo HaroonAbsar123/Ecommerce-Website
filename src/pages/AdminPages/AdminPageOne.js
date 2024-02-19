@@ -42,24 +42,7 @@ function AdminPageOne(){
         <div
         style={{flex: 2, flexDirection: 'column', display: 'flex', gap: '10px'}}
       >
-        {/* MANAGE ORDERS */}
-        <div
-        style={{
-          padding: "0.5rem",
-          flex: 1,
-          marginTop: "0rem",
-          height: 'max-content',
-          boxShadow: "0 6px 12px rgba(0, 0, 0, 0.3)",
-          background: 'rgba(255,255,255, 0.5)',
-          backdropFilter: 'blur(4px)', // Adjust the blur intensity as needed
-          WebkitBackdropFilter: 'blur(4px)', // For Safari support,
-          padding: '10px',
-          borderRadius: '10px'
-        }}
-      >
-      {/* <h2>MANAGE ORDERS</h2> */}
-      <AdminProductSection setAddProductModal={setAddProductModal} />
-        </div>
+        
 
         {/*  VIEW/DELETE PRODUCTS */}
         <div

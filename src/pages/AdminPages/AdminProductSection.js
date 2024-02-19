@@ -9,11 +9,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-regular-svg-icons";
 import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
-import { database } from "../../firebase";
-import { getDatabase, ref, set, child, remove, get } from "firebase/database";
+import { db } from "../../firebase";
 import { toast } from "react-hot-toast";
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
+import { deleteDoc, doc, Timestamp } from "firebase/firestore";
 
 function AdminProductSection({setAddProductModal}) {
   const navigate = useNavigate();
@@ -37,47 +37,36 @@ function AdminProductSection({setAddProductModal}) {
         currentArray.push(...categoryProducts);
       }
     }
-
+  
+    // Sort the products by createdAt
+    currentArray.sort((a, b) => {
+      const dateA = a.createdAt instanceof Timestamp ? a.createdAt.toDate() : a.createdAt;
+      const dateB = b.createdAt instanceof Timestamp ? b.createdAt.toDate() : b.createdAt;
+      return dateB - dateA; // Descending order, change to dateA - dateB for ascending order
+    });
+  
     setAllProducts(currentArray);
   }, [products]);
 
-  const productsRef = ref(database, "products");
-
-  const handleDeleteItem = (id) => {
-    setIsSubmitting(true)
-    try{
-    get(productsRef).then((snapshot) => {
-      snapshot.forEach((categorySnapshot) => {
-        categorySnapshot.forEach((itemSnapshot) => {
-          const item = itemSnapshot.val();
-          if (item.id === id) {
-            // Remove the item with the specified ID
-            remove(itemSnapshot.ref)
-              .then(() => {
-                toast.success(`${selectedItem?.title} deleted from inventory`)
-                setModalOpen(false);
-                setSelectedItem({});
-                // Optionally, you can update the state or perform any other actions
-              })
-              .catch((error) => {
-                console.error("Error deleting item:", error);
-                // Handle the error as needed
-              });
-          }
-        });
-      });
-    });
-    
-
-  } catch(e){
-    toast.error("Unable to delete product. Pleast try again")
-  } finally{
-    setIsSubmitting(false)
-  }
+  const handleDeleteItem = async (id) => {
+    setIsSubmitting(true);
+    try {
+      const docRef = doc(db, "products", id);
+      await deleteDoc(docRef);
+      toast.success("Product deleted successfully");
+    } catch (e) {
+      console.error("Error deleting product:", e);
+      toast.error("Unable to delete product. Please try again");
+    } finally {
+      setIsSubmitting(false);
+      setModalOpen(false);
+      setSelectedItem({});
+    }
   };
+  
 
   // PAGINATION
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = React.useState(1);
 
   const handleChangePage = (event, newPage) => {
@@ -88,20 +77,26 @@ function AdminProductSection({setAddProductModal}) {
   const endIndex = startIndex + itemsPerPage;
   const displayedSessions = allProducts?.slice(startIndex, endIndex);
 
+
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  const checkIsMobile = () => {
+    setIsMobile(window.innerWidth <= 600); // You can adjust the width threshold as needed
+  };
+  
+  useEffect(() => {
+    checkIsMobile(); // Initial check
+    window.addEventListener("resize", checkIsMobile); // Add event listener
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", checkIsMobile);
+    };
+  }, []);
+
   return (
-    <div
-      style={{
-        padding: "0.5rem",
-        flex: 1,
-        marginTop: "0rem",
-        height: "max-content",
-        boxShadow: "0 6px 12px rgba(0, 0, 0, 0.3)",
-        background: "rgba(255,255,255, 0.2)",
-        backdropFilter: "blur(4px)", // Adjust the blur intensity as needed
-        WebkitBackdropFilter: "blur(4px)", // For Safari support,
-        padding: "10px",
-        borderRadius: "10px",
-      }}
+    <
     >
       <div
         style={{
@@ -121,11 +116,8 @@ function AdminProductSection({setAddProductModal}) {
           alignItems: 'center'
         }}
        >
-          <div style={{fontSize: '1.5rem'}}>Add / Remove Products</div>
+          <div style={{fontSize: '1.5rem'}}>Inventory</div>
 
-          <div>
-            <Button onClick={() => {setAddProductModal(true)}} variant="contained" color="success">Add Product</Button>
-          </div>
         </div>
 
       <div
@@ -133,7 +125,7 @@ function AdminProductSection({setAddProductModal}) {
           flex: 1,
           padding: "10px",
           borderRadius: "10px",
-          boxShadow: "0 6px 12px rgba(0, 0, 0, 0.1)",
+          boxShadow: "0 6px 12px rgba(0, 0, 0, 0.3)",
           background: "rgba(255,255,255, 0.8)",
           backdropFilter: "blur(4px)",
           WebkitBackdropFilter: "blur(4px)",
@@ -155,9 +147,8 @@ function AdminProductSection({setAddProductModal}) {
         >
           <div style={{ flex: 1 }}>Name</div>
 
-          <div style={{ flex: 1 }}>ID</div>
-
-          <div style={{ flex: 1 }}>Price</div>
+{!isMobile && 
+          <div style={{ flex: 2 }}>ID</div>}
 
           <div style={{ flex: 1, textAlign: "right" }}>View</div>
 
@@ -179,13 +170,10 @@ function AdminProductSection({setAddProductModal}) {
           >
             <div style={{ flex: 1 }}>{item?.title}</div>
 
-            <div style={{ flex: 1 }}>ID: {item?.id}</div>
+            {!isMobile && 
+            <div style={{ flex: 2 }}>ID: {item?.id}</div>
+            }
 
-            <div style={{ flex: 1 }}>
-              Price: ${item?.price}
-              {item?.discountedPrice &&
-                ` | Discounted: $${item?.discountedPrice}`}
-            </div>
 
             <div style={{ flex: 1, textAlign: "right" }}>
               <IconButton
@@ -289,7 +277,7 @@ function AdminProductSection({setAddProductModal}) {
           </div>
         </div>
       </CustomModal>
-    </div>
+    </>
   );
 }
 

@@ -79,26 +79,36 @@ function Description({ para }) {
 
 function AdditionalInformation({ Products }) {
   const sizes = new Set();
+  let desc=[];
 
-  Products?.specs?.forEach((spec) => {
-    spec?.available?.forEach((size) => {
-      sizes.add(size.size);
+  Products?.tableData?.forEach((data) => {
+      if(data.heading && data.content){
+        desc=[...desc, data]
+      }
+    });
+
+  Products?.colors?.forEach((spec) => {
+    spec?.sizes?.forEach((size) => {
+      sizes.add(size.name);
     });
   });
 
   return (
-    <div style={{ display: "table", width: "100%", marginBottom: "3rem" }}>
-      <div style={{ display: "table-row" }}>
+    <div style={{ display: "table", width: "100%", marginBottom: "3rem", flex: 1 }}>
+  {
+    desc.map((item) => 
+      <div key={item.heading} style={{ display: "table-row", flex: 1 }}>
         <div
           className="para"
           style={{
             display: "table-cell",
             padding: "1rem",
             borderBottom: "1px solid #ccc",
-            width: "10%",
+            flex: 1,
+            whiteSpace: 'nowrap'
           }}
         >
-          Sizes:
+          {item.heading}:
         </div>
         <div
           className="para"
@@ -106,44 +116,76 @@ function AdditionalInformation({ Products }) {
             display: "table-cell",
             padding: "1rem",
             borderBottom: "1px solid #ccc",
-            width: "90%",
+            flex: 8
           }}
         >
-          {Array.from(sizes)?.join(", ")}
-        </div>
-      </div>
-      {/* <div style={{ display: "table-row" }}>
-        <div className="para" style={{ display: "table-cell", padding: "1rem", borderBottom: "1px solid #ccc", width: "10%" }}>Colors:</div>
-        <div className="para" style={{ display: "table-cell", padding: "1rem", borderBottom: "1px solid #ccc", width: "90%" }}>{Products.specs.map((spec) => spec.color).join(", ")}</div>
-      </div> */}
-      <div style={{ display: "table-row" }}>
-        <div
-          className="para"
-          style={{
-            display: "table-cell",
-            padding: "1rem",
-            borderBottom: "1px solid #ccc",
-            width: "10%",
-          }}
-        >
-          Type:
-        </div>
-        <div
-          className="para"
-          style={{
-            display: "table-cell",
-            padding: "1rem",
-            borderBottom: "1px solid #ccc",
-            width: "90%",
-          }}
-        >
-          {Products?.category}
+          {item.content}
         </div>
       </div>
-      {/* <div style={{ display: "table-row" }}>
-        <div className="para" style={{ display: "table-cell", padding: "1rem", borderBottom: "1px solid #ccc", width: "10%" }}>Pack of:</div>
-        <div className="para" style={{ display: "table-cell", padding: "1rem", borderBottom: "1px solid #ccc", width: "90%" }}>{Products.packof}</div>
-      </div> */}
+    )
+  }
+
+  <div style={{ display: "table-row" }}>
+    <div
+      className="para"
+      style={{
+        display: "table-cell",
+        padding: "1rem",
+        borderBottom: "1px solid #ccc",
+        flex: 1,
+        whiteSpace: 'nowrap'
+      }}
+    >
+      Available Sizes:
     </div>
+    <div
+      className="para"
+      style={{
+        display: "table-cell",
+        padding: "1rem",
+        borderBottom: "1px solid #ccc",
+        flex: 5,
+      }}
+    >
+      {Array.from(sizes)?.join(", ")}
+    </div>
+  </div>
+  {/* <div style={{ display: "table-row" }}>
+    <div className="para" style={{ display: "table-cell", padding: "1rem", borderBottom: "1px solid #ccc", width: "10%" }}>Colors:</div>
+    <div className="para" style={{ display: "table-cell", padding: "1rem", borderBottom: "1px solid #ccc", width: "90%" }}>{Products.specs.map((spec) => spec.color).join(", ")}</div>
+  </div> */}
+  <div style={{ display: "table-row" }}>
+    <div
+      className="para"
+      style={{
+        display: "table-cell",
+        padding: "1rem",
+        borderBottom: "1px solid #ccc",
+        width: "10%",
+        whiteSpace: 'nowrap'
+      }}
+    >
+      Category:
+    </div>
+    <div
+      className="para"
+      style={{
+        display: "table-cell",
+        padding: "1rem",
+        borderBottom: "1px solid #ccc",
+        width: "90%",
+      }}
+    >
+      {Products?.category}
+    </div>
+  </div>
+  {/* <div style={{ display: "table-row" }}>
+    <div className="para" style={{ display: "table-cell", padding: "1rem", borderBottom: "1px solid #ccc", width: "10%" }}>Pack of:</div>
+    <div className="para" style={{ display: "table-cell", padding: "1rem", borderBottom: "1px solid #ccc", width: "90%" }}>{Products.packof}</div>
+  </div> */}
+</div>
+
   );
 }
+
+

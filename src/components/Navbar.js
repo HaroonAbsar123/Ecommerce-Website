@@ -24,6 +24,9 @@ import { BugReportTwoTone } from '@mui/icons-material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Modal } from '@mui/material';
 import Cookies from 'universal-cookie';
+import Dialog from '@mui/material/Dialog';
+import { toast } from 'react-hot-toast';
+import CustomModal from './CustomModal';
 
 const pages = ['Home', 'Collection', 'Contact'];
 const settings = ['Profile', 'Cart', 'Logout'];
@@ -35,8 +38,9 @@ function Navbar() {
   const [anchorElUser, setAnchorElUser] = useState(null);
   const navigate=useNavigate();
   const {cart, setIsUserLoggedIn, setUserDetails, setUserType, userDetails, isUserLoggedIn, loading} = useContext(ProductContext);
+  const [openProfileModal, setOpenProfileModal] = useState(false)
 
-
+  const [logoutModal, setLogoutModal] = useState(false)
   const [totalItems, setTotalItems] = useState(0);
 
   useEffect(() => {
@@ -96,11 +100,12 @@ function Navbar() {
   };
 
   const handleCloseUserMenu = (item) => {
-    setAnchorElUser(null);
+    // setAnchorElUser(null);
+    setOpenProfileModal(false)
   
     if (item !== "check") {
       if (item === "Logout") {
-        LogoutHandler();
+        setLogoutModal(true)
       } else {
         navigate(`/${item.toLowerCase()}`);
       }
@@ -116,7 +121,9 @@ function Navbar() {
       setIsUserLoggedIn(false);
       setUserDetails('');
       setUserType('');
+      setLogoutModal(false)
       navigate('/login', { replace: true });
+      toast.success("Logged out successfully");
     } catch (error) {
       console.error('Error occurred during logout:', error);
     }
@@ -198,12 +205,12 @@ function Navbar() {
                 <AddShoppingCartIcon />
               </IconButton>
             
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <Tooltip title="Profile options">
+                <IconButton onClick={() => {setOpenProfileModal(true)}} sx={{ p: 0 }}>
                   <Avatar alt="User" src={userDetails.image} />
                 </IconButton>
               </Tooltip>
-              <Menu
+              {/* <Menu
                 sx={{ mt: '45px' }}
                 id="menu-appbar"
                 anchorEl={anchorElUser}
@@ -224,7 +231,7 @@ function Navbar() {
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
                 ))}
-              </Menu>
+              </Menu> */}
             </Box>
             
 
@@ -248,6 +255,101 @@ function Navbar() {
       </Container>
     </AppBar>
     <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar}/>
+
+    <Dialog
+      open={openProfileModal}
+      onClose={() => {setOpenProfileModal(false)}}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+
+    >
+      <div
+      onClick={() => {setOpenProfileModal(false)}}
+        style={{
+          position: "fixed",
+          top: "0",
+          left: "0",
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center", // center the modal content vertically and horizontally
+          backdropFilter: "blur(10px)", // Adjust the blur intensity as needed
+          WebkitBackdropFilter: "blur(10px)", // For Safari support,
+        //   background: "rgba(0,0,0, 0.2)",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            maxHeight: "90vh",
+            overflow: "hidden",
+            minWidth: '500px',
+            boxShadow: "0 6px 12px rgba(0, 0, 0, 0.3)",
+            background: "rgba(255,255,255, 0.9)",
+            borderRadius: "10px",
+            marginRight:'10px',
+            marginLeft: '10px'
+          }}
+        >
+        <div style={{ 
+          padding: "10px", 
+          flex: 1, 
+          overflow: 'auto',
+          }}>
+           {settings.map((setting, index) => (
+            <div key={index}>
+                  <Button style={{width: '100%',paddingTop: '1rem', paddingBottom: '1rem', borderTop: index !== 0 ? '1px solid #ccc' : "none"}} key={setting} onClick={() => handleCloseUserMenu(setting)}>
+                    <Typography textAlign="center" style={{color: '#1e1e1e'}}>{setting}</Typography>
+                  </Button>
+                  </div>
+                ))}
+          </div>
+        </div>
+      </div>
+    </Dialog>
+
+    <CustomModal
+        open={logoutModal}
+        onClose={() => {
+          setLogoutModal(false);
+        }}
+      >
+        <div>
+        <div>
+  <h2 style={{ marginTop: "0px", marginBottom: '0px' }}>
+    Are you sure you want to Log Out?
+  </h2>
+  <p className="para">
+    Logging out will end your current session. You will need to log in again to access your account.
+  </p>
+</div>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              gap: "10px",
+              marginTop: "1rem",
+            }}
+          >
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                setLogoutModal(false);
+              }}
+            >
+              Cancel
+            </Button>
+
+      <Button onClick={() => {LogoutHandler()}} variant="contained" color="success" type="submit">Log Out</Button>
+
+          </div>
+        </div>
+      </CustomModal>
 
 
 

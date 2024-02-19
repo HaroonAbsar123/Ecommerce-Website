@@ -7,67 +7,185 @@ import { faTruck } from "@fortawesome/free-solid-svg-icons";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { useContext } from "react";
 import ProductContext from "../../../Context/ProductContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button, IconButton } from "@mui/material";
 import toast from "react-hot-toast";
 
-function ItemDetails({ Products }) {
-  const [selectedColor, setSelectedColor] = useState(Products.specs[0].color);
-  const [selectedSize, setSelectedSize] = useState(
-    Products.specs[0].available[0].size
+function ItemDetails({ Product, colorIndex, setColorIndex }) {
+  const [selectedColor, setSelectedColor] = useState(
+    Product.colors[colorIndex].name
   );
+  const [selectedSize, setSelectedSize] = useState(
+    Product.colors[colorIndex].sizes[0].name
+  );
+  
+  const { CartAddItem, isUserLoggedIn, userDetails, cart } =
+    useContext(ProductContext);
+  const [selectedProduct, setSelectedProduct] = useState({});
   const [selectedQuantity, setSelectedQuantity] = useState(1);
+  // const [isOutOfStock, setIsOutOfStock] = useState(false);
+
+
+
   const navigate = useNavigate();
 
-  const { CartAddItem, isUserLoggedIn } = useContext(ProductContext);
+  const updateURL = (color, size) => {
+    const url = new URL(window.location.href);
+    if (color) {
+        url.searchParams.set('color', color);
+    }
+    if (size) {
+        url.searchParams.set('size', size);
+    }
+    window.history.pushState({}, '', url);
+};
 
-  const handleColorChange = (color) => {
-    setSelectedColor(color);
-    setSelectedSize(Products.specs[0].available[0].size);
-  };
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const color = searchParams.get('color')
+  const size  =searchParams.get('size')
 
-  const handleSizeChange = (size) => {
-    setSelectedSize(size);
-  };
+
+  const findColorIndex = (colorName) => {
+    const colorIndex = Product.colors.findIndex((color) => color?.name?.toLowerCase() === colorName?.toLowerCase());
+    return colorIndex;
+};
+
+useEffect(() => { 
+  if (colorIndex !== undefined && colorIndex >= 0) {
+      setSelectedColor(Product.colors[colorIndex].name);
+  }
+}, [colorIndex]);
+
+useEffect(() => {
+  const index = findColorIndex(color);
+  if (index >= 0) {
+      setColorIndex(index);
+      updateURL(color);
+  } else {
+      // toast(`${color} color not available`);
+      updateURL(Product.colors[0].name);
+  }
+}, [color]);
+
+const findSizeIndex = () => {
+  
+  const sizeSearchParams = new URLSearchParams(location.search);
+  const sizeIndex = Product.colors[colorIndex].sizes.findIndex((size) => size.name?.toLowerCase() === sizeSearchParams.get('size')?.toLowerCase());
+  return sizeIndex;
+};
+
+useEffect(() => {
+  const index = findSizeIndex();
+  console.log("SIZE INDEX", index)
+  if (index >= 0) {
+      setSelectedSize(Product.colors[colorIndex].sizes[index].name);
+      updateURL(null, Product.colors[colorIndex].sizes[index].name);
+  } else {
+      const defaultSize = Product.colors[colorIndex].sizes[0].name;
+      setSelectedSize(defaultSize);
+      updateURL(null, defaultSize);
+      
+  }
+}, [size, colorIndex]);
+
+
+const handleColorChange = (color, index) => {
+  setColorIndex(index);
+  updateURL(color);
+};
+
+const handleSizeChange = (size) => {
+  setSelectedSize(size);
+  updateURL(null, size);
+};
+
+
+
+
+
 
   const handleQuantityChange = (event) => {
     setSelectedQuantity(parseInt(event.target.value));
   };
 
+  useEffect(() => {
+    const selectedSpec = Product?.colors[colorIndex];
+    const selectedAvailability = selectedSpec?.sizes.find(
+      (size) => size?.name === selectedSize
+    );
+
+    const newPrice = selectedAvailability?.discountedPrice
+      ? selectedAvailability?.discountedPrice
+      : selectedAvailability?.price;
+
+    const { colors, ...productWithoutColors } = Product;
+
+    setSelectedProduct({
+      ...productWithoutColors,
+      ...selectedAvailability,
+      selectedColor: Product?.colors[colorIndex]?.name,
+      name: Product?.title,
+      selectedQuantity: selectedQuantity,
+      price: newPrice,
+      img: Product?.colors[colorIndex]?.images,
+    });
+  }, [colorIndex]);
+
   const handleAddToCart = () => {
     if (isUserLoggedIn) {
-      const newPrice = Products.discountedPrice
-        ? Products.discountedPrice
-        : Products.price;
+      // const newPrice = Product.discountedPrice
+      //   ? Product.discountedPrice
+      //   : Product.price;
 
-      const Product = {
-        cartID: Math.floor(10000000 + Math.random() * 90000000),
-        product: Products,
+      const selectedSpec = Product?.colors[colorIndex];
+      const selectedAvailability = selectedSpec?.sizes.find(
+        (size) => size?.name === selectedSize
+      );
+
+      const newPrice = selectedAvailability?.discountedPrice
+        ? selectedAvailability?.discountedPrice
+        : selectedAvailability?.price;
+
+      const { colors, ...productWithoutColors } = Product;
+
+      const ProductData = {
+        cartID: `${Math.floor(10000000 + Math.random() * 90000000)}${
+          userDetails?.cart?.length
+        }`,
+        productId: selectedProduct.id,
+        product: {
+          ...productWithoutColors,
+          ...selectedAvailability,
+          selectedColor: Product?.colors[colorIndex]?.name,
+          name: Product?.title,
+          selectedQuantity: selectedQuantity,
+          price: newPrice,
+          img: Product?.colors[colorIndex]?.images,
+        },
         selectedQuantity: selectedQuantity,
-        selectedColor: selectedColor,
+        selectedColor: Product?.colors[colorIndex]?.name,
         selectedSize: selectedSize,
         price: newPrice,
       };
 
-      console.log(Product);
+      console.log("ADDING ITEM TO CART", ProductData);
 
-      CartAddItem(Product);
-      // Add the item to the cart
-      console.log(
-        `Added to cart \n chosen size: ${selectedSize} \n chosenColor: ${selectedColor} \n chosenQuantity: ${selectedQuantity}\n ${Product}`
-      );
+      CartAddItem(ProductData);
+
+      toast.success(`${ProductData.product.title} added to cart`);
     } else {
-      toast("Please login to add items to cart")
+      toast("Please login to add items to cart");
       navigate("/login");
     }
   };
 
   const handleBuyNow = () => {
     if (isUserLoggedIn) {
-    handleAddToCart();
-    navigate("/cart");
+      handleAddToCart();
+      navigate("/cart");
     } else {
-      toast("Please login to buy products")
+      toast("Please login to buy products");
       navigate("/login");
     }
   };
@@ -88,119 +206,216 @@ function ItemDetails({ Products }) {
     };
   }, []);
 
+
+
+  // const [disableButtons, setDisableButtons] = useState(false);
+  // const [maxQty, setMaxQty] = useState(0);
+  // const [error, setError] = useState("");
+
+
+  // useEffect(() => {
+  //   const selectedSpec = Product.colors[colorIndex];
+  //   const selectedAvailability = selectedSpec.sizes.find(
+  //     (size) => size.name === selectedSize
+  //   );
+  //   setIsOutOfStock(selectedAvailability?.quantity === 0)
+
+
+
+  //   let MaxAvailable = selectedAvailability?.quantity;
+
+  //   const item=cart.find((item) => item.productId===Product.id)
+  //     if(item){
+  //       MaxAvailable = selectedAvailability?.quantity - (selectedQuantity + item.selectedQuantity)
+  //       setMaxQty(MaxAvailable);
+  //       if(MaxAvailable<=0){
+  //         setError("Maximum stock quantity reached. (cart items included)")
+  //       } else {
+  //         setError("");
+  //       }
+  //     }
+  //     else {
+  //       setMaxQty(selectedAvailability?.quantity)
+  //     }
+  //     console.log("MaxAvailable", MaxAvailable)
+
+  // }, [colorIndex, selectedSize, selectedColor, cart, selectedQuantity])
+
+
   const getProductDetails = () => {
-    const product = Products;
-    const selectedSpec = product.specs.find(
-      (spec) => spec.color === selectedColor
+    const selectedSpec = Product.colors[colorIndex];
+    const selectedAvailability = selectedSpec.sizes.find(
+      (size) => size.name === selectedSize
     );
-    const selectedAvailability = selectedSpec.available.find(
-      (avail) => avail.size === selectedSize
-    );
-    // const isOutOfStock = selectedAvailability.availability === false;
-    const isOutOfStock = false;
+
+    const isOutOfStock = selectedAvailability?.quantity === 0;
+
+    let MaxAvailable = selectedAvailability?.quantity;
+    let maxQty=0;
+    let error = "";
 
     
+    const item=cart.find((item) => item.productId === Product.id &&
+    item.selectedColor === selectedColor &&
+    item.selectedSize === selectedSize)
 
-
+    console.log("item", item)
+      if(item){
+        console.log("item in loop", item)
+        MaxAvailable = selectedAvailability?.quantity - item.selectedQuantity
+        // MaxAvailable = selectedAvailability?.quantity - (selectedQuantity + item.selectedQuantity) + 1
+        maxQty=MaxAvailable;
+        if(MaxAvailable<=0){
+          error="Maximum stock quantity reached. (cart items included)";
+        } else {
+          error="";
+        }
+      }
+      else {
+        maxQty=MaxAvailable;
+      }
+      
+    console.log("MaxAvailable", MaxAvailable)
+    console.log("maxQty", maxQty)
 
     return (
       <div className={classes.mainContainer}>
         <div className={classes.secondContainer}>
-          {!isMobile && 
-          <h2 className={classes.title}>{product.title}</h2>
-}
+          {!isMobile && <h2 className={classes.title}>{Product.title}</h2>}
           <div className={classes.price}>
-            {product.discountedPrice ? (
+            {selectedAvailability?.discountedPrice &&
+            selectedAvailability?.discountedPrice <
+              selectedAvailability?.price ? (
               <div className={classes.priceContainer}>
-                <p className={classes.regularPrice}>${product.price}</p>
+                <p className={classes.regularPrice}>
+                  ${selectedAvailability?.price}
+                </p>
                 <p className={classes.discountedPrice}>
-                  ${product.discountedPrice}
+                  ${selectedAvailability?.discountedPrice}
                 </p>
               </div>
             ) : (
-              <p className={classes.productPrice}>${product.price}</p>
+              <p className={classes.productPrice}>
+                ${selectedAvailability?.price}
+              </p>
             )}
           </div>
-          {/* <div className={classes.color}>
+          <div className={classes.color}>
             <div className={classes.colorTitles}>
-          <b>Color:</b> {selectedColor}
+              <b>Color:</b> {selectedColor}
+            </div>
+            <div className={classes.colorButtons}>
+              {Product.colors.map((spec, index) => (
+                <div
+                  key={spec.name}
+                  className={`${classes.colorOption} ${
+                    selectedColor === spec.name ? classes.active : ""
+                  }`}
+                  style={{ backgroundColor: spec.name }}
+                  onClick={() => handleColorChange(spec.name, index)}
+                ></div>
+              ))}
+            </div>
           </div>
-          <div className={classes.colorButtons}>
-          {product.specs.map((spec) => (
-            <button
-              key={spec.color}
-              className={`${classes.colorOption} ${selectedColor === spec.color ? classes.active : ""}`}
-              style={{ backgroundColor: spec.color }}
-              onClick={() => handleColorChange(spec.color)}
-            />
-          ))}
-          </div>
-        </div> */}
           <div className={classes.size}>
             <div className={classes.colorTitles}>
               <b>Size:</b> {selectedSize}
             </div>
-
             <div className={classes.colorButtons}>
-              {selectedSpec.available.map((avail) => (
+              {selectedSpec.sizes.map((size) => (
                 <Button
                   variant="outlined"
-                  key={avail.size}
+                  key={size.name}
                   style={{
                     color: "#1e1e1e",
-                    borderColor: "#1e1e1e",
+                    // borderColor: "#1e1e1e",
                     margin: "3px",
-                    borderWidth: selectedSize === avail.size ? "2px" : "1px",
+                    borderWidth: "1px",
+                    border:
+                      selectedSize === size.name
+                        ? "1px solid #1e1e1e"
+                        : "1px solid #ccc",
+                    background:
+                      selectedSize === size.name ? "#fff" : "transparent",
                   }}
-                  // className={`${classes.sizeOption} ${selectedSize === avail.size ? classes.active : ""}`}
-                  onClick={() => handleSizeChange(avail.size)}
+                  onClick={() => handleSizeChange(size.name)}
                 >
-                  {avail.size}
+                  {size.name}
                 </Button>
               ))}
             </div>
           </div>
-          {/* <div
+          <div
             className={classes.availability}
             style={isOutOfStock ? { color: "red" } : {}}
           >
-            <b>Availability:</b> {isOutOfStock ? "Out of Stock" : `In Stock`}
-          </div> */}
+            <b>Availability:</b>{" "}
+            {isOutOfStock ? (
+              "Out of Stock"
+            ) : (
+              <>{isUserLoggedIn &&
+              
+              <>
+                {maxQty<=selectedQuantity ? (
+                  <>{selectedAvailability?.quantity} items in stock
+                  <span style={{ color: "red",  marginLeft: '5px' }}>
+                    (Max stock quantity reached. Cart items included)
+                  </span>
+                  </>
+                ) : (
+                  `${selectedAvailability?.quantity} items in stock`
+                )}
+                </>}
+              </>
+            )}
+          </div>
           <div className={classes.quantity}>
             <div className={classes.quantityTitle}>
               <b>Quantity:</b> {selectedQuantity}
             </div>
-
             <div className={classes.buttonsContainer}>
-              <div style={{ display: "flex", alignItems: 'center' }}>
+              <div style={{ display: "flex", alignItems: "center" }}>
                 <IconButton
                   disabled={isOutOfStock}
                   style={{
                     backgroundColor: isOutOfStock ? "#ccc" : "#1e1e1e",
                     color: "#fff",
-                    overflow: 'hidden',
-                    fontSize: '1rem'
+                    overflow: "hidden",
+                    fontSize: "1rem",
                   }}
                   onClick={() => {
                     selectedQuantity > 1 &&
-                      setSelectedQuantity(selectedQuantity - 1);
+                      setSelectedQuantity((prev) => prev - 1);
                   }}
                 >
                   <FontAwesomeIcon icon={faMinus} size="1x" />
                 </IconButton>
-                <div style={{ color: isOutOfStock ? "#ccc" : "#1e1e1e", marginLeft: '10px', marginRight: '10px' }}>
+                <div
+                  style={{
+                    color: isOutOfStock ? "#ccc" : "#1e1e1e",
+                    marginLeft: "10px",
+                    marginRight: "10px",
+                  }}
+                >
                   {selectedQuantity}
                 </div>
                 <IconButton
-                  disabled={isOutOfStock}
+                  disabled={
+                    isOutOfStock ||
+                        maxQty<=selectedQuantity
+                  }
                   style={{
-                    backgroundColor: isOutOfStock ? "#ccc" : "#1e1e1e",
+                    backgroundColor:
+                      (isOutOfStock ||
+                        maxQty<=selectedQuantity)
+                        ? "#ccc"
+                        : "#1e1e1e",
                     color: "#fff",
-                    overflow: 'hidden',
-                    fontSize: '1rem'
+                    overflow: "hidden",
+                    fontSize: "1rem",
                   }}
                   onClick={() => {
-                    setSelectedQuantity(selectedQuantity + 1);
+                    setSelectedQuantity((prev) => prev + 1);
                   }}
                 >
                   <FontAwesomeIcon icon={faPlus} size="1x" />
@@ -210,19 +425,18 @@ function ItemDetails({ Products }) {
               <Button
                 variant="outlined"
                 style={{
-                  color: isOutOfStock ? "#ccc" : "#1e1e1e",
+                  color: (isOutOfStock || maxQty<=0) ? "#ccc" : "#1e1e1e",
                   borderColor: "#1e1e1e",
                   flex: 1,
-                  borderColor: isOutOfStock ? "#ccc" : "#1e1e1e",
+                  borderColor: (isOutOfStock || maxQty<=0) ? "#ccc" : "#1e1e1e",
                 }}
                 onClick={handleAddToCart}
-                disabled={isOutOfStock}
+                disabled={isOutOfStock || maxQty<=0}
               >
                 Add to Cart
               </Button>
             </div>
           </div>
-
           <Button
             style={{
               backgroundColor: isOutOfStock ? "#ccc" : "#1e1e1e",
@@ -268,11 +482,11 @@ function ItemDetails({ Products }) {
           >
             <p className="para">
               <b>ID: </b>
-              {product.id}
+              {Product.id}
             </p>
             <p className="para">
               <b>Category: </b>
-              {product.category}
+              {Product.category}
             </p>
           </div>
         </div>

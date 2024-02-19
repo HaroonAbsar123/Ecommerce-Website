@@ -9,7 +9,7 @@ const ProfileAndFinanceStudent = () => {
   return (
     <React.Fragment>
       
-      <div
+      {/* <div
         style={{
           marginTop: "0px",
           flex: 1,
@@ -25,7 +25,7 @@ const ProfileAndFinanceStudent = () => {
         }}
        >
           <div style={{fontSize: '2rem'}}>Profile</div>
-        </div>
+        </div> */}
 
 
 

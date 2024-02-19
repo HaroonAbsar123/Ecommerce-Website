@@ -4,69 +4,65 @@ import { useState, useEffect } from "react";
 import { Backdrop, Button } from "@mui/material";
 import Form from "./Form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleXmark } from "@fortawesome/free-solid-svg-icons";
+import { faCircleXmark, faShippingFast, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { useContext } from "react";
 import ProductContext from "../../Context/ProductContext";
+import CustomModal from "../../components/CustomModal";
 
 
 function SecondCard({Products}){
 
-    const [total, setTotal] = useState(0);
-    const [quantity, setQuantity] = useState(0);
-    const [shipping, setShipping] = useState(0);
-    const [open, setOpen] = useState(false);
-
-    const [subTotal, setSubTotal] = useState(0);
-
-    const {couponApplied} = useContext(ProductContext);
-
-
+  const [total, setTotal] = useState(0);
+  const [quantity, setQuantity] = useState(0);
+  const [shipping, setShipping] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [subTotal, setSubTotal] = useState(0);
+  const { couponApplied, cartError } = useContext(ProductContext);
+  const [shippingPercentage, setShippingPercentage] = useState(0.05)
+  
+  
   const handleClose = () => {
     setOpen(false);
   };
+  
   const handleOpen = () => {
     setOpen(true);
   };
+
+  useEffect(() => {
+    if(total >= 1499){
+      setShippingPercentage(0)
+    } else {
+      setShippingPercentage(0.05)
+    }
+  }, [total])
   
-    useEffect(() => {
-      // Update the totalItems whenever the cart changes
-
-
-      const newTotalItems = Products.reduce(
-        (total, item) => total + item.selectedQuantity * item.price,
-        0
-      );
-      setTotal(newTotalItems);
-
-
-      const newQuantity = Products.reduce(
-        (total, item) => total + item.selectedQuantity,
-        0
-      );
-      setQuantity(newQuantity);
-
-      const newShipping = newTotalItems*newQuantity;
-      const finalShipping = newShipping/100;
-
-      setShipping(finalShipping)
-
-
-
-      let subTotal = newTotalItems + finalShipping;
-      
-        if(Object.keys(couponApplied).length > 0){
-          const discountMultiplier = 1 - couponApplied.discount;
-          subTotal = subTotal * discountMultiplier;
-        }
-      
-      
-      setSubTotal(subTotal.toFixed(2));
-      
-
-
-
-      }, [Products])
-
+  useEffect(() => {
+    const newTotalItems = Products.reduce(
+      (total, item) => total + item.selectedQuantity * item.price,
+      0
+    );
+    setTotal(newTotalItems);
+  
+    const newQuantity = Products.reduce(
+      (total, item) => total + item.selectedQuantity,
+      0
+    );
+    setQuantity(newQuantity);
+  
+    const newShipping = newTotalItems * shippingPercentage;
+    setShipping(newShipping);
+  
+    let subTotal = newTotalItems + newShipping;
+  
+    if (Object.keys(couponApplied).length > 0) {
+      const discountMultiplier = 1 - couponApplied.discount;
+      subTotal = subTotal * discountMultiplier;
+    }
+  
+    setSubTotal(subTotal.toFixed(2));
+  }, [Products, shippingPercentage]);
+  
 
 
     return(
@@ -91,13 +87,20 @@ function SecondCard({Products}){
 
 
             <div style={{width: '100%', borderBottom: '1px solid #ccc'}}>
-                <p className="para">Shipping ({quantity} items)</p>
+                {/* <p className="para">Shipping ({quantity} items)</p> */}
                 <div style={{width: '100%', flexDirection: 'row', display: 'flex', justifyContent: 'space-between'}}>
-                <p className="para">Shipping Cost</p>
+                <p className="para">Shipping ({shippingPercentage*100}%)</p>
                 <div>
                 <p className="para">${shipping}</p>
                 </div>
                 </div>
+
+                <p className="para" style={{fontSize: 'small', textAlign: 'center'}}>
+              <FontAwesomeIcon icon={faShippingFast} />
+              <span style={{ marginLeft: "5px" }}>
+                Free shipping: On orders over $1499 and above
+              </span>
+            </p>
             </div>
 
 
@@ -118,37 +121,30 @@ function SecondCard({Products}){
                 <div>
                 <p className="para">${subTotal}</p>
                 </div>
+
+                
+               
             </div>
 
 
 
-            <Button  variant="contained" onClick={handleOpen} style={{width: '100%', marginTop: '10px', backgroundColor: '#1e1e1e', color: 'white'}}>Proceed to Checkout</Button>
+              
+            <Button disabled={cartError}  variant="contained" onClick={handleOpen} style={{width: '100%', marginTop: '10px', backgroundColor: cartError ? "#ccc" : '#1e1e1e', color: 'white'}}>Proceed to Checkout</Button>
+            {
+  cartError && (
+    <div style={{ marginTop: '10px', color: 'red' }}>
+      Please consider making suggested alterations to your cart before proceeding to checkout.
+    </div>
+  )
+}
 
 
-                <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={open}
-                
+                <CustomModal
+                open={open} 
                 >
-                    
-                    
-                    <div style={{width: '90%', backgroundColor: 'white', color: 'black', height: '100%', maxHeight: '70vh', marginTop: '5rem', overflow: 'hidden',   maxWidth: '2200px'}}>
-                    <div style={{height: '10%', width: '100%', flex: 1, display: 'flex', justifyContent: 'space-between', flexDirection: 'row', borderBottom: '1px solid #ccc', alignItems: 'center'}}>
-                        <h2 className="title" style={{fontSize: '2rem', margin: '0px', paddingLeft: '1rem'}}>Billing Details</h2>
-                    <button onClick={handleClose} style={{background: 'none', border: 'none'}}><FontAwesomeIcon icon={faCircleXmark} size="1x" style={{fontSize: '2.5rem'}} /></button>
-                    </div>
-                    
-                        <div style={{ height: '90%', overflow: 'auto', width: '100%'}}>
+                            <Form shippingPercentage={shippingPercentage} total={total} shipping={shipping} quantity={quantity} handleClose={handleClose} />
 
-                            <div style={{padding: '3rem', paddingTop: '2rem'}}>
-                            <Form total={total} shipping={shipping} quantity={quantity} />
-                            </div>
-                        
-                        </div>
-                        
-                    </div>
-
-                </Backdrop>
+                </CustomModal>
 
 
         </div></div>

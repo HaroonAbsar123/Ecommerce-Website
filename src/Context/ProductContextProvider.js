@@ -2,7 +2,8 @@ import ProductContext from "./ProductContext";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { database, db } from "../firebase";
-import { getDocs, collection, where, query, onSnapshot, doc, updateDoc, getDoc, setDoc } from "firebase/firestore";
+import { getDocs, collection, where, query, onSnapshot, doc, updateDoc, getDoc, setDoc, orderBy } from "firebase/firestore";
+
 import { debounce } from 'lodash';
 import Image1 from "../Assets/Products/1.png";
 import Image2 from "../Assets/Products/2.png";
@@ -34,6 +35,10 @@ function ProductContextProvider({ children }) {
   const [products, setProducts] = useState([]);
   const [coupons, setCoupons] = useState(initialCoupons);
   const [couponApplied, setCouponApplied] = useState({});
+
+  const [cartError, setCartError] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [firstTime, setFirstTime] = useState(false);
 
   function CartUpdateItem(product) {
     
@@ -83,13 +88,51 @@ function ProductContextProvider({ children }) {
   }
 
   function DisplayCart() {
-    console.log("Cart", cart);
+    // console.log("Cart", cart);
   }
 
   function DisplayProducts() {
-    console.log("Products", products);
+    // console.log("Products", products);
   }
 
+  
+  const fetchProducts = () => {
+    try {
+      // Use onSnapshot to listen for real-time updates
+      const userListRef = collection(db, 'products');
+      const unsubscribe = onSnapshot(
+        query(userListRef, orderBy('createdAt', 'desc')), // Order by 'createdAt' field in descending order
+        (querySnapshot) => {
+          const products = querySnapshot.docs
+            .map((doc) => ({ id: doc.id, ...doc.data() })) // Include the document id in the data
+  
+          if (!Array.isArray(products)) {
+            console.error('Products is not an array:', products);
+            return;
+          }
+  
+          const itemsObject = products.reduce((acc, curr) => {
+            const { category, ...rest } = curr;
+            if (!acc[category]) {
+              acc[category] = [];
+            }
+            acc[category].push({...rest, category});
+            return acc;
+          }, {});
+  
+  
+          setProducts(itemsObject);
+          console.log("products", itemsObject);
+        }
+      );
+  
+      // Return the unsubscribe function to stop listening when the component unmounts
+      return unsubscribe;
+    } catch (e) {
+      console.error('Error fetching data:', e);
+    }
+  };
+  
   
 
   const fetchData = () => {
@@ -99,7 +142,7 @@ function ProductContextProvider({ children }) {
       const data = snapshot.val();
       // Assuming setProducts is a state update function
       setProducts(data);
-      console.log("Data Fetched:", data);
+      // console.log("Data Fetched:", data);
     }, (error) => {
       console.error("Error while fetching data:", error);
     });
@@ -107,7 +150,8 @@ function ProductContextProvider({ children }) {
   
   
   useEffect(() => {
-    fetchData();
+    // fetchData();
+    fetchProducts();
   }, []);
 
 
@@ -128,7 +172,7 @@ function ProductContextProvider({ children }) {
         );
       }
 
-      console.log("Data Updated");
+      // console.log("Data Updated");
     } catch (error) {
       console.error("Error while updating data:", error);
     }
@@ -172,7 +216,7 @@ function ProductContextProvider({ children }) {
             setInitialCart(cartData);
             setIsCartFetched(true);
             setLoading(false); // Set loading to false when data is fetched
-            console.log("USER DATA FETCHEDDDDDDDDDDDDDDDD");
+            // console.log("USER DATA FETCHEDDDDDDDDDDDDDDDD");
           });
         } else {
           console.log('User not found in Firestore');
@@ -200,11 +244,11 @@ const DEBOUNCE_DELAY = 1000; // Adjust the debounce delay as needed
 
   useEffect(() => {
     if (!isCartFetched) {
-      console.log("DATA NOT FETCHED");
+      // console.log("DATA NOT FETCHED");
       return;
     }
 
-    console.log("POSTING CART FETCHED");
+    // console.log("POSTING CART FETCHED");
 
     const localIsUserLoggedIn = cookies.get("isLoggedIn");
 
@@ -224,12 +268,12 @@ const DEBOUNCE_DELAY = 1000; // Adjust the debounce delay as needed
           }
         })
         .then(() => {
-          console.log('Cart data posted to Firestore successfully');
+          // console.log('Cart data posted to Firestore successfully');
           setInitialCart(cart);
         })
         .catch((error) => {
           console.error('Error posting/updating cart data to Firestore: ', error);
-          alert('Failed to update your cart. Please try again.');
+          // alert('Failed to update your cart. Please try again.');
         });
     }, DEBOUNCE_DELAY);
 
@@ -257,23 +301,27 @@ const DEBOUNCE_DELAY = 1000; // Adjust the debounce delay as needed
         cart,
         coupons,
         couponApplied,
+        isUserLoggedIn,
+        userDetails,
+        userType,
+        loading,
+        cartError,
+        showErrorModal,
+        firstTime, 
+        setFirstTime,
         setCouponApplied,
         CartAddItem,
         CartRemoveItem,
         DisplayCart,
         DisplayProducts,
         // updateData,
-        fetchData,
         CartUpdateItem,
-        isUserLoggedIn,
-        userDetails,
-        userType,
         setIsUserLoggedIn,
         setUserDetails,
         setUserType,
-        isUserLoggedIn,
-        loading,
-        updateData
+        updateData,
+        setCartError,
+        setShowErrorModal
       }}
     >
       {children}
@@ -286,316 +334,101 @@ export default ProductContextProvider;
 
 const items = {
   lamps: [
-  {
-    category: "lamps",
-    description: "Premium Lamp",
-    discountedPrice: 28,
-    homePageItem: true,
-    hot: true,
-    id: "rYzHjcbwygyA",
-    img: [
-      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FrYzHjcbwygyA%2FTu05zkVO62lN?alt=media&token=166e15b8-1c4c-409a-a6ac-9702903dd3cc",
-      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FrYzHjcbwygyA%2FCJR8sZNp8dYa?alt=media&token=59c0e9de-95bf-4646-9b53-7691877fcdee"
-    ],
-    packof: 1,
-    price: 30,
-    specs: [
+    {
+    id: "1231232t3123",
+    title: "Lamp",
+    colors: [
       {
-        available: [
-          {
-            availability: true,
-            size: "L"
-          }
-        ],
-        color: "red"
-      }
-    ],
-    title: "Lamp 3"
-  },
-  {
-    category: "lamps",
-    description: "Premium Lamp",
-    discountedPrice: 28,
-    homePageItem: true,
-    hot: true,
-    id: "rYzbdfb4wygyA",
-    img: [
-      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FrYzHjcbwygyA%2FTu05zkVO62lN?alt=media&token=166e15b8-1c4c-409a-a6ac-9702903dd3cc",
-      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FrYzHjcbwygyA%2FCJR8sZNp8dYa?alt=media&token=59c0e9de-95bf-4646-9b53-7691877fcdee"
-    ],
-    packof: 1,
-    price: 30,
-    specs: [
+        name: 'Red',
+        images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Red_Color.jpg/1536px-Red_Color.jpg", "blob:http://localhost:3000/d6d01831-19aa-4ab6-876c-bfeb2dccdf01", "blob:http://localhost:3000/506f2bbf-c72d-4f35-8b26-72f233535cc5", "https://upload.wikimedia.org/wikipedia/commons/e/e4/Color-blue.JPG"],
+        sizes: [{ name: 'S', price: 50, discountedPrice: 40, quantity: 10 }, { name: 'L', price: 30, discountedPrice: 25, quantity: 0 }],
+      },
       {
-        available: [
-          {
-            availability: true,
-            size: "L"
-          }
-        ],
-        color: "red"
-      }
+        name: 'Blue',
+        images: ["https://upload.wikimedia.org/wikipedia/commons/e/e4/Color-blue.JPG"],
+        sizes: [{ name: 'L', price: 30, discountedPrice: 25, quantity: 5 }],
+      },
+      {
+        name: 'Green',
+        images: ["https://www.shutterstock.com/image-illustration/background-green-screen-video-editing-260nw-1563651100.jpg"],
+        sizes: [{ name: 'L', price: 30, discountedPrice: 25, quantity: 2 }],
+      },
     ],
-    title: "Lamp 3"
-  },
-],
+    description: "Lorem ipsum dolor si te",
+    category: "lamps",
+    homePageItem: true,
+    hot: true
+  }],
 cushions: [
   {
-    category: "cushions",
-    description: "Premium Sofa",
-    discountedPrice: 145,
-    homePageItem: true,
-    hot: true,
-    id: "aVhrth34tdGFE",
-    img: [
-      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FV6v0uGBMXlYQ?alt=media&token=0560ec76-2737-44d5-975a-be45fd38e1c9",
-      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FgxvMNKQRpgIA?alt=media&token=f5e77b28-30f3-4dfa-a682-ad46b3038e30"
-    ],
-    packof: 1,
-    price: 150,
-    specs: [
-      {
-        available: [
-          {
-            availability: true,
-            size: "L"
-          },
-          {
-            availability: true,
-            size: "XL"
-          },
-          {
-            availability: true,
-            size: "XXL"
-          },
-          {
-            availability: true,
-            size: "XXXL"
-          },
-          {
-            availability: true,
-            size: "XXXXL"
-          }
-        ],
-        color: "Red"
-      }
-    ],
-    title: "Sofa 3"
-  },
-  {
-    category: "cushions",
-    description: "Premium Sofa",
-    discountedPrice: 145,
-    homePageItem: true,
-    hot: true,
-    id: "aVh23sdg35btdGFE",
-    img: [
-      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FV6v0uGBMXlYQ?alt=media&token=0560ec76-2737-44d5-975a-be45fd38e1c9",
-      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FgxvMNKQRpgIA?alt=media&token=f5e77b28-30f3-4dfa-a682-ad46b3038e30"
-    ],
-    packof: 1,
-    price: 150,
-    specs: [
-      {
-        available: [
-          {
-            availability: true,
-            size: "L"
-          },
-          {
-            availability: true,
-            size: "XL"
-          },
-          {
-            availability: true,
-            size: "XXL"
-          },
-          {
-            availability: true,
-            size: "XXXL"
-          },
-          {
-            availability: true,
-            size: "XXXXL"
-          }
-        ],
-        color: "Red"
-      }
-    ],
-    title: "Sofa 3"
-  }
-],
+  id: "13g93g32t3123",
+  title: "Cushions",
+  colors: [
+    {
+      name: 'Red',
+      images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Red_Color.jpg/1536px-Red_Color.jpg", "blob:http://localhost:3000/d6d01831-19aa-4ab6-876c-bfeb2dccdf01", "blob:http://localhost:3000/506f2bbf-c72d-4f35-8b26-72f233535cc5", "https://upload.wikimedia.org/wikipedia/commons/e/e4/Color-blue.JPG"],
+      sizes: [{ name: 'S', price: 50, discountedPrice: 40, quantity: 10 }, { name: 'L', price: 30, discountedPrice: 25, quantity: 0 }],
+    },
+    {
+      name: 'Blue',
+      images: ["https://upload.wikimedia.org/wikipedia/commons/e/e4/Color-blue.JPG"],
+      sizes: [{ name: 'L', price: 30, discountedPrice: 25, quantity: 0 }],
+    },
+  ],
+  description: "Lorem ipsum dolor si te",
+  category: "cushions",
+  hot: true
+}],
 armchairs: [
   {
-    category: "armchairs",
-    description: "Premium Sofa",
-    discountedPrice: 145,
-    homePageItem: true,
-    hot: true,
-    id: "aVbg8m3o32GFE",
-    img: [
-      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FV6v0uGBMXlYQ?alt=media&token=0560ec76-2737-44d5-975a-be45fd38e1c9",
-      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FgxvMNKQRpgIA?alt=media&token=f5e77b28-30f3-4dfa-a682-ad46b3038e30"
-    ],
-    packof: 1,
-    price: 150,
-    specs: [
-      {
-        available: [
-          {
-            availability: true,
-            size: "L"
-          },
-          {
-            availability: true,
-            size: "XL"
-          },
-          {
-            availability: true,
-            size: "XXL"
-          },
-          {
-            availability: true,
-            size: "XXXL"
-          },
-          {
-            availability: true,
-            size: "XXXXL"
-          }
-        ],
-        color: "Red"
-      }
-    ],
-    title: "Sofa 3"
-  },
-  {
-    category: "armchairs",
-    description: "Premium Sofa",
-    discountedPrice: 145,
-    homePageItem: true,
-    hot: true,
-    id: "aVbg634dGFE",
-    img: [
-      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FV6v0uGBMXlYQ?alt=media&token=0560ec76-2737-44d5-975a-be45fd38e1c9",
-      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FgxvMNKQRpgIA?alt=media&token=f5e77b28-30f3-4dfa-a682-ad46b3038e30"
-    ],
-    packof: 1,
-    price: 150,
-    specs: [
-      {
-        available: [
-          {
-            availability: true,
-            size: "L"
-          },
-          {
-            availability: true,
-            size: "XL"
-          },
-          {
-            availability: true,
-            size: "XXL"
-          },
-          {
-            availability: true,
-            size: "XXXL"
-          },
-          {
-            availability: true,
-            size: "XXXXL"
-          }
-        ],
-        color: "Red"
-      }
-    ],
-    title: "Sofa 3"
-  }
-],
+  id: "123123123",
+  title: "Arm Chair",
+  colors: [
+    {
+      name: 'Red',
+      images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Red_Color.jpg/1536px-Red_Color.jpg", "blob:http://localhost:3000/d6d01831-19aa-4ab6-876c-bfeb2dccdf01", "blob:http://localhost:3000/506f2bbf-c72d-4f35-8b26-72f233535cc5", "https://upload.wikimedia.org/wikipedia/commons/e/e4/Color-blue.JPG"],
+      sizes: [{ name: 'S', price: 50, discountedPrice: 40, quantity: 10 }, { name: 'L', price: 30, discountedPrice: 25, quantity: 0 }],
+    },
+    {
+      name: 'Blue',
+      images: ["https://upload.wikimedia.org/wikipedia/commons/e/e4/Color-blue.JPG"],
+      sizes: [{ name: 'L', price: 30, discountedPrice: 25, quantity: 0 }],
+    },
+    {
+      name: 'Green',
+      images: ["https://www.shutterstock.com/image-illustration/background-green-screen-video-editing-260nw-1563651100.jpg"],
+      sizes: [{ name: 'L', price: 30, discountedPrice: 25, quantity: 0 }],
+    },
+  ],
+  description: "Lorem ipsum dolor si te",
+  category: "armchairs",
+  homePageItem: true,
+  hot: true
+}],
 sofas: [
   {
-    category: "sofas",
-    description: "Premium Sofa",
-    discountedPrice: 145,
-    homePageItem: true,
-    hot: true,
-    id: "aVbg8m3odGFE",
-    img: [
-      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FV6v0uGBMXlYQ?alt=media&token=0560ec76-2737-44d5-975a-be45fd38e1c9",
-      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FgxvMNKQRpgIA?alt=media&token=f5e77b28-30f3-4dfa-a682-ad46b3038e30"
-    ],
-    packof: 1,
-    price: 150,
-    specs: [
-      {
-        available: [
-          {
-            availability: true,
-            size: "L"
-          },
-          {
-            availability: true,
-            size: "XL"
-          },
-          {
-            availability: true,
-            size: "XXL"
-          },
-          {
-            availability: true,
-            size: "XXXL"
-          },
-          {
-            availability: true,
-            size: "XXXXL"
-          }
-        ],
-        color: "Red"
-      }
-    ],
-    title: "Sofa 3"
-  },
-  {
-    category: "sofas",
-    description: "Premium Sofa",
-    discountedPrice: 145,
-    homePageItem: true,
-    hot: true,
-    id: "aVbg8m323GFE",
-    img: [
-      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FV6v0uGBMXlYQ?alt=media&token=0560ec76-2737-44d5-975a-be45fd38e1c9",
-      "https://firebasestorage.googleapis.com/v0/b/ecommerce-791a1.appspot.com/o/images%2FaVbg8m3odGFE%2FgxvMNKQRpgIA?alt=media&token=f5e77b28-30f3-4dfa-a682-ad46b3038e30"
-    ],
-    packof: 1,
-    price: 150,
-    specs: [
-      {
-        available: [
-          {
-            availability: true,
-            size: "L"
-          },
-          {
-            availability: true,
-            size: "XL"
-          },
-          {
-            availability: true,
-            size: "XXL"
-          },
-          {
-            availability: true,
-            size: "XXXL"
-          },
-          {
-            availability: true,
-            size: "XXXXL"
-          }
-        ],
-        color: "Red"
-      }
-    ],
-    title: "Sofa 3"
-  }
-],
+  id: "123123125123",
+  title: "Sofa",
+  colors: [
+    {
+      name: 'Red',
+      images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Red_Color.jpg/1536px-Red_Color.jpg", "blob:http://localhost:3000/d6d01831-19aa-4ab6-876c-bfeb2dccdf01", "blob:http://localhost:3000/506f2bbf-c72d-4f35-8b26-72f233535cc5", "https://upload.wikimedia.org/wikipedia/commons/e/e4/Color-blue.JPG"],
+      sizes: [{ name: 'S', price: 50, discountedPrice: 40, quantity: 10 }, { name: 'L', price: 30, discountedPrice: 25, quantity: 0 }],
+    },
+    {
+      name: 'Blue',
+      images: ["https://upload.wikimedia.org/wikipedia/commons/e/e4/Color-blue.JPG"],
+      sizes: [{ name: 'L', price: 30, discountedPrice: 25, quantity: 0 }],
+    },
+    {
+      name: 'Green',
+      images: ["https://www.shutterstock.com/image-illustration/background-green-screen-video-editing-260nw-1563651100.jpg"],
+      sizes: [{ name: 'L', price: 30, discountedPrice: 25, quantity: 0 }],
+    },
+  ],
+  description: "Lorem ipsum dolor si te",
+  category: "sofas",
+  hot: true
+}]
 }
 

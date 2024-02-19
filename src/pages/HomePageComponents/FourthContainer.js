@@ -46,15 +46,15 @@ useEffect(() => {
   
   <div className={classes.secondContainer}>
         <div className={classes.productsContainer}> 
-          {hotProducts?.map((product, index) => (
+          {hotProducts?.map((item, index) => (
             <HomeProductCard
               key={index} 
-              image={product.img[0]}
-              title={product.title}
-              price={product.price}
-              discountedPrice={product.discountedPrice}
-              category={product.category}
-              id={product.id}
+              category={item.category}
+              id={item.id}
+              image={item.colors[0]?.images[0]}
+              title={item.title}
+              price={item.colors[0]?.sizes[0]?.price}
+              discountedPrice={item.colors[0]?.sizes[0]?.discountedPrice}
             />
           ))}
         </div>
@@ -62,7 +62,7 @@ useEffect(() => {
 
         <div>
           <Link to={'/collection/hot'} className="nolinkstyle">
-            <button className="mainButton" style={{border: "1px solid black", minWidth: "13rem"}}>More Collection</button>
+            <button className="mainButton" style={{minWidth: "13rem"}}>More Collection</button>
             </Link>
         </div>
       </div>

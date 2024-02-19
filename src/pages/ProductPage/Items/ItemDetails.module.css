@@ -26,6 +26,7 @@
     margin-bottom: 1rem;
     flex-direction: column;
     font-size: 1.2rem;
+    margin-top: 2rem;
   }
 
   .colorTitles{
@@ -36,22 +37,22 @@
     display: flex;
     margin-bottom: 1rem;
     align-items: center;
-    max-width: 110px;
-    justify-content: space-between;
+    justify-content: flex-start;
+    gap: 5px;
   }
   
   .colorOption {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    border: none;
     cursor: pointer;
-    opacity: 0.6;
-    transition: transform 0.3s ease-in-out;
+    transition: transform, opacity 0.3s ease-in-out;
+    opacity: 0.7;
+    border: 3px solid transparent
   }
 
   .colorOption.active{
-    transform: scale(1.15);
+    border: 3px solid #1e1e1e;
     opacity: 1;
   }
   
@@ -148,13 +149,13 @@
   .productPrice {
     font-size: 1.5rem;
     color: #888;
-
+    margin-top: 0px;
+    margin-bottom: 0px;
   }
   
   .regularPrice {
     font-size: 1.5rem;
     color: #888;
-    margin-right: 1rem;
     text-decoration: line-through;
     margin-top: 0px;
     margin-bottom: 0px;
@@ -171,8 +172,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
+    gap: 10px;
   }
 
 

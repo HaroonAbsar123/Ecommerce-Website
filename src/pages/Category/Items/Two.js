@@ -37,29 +37,29 @@ function Two() {
 
 
   // Helper functions to get the minimum and maximum price from the Products array
-  function getMinPrice(products) {
-    if (products.length > 0) {
-    return Math.min(
-      ...products?.map(
-        (product) => product?.discountedPrice || product?.price
-      )
-    );
-  } else {
-    return 0;
-  }
-  }
+  // function getMinPrice(products) {
+  //   if (products.length > 0) {
+  //   return Math.min(
+  //     ...products?.map(
+  //       (product) => product?.discountedPrice || product?.price
+  //     )
+  //   );
+  // } else {
+  //   return 0;
+  // }
+  // }
 
-  function getMaxPrice(products) {
-    if (products.length > 0) {
-      return Math.max(
-        ...products.map(
-          (product) => product?.discountedPrice || product?.price
-        )
-      );
-    } else {
-      return 0;
-    }
-  }
+  // function getMaxPrice(products) {
+  //   if (products.length > 0) {
+  //     return Math.max(
+  //       ...products.map(
+  //         (product) => product?.discountedPrice || product?.price
+  //       )
+  //     );
+  //   } else {
+  //     return 0;
+  //   }
+  // }
   
 
   useEffect(() => {
@@ -92,11 +92,11 @@ function Two() {
     setCurremtItems(currentArray);
   
     // Update the min and max prices whenever the Products or category changes
-    setMinPrice(getMinPrice(currentArray));
-    setMaxPrice(getMaxPrice(currentArray));
+    // setMinPrice(getMinPrice(currentArray));
+    // setMaxPrice(getMaxPrice(currentArray));
   
-    // setMinPrice(0);
-    // setMaxPrice(10000);
+    setMinPrice(0);
+    setMaxPrice(10000);
   }, [category, products]);
   
   
@@ -123,11 +123,13 @@ function Two() {
     <div className={classes.mainContainer}>
       <div className={classes.First}>
         <ListBox
-          Products={currentItems.filter(
-            (product) =>
-              (product?.discountedPrice || product?.price) >= minPrice &&
-              (product?.discountedPrice || product?.price) <= maxPrice
-          )}
+          // Products={currentItems.filter(
+          //   (product) =>
+          //     (product?.discountedPrice || product?.price) >= minPrice &&
+          //     (product?.discountedPrice || product?.price) <= maxPrice
+          // )}
+
+          Products={currentItems}
 
           category={category}
         />
@@ -145,33 +147,51 @@ function Two() {
   padding: '10px',
   boxShadow: "0 6px 8px rgba(0, 0, 0, 0.2)",
 }}>
-  <div className={classes.navLinks}>
-  <h2 className={classes.title}>Collection</h2>
+ <div>
+ <Button disabled
+                onClick={() => navigate("/collection/hot")}
+                style={{  width: '100%',fontSize: '1rem', background: '#1e1e1e', marginBottom: '5px', color: 'white'   }}
+              >
+               Collection
+              </Button>
+  <Button
+                onClick={() => navigate("/collection/hot")}
+                sx={{ color: '#1e1e1e', width: '100%',fontSize: '1rem', background: '#fff', marginBottom: '5px'   }}
+              >
+               Hot Products
+              </Button>
 
-          <NavLink to={'/collection/hot'}>
-  <p className="navLinkUnderline">Hot</p>
-</NavLink>
+              <Button
+                onClick={() => navigate("/collection/sofas")}
+                sx={{ color: '#1e1e1e', width: '100%', fontSize: '1rem', background: '#fff', marginBottom: '5px'  }}
+              >
+               Sofas
+              </Button>
 
-          <NavLink to={'/collection/sofas'}>
-  <p className="navLinkUnderline">Sofas</p>
-</NavLink>
+              <Button
+                onClick={() => navigate("/collection/armchairs")}
+                sx={{  color: '#1e1e1e', width: '100%', fontSize: '1rem', background: '#fff', marginBottom: '5px'  }}
+              >
+               Armchairs
+              </Button>
+              <Button
+                onClick={() => navigate("/collection/lamps")}
+                sx={{  color: '#1e1e1e', width: '100%', fontSize: '1rem', background: '#fff', marginBottom: '5px'  }}
+              >
+               Lamps
+              </Button>
 
-<NavLink to={'/collection/armchairs'}>
-  <p className="navLinkUnderline">Armchairs</p>
-</NavLink>
-
-<NavLink to={'/collection/lamps'}>
-  <p className="navLinkUnderline">Lamps</p>
-</NavLink>
-
-<NavLink to={'/collection/cushions'}>
-  <p className="navLinkUnderline">Cushions</p>
-</NavLink>
+              <Button
+                onClick={() => navigate("/collection/cushions")}
+                sx={{ color: '#1e1e1e', width: '100%', fontSize: '1rem', background: '#fff',  }}
+              >
+               Cushions
+              </Button>
 
 </div>
 
 {/* Filter component */}
-<div className={classes.FilterContainer}>
+{/* <div className={classes.FilterContainer}>
           <div className={classes.filterInputContainer}>
             <label htmlFor="minPrice" className={classes.filterText}>
               Min Price:
@@ -180,7 +200,7 @@ function Two() {
               type="number"
               id="minPrice"
               value={minPrice}
-              min={getMinPrice(currentItems)}
+              min={0}
               max={maxPrice}
               onChange={(e) => setMinPrice(e.target.value)}
             />
@@ -194,11 +214,11 @@ function Two() {
               id="maxPrice"
               value={maxPrice}
               min={minPrice}
-              max={getMaxPrice(currentItems)}
+              max={10000}
               onChange={(e) => setMaxPrice(e.target.value)}
             />
           </div>
-        </div>
+        </div> */}
 </div>
 :
 <>
@@ -266,7 +286,7 @@ function Two() {
 </Accordion>
 
 {/* Filter component */}
-<div className={classes.FilterContainer}>
+{/* <div className={classes.FilterContainer}>
           <div className={classes.filterInputContainer}>
             <label htmlFor="minPrice" className={classes.filterText}>
               Min Price:
@@ -275,7 +295,7 @@ function Two() {
               type="number"
               id="minPrice"
               value={minPrice}
-              min={getMinPrice(currentItems)}
+              min={0}
               max={maxPrice}
               onChange={(e) => setMinPrice(e.target.value)}
             />
@@ -289,11 +309,11 @@ function Two() {
               id="maxPrice"
               value={maxPrice}
               min={minPrice}
-              max={getMaxPrice(currentItems)}
+              max={10000}
               onChange={(e) => setMaxPrice(e.target.value)}
             />
           </div>
-        </div>
+        </div> */}
 </div>
 
 

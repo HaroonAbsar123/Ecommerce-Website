@@ -17,10 +17,16 @@ import { Button } from "@mui/material";
 
 import dummyImage from '../../../Assets/displayImage.png';
 
-function ImageCarousel({ Products }) {
-  const [selectedImage, setSelectedImage] = useState(Products.img[0]);
+function ImageCarousel({ Product, colorIndex, setColorIndex  }) {
+
+
+  const [selectedImage, setSelectedImage] = useState(Product.colors[colorIndex].images[0]);
   const [startIndex, setStartIndex] = useState(0);
   const itemsPerPage = 4;
+
+  useEffect(() => {
+    setSelectedImage(Product.colors[colorIndex].images[0])
+  }, [colorIndex])
 
   
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -33,20 +39,9 @@ function ImageCarousel({ Products }) {
   const { products } = useContext(ProductContext);
 
   useEffect(() => {
-    const currentArray = [];
-    if (category === "hot") {
-      for (const category in products) {
-        const categoryProducts = products[category].filter(
-          (item) => item.hot === true
-        );
-        currentArray.push(...categoryProducts);
-      }
-
-      const currentItem = currentArray.find((item) => item.id === Number(id));
-      setSelectedImage(currentItem.img[0]);
-    } else {
-      setSelectedImage(Products.img[0]);
-    }
+    
+  console.log("COLORS", Product.colors)
+      setSelectedImage(Product.colors[colorIndex].images[0]);
   }, [id]);
 
   const handleImageClick = (image) => {
@@ -63,12 +58,12 @@ function ImageCarousel({ Products }) {
     setStartIndex(newStartIndex);
   };
 
-  const displayedImages = Products.img.slice(
+  const displayedImages = Product.colors[colorIndex].images.slice(
     startIndex,
     startIndex + itemsPerPage
   );
 
-  const showButtons = Products.img.length > itemsPerPage;
+  const showButtons = Product.colors[colorIndex].images.length > itemsPerPage;
 
 
   const [isMobile, setIsMobile] = useState(false);
@@ -91,7 +86,7 @@ function ImageCarousel({ Products }) {
     <div className={classes.mainContainer}>
 
 {isMobile && 
-          <h2 className={classes.title}>{Products.title}</h2>
+          <h2 className={classes.title}>{Product.title}</h2>
 }
 
       <div className={classes.mainImage}>
@@ -105,6 +100,7 @@ function ImageCarousel({ Products }) {
                     backgroundColor: "#1e1e1e",
                     color: "white",
                     borderRadius: "0px",
+                    maxHeight: '30px'
                   }}
                   onClick={() => zoomIn()}
                 >
@@ -115,7 +111,8 @@ function ImageCarousel({ Products }) {
                   flex: 1,
                   backgroundColor: "#1e1e1e",
                   color: "white",
-                  borderRadius: '0px'
+                  borderRadius: '0px',
+                  maxHeight: '30px'
                 }}
                 
                   onClick={() => zoomOut()}
@@ -128,6 +125,7 @@ function ImageCarousel({ Products }) {
                     backgroundColor: "#1e1e1e",
                     color: "white",
                     borderRadius: "0px",
+                    maxHeight: '30px'
                   }}
                   onClick={() => resetTransform()}
                 >
@@ -180,17 +178,17 @@ function ImageCarousel({ Products }) {
           >
             <FontAwesomeIcon icon={faArrowLeft} size="1x" />
           </Button>
-          {Products.img.length > itemsPerPage && (
+          {Product.colors[colorIndex].images.length > itemsPerPage && (
             <Button
               onClick={handleNextClick}
               style={{
                 color: "white",
                 background:
-                  startIndex + itemsPerPage >= Products.img.length
+                  startIndex + itemsPerPage >= Product.colors[colorIndex].images.length
                     ? "#ccc"
                     : "#1e1e1e",
               }}
-              disabled={startIndex + itemsPerPage >= Products.img.length}
+              disabled={startIndex + itemsPerPage >= Product.colors[colorIndex].images.length}
             >
               <FontAwesomeIcon icon={faArrowRight} size="1x" />
             </Button>

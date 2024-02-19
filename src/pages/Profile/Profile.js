@@ -8,13 +8,24 @@ import { useContext } from 'react';
 import Footer from '../../components/Footer';
 
 import AdminPageOne from '../AdminPages/AdminPageOne';
+import AdminProfile from '../AdminPages/AdminProfile';
 
 export default function PersonalProfile() {
   const navigate = useNavigate();
-  const { setIsUserLoggedIn, setUserDetails, setUserType, userDetails } = useContext(ProductContext);
+  const { setIsUserLoggedIn, setUserDetails, setUserType, userDetails, isUserLoggedIn } = useContext(ProductContext);
 
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({}); // State to manage form data
+  const [showPage, setShowPage] = useState(false)
+
+  useEffect(() => {
+    if(Object.values(userDetails).length>1){
+      setShowPage(true);
+      if(!userDetails?.userId){
+        navigate('/login')
+      }
+  }
+  }, [userDetails])
 
   useEffect(() => {
     async function fetchUserData() {
@@ -98,113 +109,122 @@ export default function PersonalProfile() {
 
   return (
     <div className={styles.mainContainer}>
-      {userDetails?.type==="user" ?
-    <section className={styles.container}>
+      {userDetails?.type!=="admin" ?
 
-<div style={{flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-<button
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                        padding: "5px",
-                        borderRadius: "10rem",
-                        justifyContent: "center",
-                        backgroundColor: "#1e1e1e",
-                        border: "1px solid #1e1e1e",
-                        cursor: "pointer",
-                      }}
-                    >
-                      <div
-                        style={{
-                          minWidth: "100px",
-                          height: "100px",
-                          textAlign: "center",
-                          display: "flex",
-                          alignItems: "center",
-                          color: "white",
-                          justifyContent: "center",
-                          fontSize: '3rem',
-                          fontWeight: 'bold'
-                        }}
-                      >
-                        {finalName}
-                      </div>
-                    </button>
-                    </div>
-      {editing ? (
-        <form className={styles.form} onSubmit={handleSubmit}>
-          {/* Input fields for user details */}
-          {/* Assuming the names of fields correspond to the keys in your userDetails object */}
-          <div>
-          Full Name: <input type="text" name="userName" value={formData.userName} onChange={handleChange} />
-          </div>
-          <div>
-          Email: <input type="email" name="email" value={formData.email} onChange={handleChange} />
-          </div>
-          <div>
-          Phone: <input type={"tel"} name="phone" value={formData.phone} onChange={handleChange} />
-          </div>
-          <div>
-          Apartment: <input type="text" name="apartment" value={formData.apartment} onChange={handleChange} />
-          </div>
-          <div>
-          Address: <input type="address" name="address" value={formData.address} onChange={handleChange} />
-          </div>
-          <div>
-          City: <input type="text" name="city" value={formData.city} onChange={handleChange} />
-          </div>
-          <div>
-          Zip Code: <input type={"number"} name="zip" value={formData.zip} onChange={handleChange} />
-          </div>
-          <div>
-          Country: <input type={"text"} name="country" value={formData.country} onChange={handleChange} />
-          </div>
-          {/* Add more divs with input fields for other user details as required */}
-          
-          {/* Buttons for editing */}
-          <div className={styles.buttons}>
-            <button type="submit">Save</button>
-            <button type="button" onClick={handleCancel}>Cancel</button>
-          </div>
-        </form>
-      ) : (
-        <>
-          {/* Display user details */}
-          <div className={styles.userData}>
-  {/* Display user details */}
-  <div style={{ fontSize: '1.2rem', display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '0.5rem', padding: '1rem' }}>
-    <div style={{ fontWeight: 'bold' }}>Full Name:</div>
-    <div>{userDetails?.userName}</div>
-    <div style={{ fontWeight: 'bold' }}>Email:</div>
-    <div>{userDetails?.email}</div>
-    <div style={{ fontWeight: 'bold' }}>Phone:</div>
-    <div>{userDetails?.phone}</div>
-    <div style={{ fontWeight: 'bold' }}>Address:</div>
-    <div>{userDetails?.address}</div>
-    <div style={{ fontWeight: 'bold' }}>Apartment:</div>
-    <div>{userDetails?.apartment}</div>
-    <div style={{ fontWeight: 'bold' }}>City:</div>
-    <div>{userDetails?.city}</div>
-    <div style={{ fontWeight: 'bold' }}>Country:</div>
-    <div>{userDetails?.country}</div>
-    <div style={{ fontWeight: 'bold' }}>Zip:</div>
-    <div>{userDetails?.zip}</div>
-  </div>
-</div>
+      <>
+      {showPage && 
+         <section className={styles.container}>
 
-          {/* Button to edit profile */}
-          
-  <button className={styles.editButton} onClick={handleEdit}>Edit</button>
-        </>
-      )}
-      {/* Logout button */}
-      <button className={styles.logoutButton} onClick={LogoutHandler}>Logout</button>
-    </section>
+         <div style={{flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+         <button
+                               style={{
+                                 display: "flex",
+                                 flexDirection: "row",
+                                 alignItems: "center",
+                                 padding: "5px",
+                                 borderRadius: "10rem",
+                                 justifyContent: "center",
+                                 backgroundColor: "#1e1e1e",
+                                 border: "1px solid #1e1e1e",
+                                 cursor: "pointer",
+                               }}
+                             >
+                               <div
+                                 style={{
+                                   minWidth: "100px",
+                                   height: "100px",
+                                   textAlign: "center",
+                                   display: "flex",
+                                   alignItems: "center",
+                                   color: "white",
+                                   justifyContent: "center",
+                                   fontSize: '3rem',
+                                   fontWeight: 'bold'
+                                 }}
+                               >
+                                 {finalName}
+                               </div>
+                             </button>
+                             </div>
+               {editing ? (
+                 <form className={styles.form} onSubmit={handleSubmit}>
+                   {/* Input fields for user details */}
+                   {/* Assuming the names of fields correspond to the keys in your userDetails object */}
+                   <div>
+                   Full Name: <input type="text" name="userName" value={formData.userName} onChange={handleChange} />
+                   </div>
+                   <div>
+                   Email: <input type="email" name="email" value={formData.email} onChange={handleChange} />
+                   </div>
+                   <div>
+                   Phone: <input type={"tel"} name="phone" value={formData.phone} onChange={handleChange} />
+                   </div>
+                   <div>
+                   Apartment: <input type="text" name="apartment" value={formData.apartment} onChange={handleChange} />
+                   </div>
+                   <div>
+                   Address: <input type="address" name="address" value={formData.address} onChange={handleChange} />
+                   </div>
+                   <div>
+                   City: <input type="text" name="city" value={formData.city} onChange={handleChange} />
+                   </div>
+                   <div>
+                   Zip Code: <input type={"number"} name="zip" value={formData.zip} onChange={handleChange} />
+                   </div>
+                   <div>
+                   Country: <input type={"text"} name="country" value={formData.country} onChange={handleChange} />
+                   </div>
+                   {/* Add more divs with input fields for other user details as required */}
+                   
+                   {/* Buttons for editing */}
+                   <div className={styles.buttons}>
+                     <button type="submit">Save</button>
+                     <button type="button" onClick={handleCancel}>Cancel</button>
+                   </div>
+                 </form>
+               ) : (
+                 <>
+                   {/* Display user details */}
+                   <div className={styles.userData}>
+           {/* Display user details */}
+           <div style={{ fontSize: '1.2rem', display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '0.5rem', padding: '1rem' }}>
+             <div style={{ fontWeight: 'bold' }}>Full Name:</div>
+             <div>{userDetails?.userName}</div>
+             <div style={{ fontWeight: 'bold' }}>Email:</div>
+             <div>{userDetails?.email}</div>
+             <div style={{ fontWeight: 'bold' }}>Phone:</div>
+             <div>{userDetails?.phone}</div>
+             <div style={{ fontWeight: 'bold' }}>Address:</div>
+             <div>{userDetails?.address}</div>
+             <div style={{ fontWeight: 'bold' }}>Apartment:</div>
+             <div>{userDetails?.apartment}</div>
+             <div style={{ fontWeight: 'bold' }}>City:</div>
+             <div>{userDetails?.city}</div>
+             <div style={{ fontWeight: 'bold' }}>Country:</div>
+             <div>{userDetails?.country}</div>
+             <div style={{ fontWeight: 'bold' }}>Zip:</div>
+             <div>{userDetails?.zip}</div>
+           </div>
+         </div>
+         
+                   {/* Button to edit profile */}
+                   
+           <button className={styles.editButton} onClick={handleEdit}>Edit</button>
+                 </>
+               )}
+               {/* Logout button */}
+               <button className={styles.logoutButton} onClick={LogoutHandler}>Logout</button>
+             </section>
+      }
+      </>
+
 
     :
-
-    <div> <AdminPageOne/> </div>
+<>
+      {showPage && 
+    <div> <AdminProfile/> </div>
+  }
+  </>
 
   }
     <Footer/>

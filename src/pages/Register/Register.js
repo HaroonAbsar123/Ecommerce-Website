@@ -24,16 +24,16 @@ function Register() {
   const [isLogin, setIsLogin] = useState(false);
 
   const cookies = new Cookies();
-  const { setIsUserLoggedIn, setUserDetails, setUserType } =
+  
+  const { setIsUserLoggedIn, setUserDetails, setUserType, isUserLoggedIn } =
     useContext(ProductContext);
 
-  // useEffect(() => {
-  //   // Fetch the 'isUserLoggedIn' value from local storage
-  //   const localIsUserLoggedIn = localStorage.getItem("isLoggedIn");
-  //   if (localIsUserLoggedIn === "true") {
-  //     navigate("/profile", { replace: true });
-  //   }
-  // }, []);
+  useEffect(() => {
+    // Fetch the 'isUserLoggedIn' value from local storage
+    if (isUserLoggedIn === "true") {
+      navigate("/", { replace: true });
+    }
+  }, []);
 
   function validateEmail(email) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

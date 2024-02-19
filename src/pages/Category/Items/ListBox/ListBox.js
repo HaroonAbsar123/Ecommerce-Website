@@ -37,10 +37,17 @@ function ListBox({ Products, category }) {
       <div className={classes.mainContainer}>
         <>
           <div className={classes.listContainer}>
-            {displayedSessions.map((product, index) => (
+            {displayedSessions.map((item, index) => (
               <div key={index}>
                 
-                  <ImageCard id={product.id} category={product.category} image={product.img[0]} price={product.price} title={product.title} discountedPrice={product.discountedPrice} />
+                  <ImageCard
+                  
+              category={item.category}
+              id={item.id}
+              image={item.colors[0]?.images[0]}
+              title={item.title}
+              price={item.colors[0]?.sizes[0]?.price}
+              discountedPrice={item.colors[0]?.sizes[0]?.discountedPrice} />
                 
               </div>
             ))}

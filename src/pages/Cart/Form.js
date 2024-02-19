@@ -1,70 +1,97 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import classes from './Form.module.css';
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import ProductContext from "../../Context/ProductContext";
+import { Email, EmailOutlined } from "@mui/icons-material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShippingFast, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
 
-function Form({total,shipping, quantity}){
+function Form({total,shipping, quantity, handleClose, shippingPercentage}){
 
+  const {userDetails} = useContext(ProductContext)
+
+  const [name, setName] = useState(userDetails?.userName);
+  const [email, setEmail] = useState(userDetails?.email);
+  const [address, setAddress] = useState(userDetails?.address)
+  const [apartment, setApartment] = useState(userDetails?.apartment)
+  const [city, setCity] = useState(userDetails?.city);
+  const [country, setCountry] = useState(userDetails?.country ? userDetails?.country : {});
+  const [zip, setZip] = useState(userDetails?.zip);
+  const [phone, setPhone] = useState(userDetails?.phone);
 
     return (
         <div style={{width: '100%'}} >
+          
+          <div style={{flex: 1, textAlign: 'center', marginTop: '1rem', marginBottom: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px'}}>
+              
+          <FontAwesomeIcon icon={faShoppingCart} /><h2 style={{textAlign: 'center'}}>Checkout Form</h2>
+          </div>
 
-        <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: '1rem'}}>
-            <TextField style={{width: '49%'}} id="outlined-basic" label="First Name" variant="outlined" />
-            <TextField style={{width: '49%'}} id="outlined-basic" label="Last Name" variant="outlined" />
+        <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: '1rem', gap: '1rem', flex: 1, flexWrap: 'wrap'}}>
+            <TextField style={{flex: 1}} value={name} onChange={(e) => {setName(e.target.value)}} id="outlined-basic" label="Full Name" variant="outlined" />
+            <TextField  style={{flex: 1}} value={email} onChange={(e) => {setEmail(e.target.value)}} id="outlined-basic" label="Email Address" variant="outlined" />
+</div>
+<TextField value={phone} onChange={(e) => {setPhone(e.target.value)}} style={{width: '100%', marginBottom: '1rem'}} id="outlined-basic" label="Phone" variant="outlined" />
+   
+
+
+        <TextField value={address} onChange={(e) => {setAddress(e.target.value)}}  style={{width: '100%', marginBottom: '1rem'}} id="outlined-basic" label="Address" variant="outlined" />
+        <TextField value={apartment} onChange={(e) => {setApartment(e.target.value)}}  style={{width: '100%', marginBottom: '1rem'}} id="outlined-basic" label="Apartment, suite, unit, etc." variant="outlined" />
+        
+
+        <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: '1rem', gap: '1rem', flex: 1, flexWrap: 'wrap'}}>
+        
+        <TextField value={city} onChange={(e) => {setCity(e.target.value)}}  style={{flex: 1}} id="outlined-basic" label="City" variant="outlined" />
+        
+        <Autocomplete
+        id="controlled-demo"
+        sx={{ flex: 1 }}
+        style={{ width: '100%', marginBottom: '1rem' }}
+        options={countries}
+        autoHighlight
+        value={country} // Make sure `country` is one of the options in `countries`
+        onChange={(e, newValue) => {
+        setCountry(newValue);
+        }}
+        getOptionLabel={(option) => option.label}
+        renderOption={(props, option) => (
+        <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+        <img
+        loading="lazy"
+        width="20"
+        src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
+        srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
+        alt=""
+        />
+        {option.label} ({option.code})
+        </Box>
+        )}
+        renderInput={(params) => (
+        <TextField
+        {...params}
+        label="Country"
+        inputProps={{
+        ...params.inputProps,
+        autoComplete: 'new-password', // disable autocomplete and autofill
+        }}
+        />
+        )}
+        />
+        
+        <TextField value={zip} onChange={(e) => {setZip(e.target.value)}} 
+        sx={{ flex: 1 }} id="outlined-basic" label="Zip Code" variant="outlined" />
+            
         </div>
 
-        <TextField style={{width: '100%', marginBottom: '1rem'}} id="outlined-basic" label="Address" variant="outlined" />
-        <TextField style={{width: '100%', marginBottom: '1rem'}} id="outlined-basic" label="Apartment, suite, unit, etc." variant="outlined" />
-        <TextField style={{width: '100%', marginBottom: '1rem'}} id="outlined-basic" label="City" variant="outlined" />
-
-        <Autocomplete
-          id="country-select-demo"
-          sx={{ width: 300 }}
-          style={{width: '100%', marginBottom: '1rem'}}
-          options={countries}
-          autoHighlight
-          getOptionLabel={(option) => option.label}
-          renderOption={(props, option) => (
-            <Box  component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-              <img
-                loading="lazy"
-                width="20"
-                src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-                srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
-                alt=""
-              />
-              {option.label} ({option.code})
-            </Box>
-          )}
-          renderInput={(params) => (
-            <TextField
-            
-              {...params}
-              label="Country"
-              inputProps={{
-                ...params.inputProps,
-                autoComplete: 'new-password', // disable autocomplete and autofill
-              }}
-            />
-          )}
-        />
-
-
-
-        <TextField style={{width: '100%', marginBottom: '1rem'}} id="outlined-basic" label="Zip Code" variant="outlined" />
-        <TextField style={{width: '100%', marginBottom: '1rem'}} id="outlined-basic" label="Phone" variant="outlined" />
-        <TextField style={{width: '100%', marginBottom: '1rem'}} id="outlined-basic" label="Email Address" variant="outlined" />
-
-
+        
         <TextField
           id="outlined-multiline-flexible"
           label="Notes about your order, e.g. special notes for delivery."
           style={{width: '100%', marginBottom: '1rem'}}
           multiline
-          maxRows={4}
         />
 
 <div style={{width: '100%', borderBottom: '1px solid #ccc', flexDirection: 'row', display: 'flex', justifyContent: 'space-between'}}>
@@ -77,13 +104,20 @@ function Form({total,shipping, quantity}){
 
 
             <div style={{width: '100%', borderBottom: '1px solid #ccc'}}>
-                <p className="para">Shipping ({quantity} items)</p>
+                {/* <p className="para">Shipping ({quantity} items)</p> */}
                 <div style={{width: '100%', flexDirection: 'row', display: 'flex', justifyContent: 'space-between'}}>
-                <p className="para">Shipping Cost</p>
+                <p className="para">Shipping ({shippingPercentage*100}%)</p>
                 <div>
                 <p className="para">${shipping}</p>
                 </div>
                 </div>
+
+                <p className="para" style={{fontSize: 'small', textAlign: 'center'}}>
+              <FontAwesomeIcon icon={faShippingFast} />
+              <span style={{ marginLeft: "5px" }}>
+                Free shipping: On orders over $1499 and above
+              </span>
+            </p>
             </div>
 
 
@@ -94,10 +128,14 @@ function Form({total,shipping, quantity}){
                 </div>
             </div>
 
-        
-        <button className="mainButton" style={{backgroundColor: 'black', color: 'white'}}>
+              <div style={{display: 'flex', justifyContent: 'flex-end', flex: 1, gap: '10px'}}>
+        <Button onClick={handleClose} variant="contained" color="error" >
+            Cancel
+        </Button>
+        <Button variant="contained" style={{backgroundColor: '#1e1e1e', color: 'white'}}>
             Place Order
-        </button>
+        </Button>
+        </div>
 
 </div>
       );

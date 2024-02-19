@@ -1,162 +1,119 @@
-import React, { useEffect, useState, useContext } from "react";
-import { ref, push, set, get } from "firebase/database";
-import { database, storage } from "../../firebase";
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
-import { Button, TextField, Checkbox, FormControlLabel, IconButton } from "@mui/material";
-
+import { faTrashCan, faXmarkCircle } from "@fortawesome/free-regular-svg-icons";
+import { faX } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  Button,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  TextField,
+  IconButton,
+  FormControlLabel,
+  Checkbox,
+} from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
-import { useTheme } from '@mui/material/styles';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import { toast } from "react-hot-toast";
-import DeleteIcon from '@mui/icons-material/Delete';
+
+import { ref, push, set, get } from "firebase/database";
+import { database, storage, db } from "../../firebase";
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
 import ProductContext from "../../Context/ProductContext";
 
-export default function AddProducts({setAddProductModal}) {
-  const {products} = useContext(ProductContext);
 
+import { collection, addDoc, doc, updateDoc, query, where, onSnapshot, getDocs } from "firebase/firestore";
+import CustomModal from "../../components/CustomModal";
+
+const AddProducts = () => {
+  
+  const [submitting, setSubmitting] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const {products} = useContext(ProductContext);
   const [hotItemsFinished, setHotItemsFinished] = useState(false)
+  // const [productData, setProductData] = useState({
+  //   id: "",
+  //   title: "",
+  //   colors: [
+  //     {
+  //       name: "",
+  //       images: [],
+  //       sizes: [{ name: "", price: 0, discountedPrice: 0, quantity: 0 }],
+  //     },
+  //   ],
+  //   description: "",
+  //   category: "",
+  //   tableData: [{ heading: "", content: "" }],
+  //   hot: false,
+  //   homePageItem: false
+  // });
+
+  const [productData, setProductData] = useState({
+    id: "",
+    title: "",
+    colors: [],
+    description: "",
+    category: "",
+    tableData: [],
+    hot: false,
+    homePageItem: false
+  });
 
   useEffect(() => {
     var currentArray=[];
     for (const cat in products) {
       if (Array.isArray(products[cat])) {
         // Find the products with hot === true in the current category
-        const categoryProducts = products[cat].filter((item) => item?.hot === true);
+        const categoryProducts = products[cat].filter((item) => item?.homePageItem === true);
         // Add the hot products of the current category to the array
         currentArray.push(...categoryProducts);
       }
     }
     console.log("FINISHED", currentArray?.length>=2)
     console.log("ITEMS", currentArray)
-    setHotItemsFinished(currentArray?.length>=2);
+    if(currentArray?.length>=2){
+      setHotItemsFinished(true);
+      setProductData({...productData, homePageItem: false })
+    }
   }, [products])
 
-  const [formData, setFormData] = useState({
-    id: "",
-    img: [],
-    title: "",
-    specs: [
-      { color: "", available: [] }
-    ],
-    price: 0,
-    discountedPrice: 0,
-    category: "",
-    packof: 0,
-    hot: false,
-    homePageItem: false,
-    description: ""
-  });
 
-  useEffect(() => {
-    console.log("FORM DATA", formData)
-  }, [formData])
-  
-  const handleChange = (e) => {
-    const { name, value, type, files, checked } = e.target;
-    if (type === 'file') {
-      setFormData(prevData => ({
-        ...prevData,
-        img: prevData.img ? [...prevData.img, ...(files.length > 0 ? Array.from(files) : [])] : [...(files.length > 0 ? Array.from(files) : [])]
-      }));      
-    } else if (type === 'checkbox') {
-      setFormData(prevData => ({
-        ...prevData,
-        [name]: checked
-      }));
-    }  else if (type === 'number') {
-      setFormData(prevData => ({
-        ...prevData,
-        [name]: parseFloat(value)
-      }));
-    }  else {
-      setFormData(prevData => ({
-        ...prevData,
-        [name]: value
-      }));
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { title, colors, description, category, tableData } = productData;
+    if (
+    !title ||
+    colors.some(color => color.name === "" || color.images.length === 0 || color.sizes.some(size => size.name === "" || size.price === 0|| size.quantity === 0)) ||
+    !description ||
+    !category
+    ) {
+      toast('Please fill all fields');
+    } else {
+      try{
+        setSubmitting(true)
+    const newId = generateRandomId(12);
+
+    const productDetails = { ...productData, createdAt: new Date, id: newId };
+
+    const userListRef = collection(db, "products");
+    const docRef = await addDoc(userListRef, productDetails);
+
+    const docId = docRef.id;
+
+    await updateDoc(docRef, { id: docId });
+    toast.success(`${productData.title} is added to inventory`)
+
+    } catch(error){
+      toast.error("Error Ocurred")
+      console.log("Error Ocurred", error)
+    } finally{
+      setSubmitting(false);
     }
-  }
-  
-  const handleColorChange = (e, index) => {
-    const { value } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      specs: prevData.specs.map((spec, i) => {
-        if (i === index) {
-          return { ...spec, color: value, available: spec.available }
-        } else {
-          return spec;
-        }
-      })
-    }));
-  }
-  
-  const handleAddSpec = () => {
-    setFormData(prevData => ({
-      ...prevData,
-      specs: [...prevData.specs, { color: "", available: [] }]
-    }));
-  }
+    }
+};
 
-  const handleAddSize = (specIndex) => {
-    setFormData(prevData => ({
-      ...prevData,
-      specs: prevData.specs.map((spec, i) => {
-        if (i === specIndex) {
-          return {
-            ...spec,
-            available: [...spec.available, { size: "", availability: true }]
-          }
-        } else {
-          return spec;
-        }
-      })
-    }));
-  }
-  
-  const handleSizeChange = (e, specIndex, sizeIndex) => {
-    const { name, value } = e.target;
-    setFormData(prevData => ({
-      ...prevData,
-      specs: prevData.specs.map((spec, i) => {
-        if (i === specIndex) {
-          return {
-            ...spec,
-            available: spec.available.map((size, j) => {
-              if (j === sizeIndex) {
-                return { ...size, size: value }
-              } else {
-                return size;
-              }
-            })
-          };
-        } else {
-          return spec;
-        }
-      })
-    }));
-  };
-  
-  const handleSizeDelete = (specIndex, sizeIndex) => {
-    setFormData(prevData => ({
-      ...prevData,
-      specs: prevData.specs.map((spec, i) => {
-        if (i === specIndex) {
-          return {
-            ...spec,
-            available: spec.available.filter((size, j) => j !== sizeIndex)
-          };
-        } else {
-          return spec;
-        }
-      })
-    }));
-  };
-  
   function generateRandomId(length) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
@@ -166,259 +123,499 @@ export default function AddProducts({setAddProductModal}) {
     return result;
   }
 
-  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (
-      !formData.img.length ||
-      !formData.title ||
-      !formData.specs.length ||
-      !formData.price ||
-      !formData.discountedPrice ||
-      !formData.category ||
-      !formData.packof ||
-      !formData.description
-    ) {
-      toast('Please fill all fields');
-    } else {
-      try{
-        setSubmitting(true)
-    
-    const newId = generateRandomId(12);
-    console.log("FORMDATA", formData);
 
-    // Upload images to Firebase Storage
-    const imageUrls = [];
-    for (const img of formData.img) {
-      // Generate a random name for the image
+  const fileInput = React.useRef();
+
+  const addColor = () => {
+    setProductData({
+      ...productData,
+      colors: [...productData.colors, { name: "", images: [], sizes: [] }],
+    });
+  };
+
+  const addSize = (colorIndex) => {
+    const newColors = [...productData.colors];
+    newColors[colorIndex].sizes.push({
+      name: "",
+      price: 0,
+      discountedPrice: 0,
+      quantity: 0,
+    });
+    setProductData({ ...productData, colors: newColors });
+  };
+
+  const handleColorNameChange = (colorIndex, name) => {
+    const newColors = [...productData.colors];
+    newColors[colorIndex].name = name;
+    setProductData({ ...productData, colors: newColors });
+  };
+
+  const handleSizeChange = (colorIndex, sizeIndex, field, value) => {
+    const newColors = [...productData.colors];
+    newColors[colorIndex].sizes[sizeIndex][field] = value;
+    setProductData({ ...productData, colors: newColors });
+  };
+
+  // const handleImageChange = (colorIndex, e) => {
+  //   const newColors = [...productData.colors];
+  //   const files = e.target.files;
+  //   const images = newColors[colorIndex].images.slice(); // Copy the existing images array
+  //   for (let i = 0; i < files.length; i++) {
+  //     images.push(URL.createObjectURL(files[i]));
+  //   }
+  //   newColors[colorIndex].images = images;
+  //   setProductData({ ...productData, colors: newColors });
+  // };
+
+  const removeImage = (colorIndex, imageIndex) => {
+    const updatedColors = [...productData.colors];
+    const updatedImages = [...updatedColors[colorIndex].images];
+    updatedImages.splice(imageIndex, 1);
+    updatedColors[colorIndex].images = updatedImages;
+    setProductData({ ...productData, colors: updatedColors });
+  };
+
+  const removeColor = (colorIndex) => {
+    const updatedColors = [...productData.colors];
+    updatedColors.splice(colorIndex, 1);
+    setProductData({ ...productData, colors: updatedColors });
+  };
+
+  const removeSize = (colorIndex, sizeIndex) => {
+    const updatedColors = [...productData.colors];
+    const updatedSizes = [...updatedColors[colorIndex].sizes];
+    updatedSizes.splice(sizeIndex, 1);
+    updatedColors[colorIndex].sizes = updatedSizes;
+    setProductData({ ...productData, colors: updatedColors });
+  };
+
+  const addTableData = () => {
+    setProductData({
+      ...productData,
+      tableData: [...productData.tableData, { heading: "", content: "" }],
+    });
+  };
+
+  const removeTableData = (index) => {
+    const updatedTableData = [...productData.tableData];
+    updatedTableData.splice(index, 1);
+    setProductData({ ...productData, tableData: updatedTableData });
+  };
+
+  const handleImageChange = async (colorIndex, e) => {
+    const files = Array.from(e.target.files);
+  
+    const updatedColors = [...productData.colors];
+    const updatedImages = [...updatedColors[colorIndex].images];
+  
+    const promises = files.map(async (img) => {
       const randomName = generateRandomId(12);
-      const imageRef = storageRef(storage, `images/${newId}/${randomName}`);
+      const imageRef = storageRef(storage, `images/${randomName}`);
       await uploadBytes(imageRef, img);
       const imageUrl = await getDownloadURL(imageRef);
-      imageUrls.push(imageUrl);
-    }
+      updatedImages.push(imageUrl);
+    });
+  
+    await Promise.all(promises);
+  
+    updatedColors[colorIndex].images = updatedImages;
+    setProductData({ ...productData, colors: updatedColors });
+  };
+  
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   console.log(productData);
+  // };
 
-    // Create productDetails object with imageUrls
-    const productDetails = { ...formData, createdAt: new Date, id: newId, img: imageUrls };
-
-    const productsRef = ref(database, `products/${formData.category}`);
-    
-    // Get the current products in the category
-    const snapshot = await get(productsRef);
-    const currentProducts = snapshot.val();
-
-    // Get the index of the new product
-    const index = Object.keys(currentProducts || {}).length;
-
-    // Update the product with the new ID, image URLs, and index
-    set(ref(database, `products/${productDetails.category}/${index}`), productDetails)
-      .then(() => {   
-        console.log("Product added successfully with ID:", index);
-        // Add any additional logic after successful submission
-      })
-      .catch((error) => {
-        console.error('Error adding product: ', error);
-        alert('Error adding product. Please try again.');
-      });
-    } catch(error){
-      toast.error("Error Ocurred")
-    } finally{
-      setSubmitting(false);
-      setAddProductModal(false);
-      toast.success(`${formData.title} is added to inventory`)
-    }
-    }
-};
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
     },
-  },
-};
+  };
 
-const names = [
-  'armchairs',
-  'sofas',
-  'lamps',
-  'cushions',
-];
-
-const theme = useTheme();
+  const names = ["armchairs", "sofas", "lamps", "cushions"];
 
   return (
-    <form style={{display: 'flex', flexDirection: 'column', gap: '20px', padding: '10px' }} onSubmit={handleSubmit}>
-      <div style={{textAlign: 'center'}}><h2>Add Product</h2></div>
-{/* <label htmlFor="title" style={{ fontWeight: 'bold', marginRight: '5px' }}>Title:</label> */}
-<TextField  label="Title" variant="outlined"
-  type="text"
-  id="title"
-  name="title"
-  value={formData.title}
-  onChange={handleChange}
-/>
-
-<>
-<InputLabel id="demo-multiple-name-label">Images</InputLabel>
-<TextField  label=""
-  type="file"
-  id="img"
-  name="img"
-  multiple
-  onChange={handleChange}
-/>
-<div style={{ display: 'flex', flexWrap: 'wrap' }}>
-  {formData.img &&
-    Array.from(formData.img).map((image, index) => (
+    <form
+      onSubmit={handleSubmit}
+      style={{ display: "flex", flexDirection: "column", padding: '10px' }}
+    >
       <div
-        key={index}
         style={{
-          position: 'relative',
-          marginRight: '10px',
+          marginTop: "0px",
+          flex: 1,
+          height: "max-content",
+          boxShadow: "0 6px 12px rgba(0, 0, 0, 0.3)",
+          background: 'rgba(17, 17, 17, 0.9)',
+          backdropFilter: 'blur(5px)', // Adjust the blur intensity as needed
+          WebkitBackdropFilter: 'blur(5px)', // For Safari support,
+          padding: '10px',
+          borderRadius: '10px', marginRight: '10px',
           marginBottom: '10px',
+          color: '#eee',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '1rem'
         }}
-        onClick={() => {
-          const images = Array.from(formData.img);
-          images.splice(index, 1);
-          setFormData({
-            ...formData,
-            img: images.length > 0 ? images : null,
-          })}}
+       >
+          <div style={{fontSize: '1.5rem'}}>Add Product</div>
+
+        </div>
+
+
+      <TextField
+        label="Title"
+        variant="outlined"
+        type="text"
+        value={productData.title}
+        onChange={(e) =>
+          setProductData({ ...productData, title: e.target.value })
+        }
+      />
+
+      <TextField
+        label="Description"
+        variant="outlined"
+        multiline
+        id="description"
+        name="description"
+        type="text"
+        value={productData.description}
+        onChange={(e) =>
+          setProductData({ ...productData, description: e.target.value })
+        }
+        style={{ marginTop: "1rem" }}
+      />
+
+      <TextField
+        value={productData.category}
+        style={{ marginTop: "1rem", paddingBottom: "1.5rem" }}
+        onChange={(e) => {
+          setProductData((prevData) => ({
+            ...prevData,
+            category: e.target.value,
+          }));
+        }}
+        select // tell TextField to render select
+        label="Category"
       >
-        <img
-          src={URL.createObjectURL(image)}
-          alt={`Image ${index + 1}`}
+        {names.map((name) => (
+          <MenuItem key={name} value={name}>
+            {name}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      <>
+      <div style={{flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px', marginBottom: '0.5rem'}}>
+      <div className="title">Product Specs</div>
+      <Button
+          variant="contained"
+          type="button"
+          onClick={addColor}
+          color="success"
+        >
+          Add Color
+        </Button>
+        </div>
+        
+        <div
           style={{
-            maxWidth: '100px',
-            maxHeight: '100px',
-            cursor: 'pointer',
-          }}
-        />
-        <span
-          style={{
-            position: 'absolute',
-            top: '5px',
-            right: '5px',
-            backgroundColor: 'rgba(255, 255, 255, 0.5)',
-            padding: '2px 5px',
-            borderRadius: '50%',
-            cursor: 'pointer',
+            flex: 1,
+            padding: "10px",
+            border: "1px solid #ccc",
+            borderRadius: "10px",
           }}
         >
-          X
-        </span>
-      </div>
-    ))}
-</div>
-</>
+          {productData.colors.map((color, colorIndex) => (
+            <div
+              key={colorIndex}
+              style={{
+                flex: 1,
+                background: "#fff",
+                marginTop: colorIndex !== 0 ? "10px" : "0px",
+                padding: "10px",
+                border: "1px solid #ddd",
+                borderRadius: "7px",
+                boxShadow: "0 6px 12px rgba(0, 0, 0, 0.3)",
+              }}
+            >
+              <div
+                style={{
+                  flex: 1,
+                  justifyContent: "space-between",
+                  alignItems: "stretch",
+                  gap: "10px",
+                  width: "100%",
+                  display: "flex",
+                }}
+              >
+                <TextField
+                  label="Color Name"
+                  variant="outlined"
+                  type="text"
+                  value={color.name}
+                  onChange={(e) =>
+                    handleColorNameChange(colorIndex, e.target.value)
+                  }
+                  style={{ flex: 1 }}
+                />
 
+                <Button
+                  variant="contained"
+                  color="error"
+                  type="button"
+                  onClick={() => removeColor(colorIndex)}
+                >
+                  Remove Color
+                </Button>
+              </div>
 
-<InputLabel id="demo-multiple-name-label">Category</InputLabel>
-<Select
-  labelId="demo-multiple-name-label"
-  id="demo-multiple-name"
-  value={formData.category}
-  onChange={(e) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      category: e.target.value,
-    }));
-  }}
-  input={<OutlinedInput label="Name" />}
-  MenuProps={MenuProps}
->
-  {names.map((name) => (
-    <MenuItem key={name} value={name}>
-      {name}
-    </MenuItem>
-  ))}
-</Select>
-      
-{/* <label htmlFor="img">Images:</label>
-<input type="file" id="img" name="img" multiple onChange={handleChange} /> */}
-      <div style={{marginBottom: '1rem', border: '1px solid #ccc', borderRadius: '10px', padding: '10px'}}>
-        
-<h3 style={{ textAlign: 'center' }}>Product Size Specs</h3>
-      {/* {formData.specs.map((spec, index) => (
-        <div>
-        <div style={{display: 'flex',  justifyContent: 'flex-start', gap: '10px', flexDirection:'column'}} key={index} >
-          <TextField  label={`Size Range Name`} variant="outlined" type="text" id={`color-${index}`} name={`color-${index}`} value={spec.color} onChange={(e) => handleColorChange(e, index)} />
+              <div>
+                <div style={{ marginTop: "1rem" }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => fileInput.current.click()}
+                  >
+                    upload images
+                  </Button>
 
-        <div style={{margin: '10px'}}>
-          {spec.available.map((size, sizeIndex) => (
-            <div style={{display: 'flex', flexDirection: 'row', flex: 1, gap: '10px', marginTop: '10px'}}>
-              <TextField style={{flex: 1}} key={sizeIndex} label={`Size ${sizeIndex + 1}`} type="text" id={`size-${index}-${sizeIndex}`} value={size.size} name={`size-${index}-${sizeIndex}`}  onChange={(e) => handleSizeChange(e, index, sizeIndex)} />
+                  <input
+                    ref={fileInput}
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={(e) => handleImageChange(colorIndex, e)}
+                    style={{ display: "none" }}
+                  />
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "5px",
+                    marginTop: "1rem",
+                    marginBottom: "1rem",
+                  }}
+                >
+                  {color.images.map((image, imageIndex) => (
+                    <div
+                      key={imageIndex}
+                      style={{
+                        display: "inline-block",
+                        position: "relative",
+                        border: "1px solid #ccc",
+                      }}
+                    >
+                      <img
+                        src={image}
+                        alt={`Color ${color.name}`}
+                        style={{
+                          height: "50px",
+                          width: "40px",
+                          cursor: "pointer",
+                          objectFit: "contain",
+                        }}
+                        onClick={() => removeImage(colorIndex, imageIndex)}
+                      />
+                      <span
+                        style={{
+                          position: "absolute",
+                          top: 2,
+                          right: 2,
+                          cursor: "pointer",
+                          color: "red",
+                        }}
+                        onClick={() => removeImage(colorIndex, imageIndex)}
+                      >
+                        <FontAwesomeIcon icon={faTrashCan} />
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {color.sizes.map((size, sizeIndex) => (
+                <div key={sizeIndex}>
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "10px",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
+                    <TextField
+                      label="Size Name"
+                      variant="outlined"
+                      type="text"
+                      value={size.name}
+                      onChange={(e) =>
+                        handleSizeChange(
+                          colorIndex,
+                          sizeIndex,
+                          "name",
+                          e.target.value
+                        )
+                      }
+                    />
+                    <TextField
+                      label="Price"
+                      variant="outlined"
+                      type="number"
+                      value={size.price}
+                      onChange={(e) =>
+                        handleSizeChange(
+                          colorIndex,
+                          sizeIndex,
+                          "price",
+                          parseInt(e.target.value)
+                        )
+                      }
+                    />
+                    <TextField
+                      label="Discounted Price"
+                      variant="outlined"
+                      type="number"
+                      value={size.discountedPrice}
+                      onChange={(e) =>
+                        handleSizeChange(
+                          colorIndex,
+                          sizeIndex,
+                          "discountedPrice",
+                          parseInt(e.target.value)
+                        )
+                      }
+                    />
+                    <TextField
+                      label="Quantity"
+                      variant="outlined"
+                      type="number"
+                      value={size.quantity}
+                      onChange={(e) =>
+                        handleSizeChange(
+                          colorIndex,
+                          sizeIndex,
+                          "quantity",
+                          parseInt(e.target.value)
+                        )
+                      }
+                    />
+                    <IconButton
+                      // style={{ color: "red" }}
+                      onClick={() => removeSize(colorIndex, sizeIndex)}
+                      aria-label="delete"
+                      size="small"
+                      color="error"
+                    >
+                      <DeleteIcon fontSize="large" />
+                    </IconButton>
+                  </div>
+                </div>
+              ))}
               <Button
-              variant="contained"
-              color="secondary"
-            >
-              Delete
-            </Button>
-            <IconButton style={{color: '#1e1e1e'}} 
-              onClick={() => handleSizeDelete(index, sizeIndex)} aria-label="delete" size="small">
-  <DeleteIcon fontSize="large" />
-</IconButton> 
-            </div>
-          ))}
-          </div>
-        </div>
-        <Button variant="contained" style={{background: '#1e1e1e', color: 'white', width: '100%', marginTop: '20px'}} type="button" onClick={() => handleAddSize(index)}>Add Size</Button>
-        </div>
-      ))} */}
-
-{formData.specs.map((spec, index) => (
-        <div>
-        <div style={{display: 'flex',  justifyContent: 'flex-start', gap: '10px', flexDirection:'column'}} key={index} >
-          <TextField disabled  label={`Size Range Name`} variant="outlined" type="text" id={`color-${index}`} name={`color-${index}`} value={"Size Range"} onChange={(e) => handleColorChange(e, index)} />
-
-          {spec.available.map((size, sizeIndex) => (
-            <div style={{display: 'flex', flexDirection: 'row', flex: 1, gap: '10px', marginTop: '10px', marginRight: '10px', marginLeft: '10px'}}>
-              <TextField style={{flex: 1}} key={sizeIndex} label={`Size ${sizeIndex + 1}`} type="text" id={`size-${index}-${sizeIndex}`} value={size.size} name={`size-${index}-${sizeIndex}`}  onChange={(e) => handleSizeChange(e, index, sizeIndex)} />
-              {/* <Button
-              variant="contained"
-              color="secondary"
-            >
-              Delete
-            </Button> */}
-            <IconButton style={{color: '#1e1e1e'}} 
-              onClick={() => handleSizeDelete(index, sizeIndex)} aria-label="delete" size="small">
-  <DeleteIcon fontSize="large" />
-</IconButton> 
+                variant="outlined"
+                style={{ width: "100%", marginTop: "1rem" }}
+                type="button"
+                onClick={() => addSize(colorIndex)}
+              >
+                Add Size
+              </Button>
             </div>
           ))}
         </div>
-        <Button variant="contained" style={{background: '#1e1e1e', color: 'white', width: '100%', marginTop: '20px'}} type="button" onClick={() => handleAddSize(index)}>Add Size</Button>
+
+      </>
+
+      <>
+        <div style={{flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '10px', marginBottom: '0.5rem', marginTop: '1.5rem'}}>
+      <div className="title">Table Information</div>
+
+        <Button
+            variant="contained"
+            type="button"
+            onClick={addTableData}
+            color="success"
+          >
+            Add Table Data
+          </Button>
         </div>
-      ))}
+        <div style={{marginBottom: '1rem', padding: "10px",
+            border: "1px solid #ccc",
+            borderRadius: "10px",}}>
+          {productData.tableData.map((data, index) => (
+            <div
+              key={index}
+              style={{
+                display: "flex",
+                flex: 1,
+                gap: "10px",
+                justifyContent: "space-between",
+                alignItems: "center",
+              background: "#fff",
+              marginTop: index !== 0 ? "10px" : "0px",
+              padding: '10px',
+              border: '1px solid #ddd',
+              borderRadius: '7px',
+              boxShadow: "0 6px 12px rgba(0, 0, 0, 0.3)",
+              }}
+            >
+              <TextField
+                label="Heading"
+                variant="outlined"
+                type="text"
+                style={{ flex: 1 }}
+                value={data.heading}
+                onChange={(e) => {
+                  const updatedTableData = [...productData.tableData];
+                  updatedTableData[index].heading = e.target.value;
+                  setProductData({
+                    ...productData,
+                    tableData: updatedTableData,
+                  });
+                }}
+              />
+              <TextField
+                label="Content"
+                variant="outlined"
+                type="text"
+                style={{ flex: 1 }}
+                value={data.content}
+                onChange={(e) => {
+                  const updatedTableData = [...productData.tableData];
+                  updatedTableData[index].content = e.target.value;
+                  setProductData({
+                    ...productData,
+                    tableData: updatedTableData,
+                  });
+                }}
+              />
+              <IconButton
+                // style={{ color: "red" }}
+                onClick={() => removeTableData(index)}
+                aria-label="delete"
+                size="small"
+                color="error"
+              >
+                <DeleteIcon fontSize="large" />
+              </IconButton>
+            </div>
+          ))}
 
-      
-{/* <Button style={{background: '#1e1e1e', color: 'white', width: '100%'}} variant="contained" type="button" onClick={handleAddSpec}>Add Color</Button> */}
-</div>
+        </div>
+      </>
 
-<div style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', flex: 1, gap: '10px', flexDirection: 'row'}}>
-<TextField style={{flex: 1}} label="Price" variant="outlined"  type="number" id="price" name="price" value={formData.price} onChange={handleChange} />
-
-<TextField style={{flex: 1}}  label="Discounted Price" variant="outlined" type="number" id="discountedPrice" name="discountedPrice" value={formData.discountedPrice} onChange={handleChange} />
-
-<TextField style={{flex: 1}}  label="Pack of" variant="outlined" type="number" id="packof" name="packof" value={formData.packof} onChange={handleChange} />
-
-</div>
-
-
-
-<TextField  label="Description" variant="outlined" multiline id="description" name="description" value={formData.description} onChange={handleChange}/>
-
-
-<FormControlLabel
+      <FormControlLabel
   control={
     <Checkbox
-      checked={formData.hot}
-      onChange={(event) => setFormData({ ...formData, hot: event.target.checked })}
+      checked={productData.hot}
+      onChange={(event) => setProductData({ ...productData, hot: event.target.checked })}
     />
   }
   label="Mark as Hot Product"
@@ -428,23 +625,19 @@ const theme = useTheme();
   control={
     <Checkbox
       disabled={hotItemsFinished}
-      checked={formData.homePageItem}
-      onChange={(event) => setFormData({ ...formData, homePageItem: event.target.checked })}
+      checked={productData.homePageItem}
+      onChange={(event) => setProductData({ ...productData, homePageItem: event.target.checked })}
     />
   }
   label="Show on Home Page (Max 2)"
 />
 
+      <div style={{display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '10px', marginTop: '1rem'}}>
 
 
-
-      
-<div style={{display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '10px'}}>
-
-
-      <Button disabled={submitting} onClick={() => {setAddProductModal(false)}} variant="contained" color="error" type="button">Cancel</Button>
+      <Button disabled={submitting} onClick={() => {setModalOpen(true)}} variant="outlined" color="error" type="button">Reset details</Button>
       {!submitting ? 
-      <Button variant="contained" color="success" type="submit">Submit</Button>
+      <Button variant="contained" color="success" type="submit">ADD PRODUCT</Button>
 :
       <LoadingButton
         loading
@@ -452,11 +645,70 @@ const theme = useTheme();
         startIcon={<SaveIcon />}
         variant="outlined"
       >
-        SUBMITTING
+        ADDING PRODUCT
       </LoadingButton>
       }
       </div>
+
+
       
-      </form>
-  );
+      <CustomModal
+        open={modalOpen}
+        onClose={() => {
+          setModalOpen(false);
+        }}
+      >
+        <div>
+          <div>
+            <h2 style={{ marginTop: "0px", marginBottom: '0px' }}>
+              Are you sure you want to reset?
+            </h2>
+            <p className="para">
+              This action cannot be undone. Once reset, you will have to re-enter all the details
+            </p>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              gap: "10px",
+              marginTop: "1rem",
+            }}
+          >
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                setModalOpen(false);
+              }}
+            >
+              Cancel
+            </Button>
+
+      <Button onClick={() => {
+        setProductData({
+    id: "",
+    title: "",
+    colors: [],
+    description: "",
+    category: "",
+    tableData: [],
+    hot: false,
+    homePageItem: false
+  });
+  setModalOpen(false);
+  toast.success("Form reset successfully");
+
 }
+  }  variant="contained" color="success" type="submit">Confirm</Button>
+
+          </div>
+        </div>
+      </CustomModal>
+    </form>
+  );
+};
+
+export default AddProducts;

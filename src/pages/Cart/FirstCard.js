@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import classes from './FirstCard.module.css';
+import React, { useEffect, useState } from "react";
+import classes from "./FirstCard.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from "@fortawesome/free-regular-svg-icons";
 import { faEye, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
@@ -8,204 +8,573 @@ import ProductContext from "../../Context/ProductContext";
 import { Link } from "react-router-dom";
 import { Button, IconButton } from "@mui/material";
 
-import DeleteIcon from '@mui/icons-material/Delete';
-import { ImportContactsSharp } from "@mui/icons-material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { ImportContactsSharp, TurnedInOutlined } from "@mui/icons-material";
+
+import Pagination from "@mui/material/Pagination";
+import Stack from "@mui/material/Stack";
+import CustomModal from "../../components/CustomModal";
+
+function FirstCard({ Products }) {
+  const {
+    CartRemoveItem,
+    CartUpdateItem,
+    cart,
+    coupons,
+    setCouponApplied,
+    couponApplied,
+    setCartError,
+    cartError,
+    showErrorModal,
+    setShowErrorModal,
+    firstTime,
+    setFirstTime,
+  } = useContext(ProductContext);
+  const [couponInput, setCouponInput] = useState("");
+  const [sortedProducts, setSortedProducts]= useState([])
+  // const [error, setError] = useState(false);
+  // const [showErrorModal, setShowErrorModal] = useState(false);
+  // const [errorModalContent, setErrorModalContent] = useState([]);
+  // const [noErrors, setNoErrors] = useState(true);
+
+  // let showError = false;
+  // let error = false;
+  let errorModalContent = [];
+  let errorDetails = [];
+
+  // useEffect(() => {
+  //   const sortedCart = [...Products].sort((a, b) => {
+  //     const dateA = new Date(a.addedOn.seconds * 1000 + a.addedOn.nanoseconds / 1000000);
+  //     const dateB = new Date(b.addedOn.seconds * 1000 + b.addedOn.nanoseconds / 1000000);
+  //     return dateB - dateA;
+  //   });
+  //   setSortedProducts(sortedCart)
+  //   // console.log("sortedCart", sortedCart)
+  // }, [Products])
 
 
-import Pagination from '@mui/material/Pagination';
-import Stack from '@mui/material/Stack';
+  // useEffect(() => {
+  //   if (errorDetails.length > 0) {
+  //       setCartError(true);
+  //   } else {
+  //   setCartError(false);
+  // }
+  // }, [errorDetails]);
 
 
-function FirstCard({Products}) {
-
-
-  const {CartRemoveItem, CartUpdateItem, cart, coupons, setCouponApplied, couponApplied} = useContext(ProductContext);
-  const [couponInput, setCouponInput] = useState('');
-
-
-
-  function CouponCheckHandler(){
-
-    if (couponInput !== ''){
-      const item = coupons.find(item => item.couponCode === couponInput)
-
-      if(item){
-        setCouponApplied(item);
+  useEffect(() => {
+    if (errorModalContent.length > 0) {
+      if (!firstTime) {
+        setShowErrorModal(true);
+        setFirstTime(true);
       }
-      else {
+      setCartError(true);
+    } else {
+    setFirstTime(false)
+    setCartError(false);
+  }
+  }, [errorModalContent]);
+
+  const { products } = useContext(ProductContext);
+
+  function CouponCheckHandler() {
+    if (couponInput !== "") {
+      const item = coupons.find((item) => item.couponCode === couponInput);
+
+      if (item) {
+        setCouponApplied(item);
+      } else {
         setCouponApplied({});
-        console.log("Coupon NOT Applied");
+        // console.log("Coupon NOT Applied");
       }
     }
 
-    console.log(couponApplied);
-
+    // console.log(couponApplied);
   }
 
   function CartAddItemHandler(cartID) {
-    const currentItem = cart.find(item => item.cartID === cartID);
+    const currentItem = cart.find((item) => item.cartID === cartID);
     let updatedItem = {}; // Use "let" instead of "const"
-  
+
     if (currentItem) {
       updatedItem = {
         ...currentItem,
-        selectedQuantity: currentItem.selectedQuantity + 1
+        selectedQuantity: currentItem.selectedQuantity + 1,
       };
-  
-      console.log(updatedItem);
+
+      // console.log(updatedItem);
     } else {
-      console.log("Item not found in cart.");
+      // console.log("Item not found in cart.");
     }
-  
+
     CartUpdateItem(updatedItem);
   }
 
-
   function CartRemoveItemHandler(cartID) {
-    const currentItem = cart.find(item => item.cartID === cartID);
+    const currentItem = cart.find((item) => item.cartID === cartID);
     let updatedItem = {}; // Use "let" instead of "const"
-  
+
     if (currentItem) {
       const newSelectedQuantity = Math.max(currentItem.selectedQuantity - 1, 1); // Ensure selectedQuantity doesn't go below 0
       updatedItem = {
         ...currentItem,
-        selectedQuantity: newSelectedQuantity
+        selectedQuantity: newSelectedQuantity,
       };
-  
-      console.log(updatedItem);
+
+      // console.log(updatedItem);
     } else {
-      console.log("Item not found in cart.");
+      // console.log("Item not found in cart.");
     }
-  
+
     CartUpdateItem(updatedItem);
   }
 
-  
   const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
 
   const handleChangePage = (event, newPage) => {
     setCurrentPage(newPage);
   };
-  
+
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const displayedSessions = Products?.slice(startIndex, endIndex);
+
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  const checkIsMobile = () => {
+    setIsMobile(window.innerWidth <= 600); // You can adjust the width threshold as needed
+  };
   
-  
+  useEffect(() => {
+    checkIsMobile(); // Initial check
+    window.addEventListener("resize", checkIsMobile); // Add event listener
 
-    return (
-      <div className={classes.mainContainer}>
-        <div className={classes.secondContainer}>
-          
-        <div style={{ minWidth: '400px' }}>
-          <div style={{ width: '100%', }}>
-            <div style={{width: '100%', borderBottom: '1px solid #ccc', marginBottom: '1rem' }}>
-            <h2 className="title">Item Cart</h2>
-            </div>
-            {
-              Products.length > 0 ?
-              <div  style={{ gap: '10px', width: "100%", flex: 1, display: 'flex', justifyContent: 'flex-end', textAlign: 'left', paddingBottom: '1rem', borderBottom: '1px solid #ccc'  }}>
-            {/* <span style={{ flex: 0.5, textAlign: 'left' }}>Action</span> */}
-              <span style={{ flex: 1 }}>Product</span>
-              <span style={{ flex: 1, textAlign: 'center' }}>Quantity</span>
-              <span style={{ flex: 1, textAlign: 'center' }}>Total</span>
-              <span style={{ flex: 1, textAlign: 'right' }}>Delete</span>
-            </div>
+    // Clean up the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("resize", checkIsMobile);
+    };
+  }, []);
 
-            :
-              <div style={{ width: '100%', textAlign: 'center' }}>
-            <h2 style={{marginBottom: '2rem', marginTop: '2rem'}} className="title">No Items in Cart</h2>
-            <Link to={'/collection'} className="nolinkstyle">
-            <Button variant="contained" style={{ backgroundColor: '#1e1e1e', color: 'white'}}>Checkout Our Collection</Button>
-            </Link>
-
-            
+  return (
+    <div className={classes.mainContainer}>
+      <div className={classes.secondContainer}>
+        <div >
+          <div style={{ width: "100%" }}>
+            <div
+              style={{
+                width: "100%",
+                borderBottom: "1px solid #ccc",
+                marginBottom: "1rem",
+              }}
+            >
+              <h2 className="title">Item Cart</h2>
             </div>
-            }
-            
+            {Products.length > 0 ? (
+              <div
+                style={{
+                  gap: "10px",
+                  width: "100%",
+                  flex: 1,
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  textAlign: "left",
+                  paddingBottom: "1rem",
+                  borderBottom: "1px solid #ccc",
+                }}
+              >
+                {/* <span style={{ flex: 0.5, textAlign: 'left' }}>Action</span> */}
+                <span style={{ flex: 1 }}>Product</span>
+                <span style={{ flex: 1, textAlign: "center" }}>Quantity</span>
+                <span style={{ flex: 1, textAlign: "center" }}>Total</span>
+                <span style={{ flex: 1, textAlign: "right" }}>Delete</span>
+              </div>
+            ) : (
+              <div style={{ width: "100%", textAlign: "center" }}>
+                <h2
+                  style={{ marginBottom: "2rem", marginTop: "2rem" }}
+                  className="title"
+                >
+                  No Items in Cart
+                </h2>
+                <Link to={"/collection"} className="nolinkstyle">
+                  <Button
+                    variant="contained"
+                    style={{ backgroundColor: "#1e1e1e", color: "white" }}
+                  >
+                    Checkout Our Collection
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
           {displayedSessions.map((product, index) => (
-            <>
-            <div style={{marginBottom: '0px', flex: 1, paddingBottom: '0px'}}>
-              <h2 style={{marginBottom: '0px', paddingBottom: '0px'}} className="title">{product.product.title}</h2>
-            
-            </div>
-            <div className={classes.cartItem} key={product.cartID} style={{ width: "100%", flex: 1, display: 'flex', justifyContent: 'flex-end', textAlign: 'left', flexDirection: 'row', alignItems: 'center' }}>
-                
-                <span style={{ flex: 1, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start' }}>
-                  <div  style={{ flexDirection: 'row', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', flex: 1 }}> 
-                {/* <button onClick={() => {CartRemoveItem(product.cartID)}} style={{margin: '0.5rem', background: 'none', border: 'none'}}>
+            <div
+              key={index}
+              style={{
+                color: "#1e1e1e",
+                // background: "#f3f3f3",
+                padding: "10px",
+                borderTop: index !== 0 ? "1px solid #ccc" : "none",
+              }}
+            >
+              
+
+              <div
+                style={{ marginBottom: "0px", flex: 1, paddingBottom: "0px" }}
+              >
+                <h2
+                  style={{ marginBottom: "0px", paddingBottom: "0px" }}
+                  className="title"
+                >
+                  {product.product.title}
+                </h2>
+              </div>
+
+              {(() => {
+                const thisCategory = product?.product?.category;
+                const thisItem = products[thisCategory]?.find(
+                  (item) => item?.id === product?.productId
+                );
+                if (thisItem) {
+                  const selectedColor = thisItem.colors.find(
+                    (item) => item.name === product.selectedColor
+                  );
+                  if (selectedColor) {
+                    const selectedSize = selectedColor.sizes.find(
+                      (item) => item.name === product.selectedSize
+                    );
+                    if (selectedSize) {
+                      if (selectedSize.quantity === 0) {
+                        // showError=true;
+                        // error=true;
+                        errorDetails = [
+                          ...errorDetails,
+                          { cartID: product.cartID, error: true },
+                        ];
+                        errorModalContent = [
+                          ...errorModalContent,
+                          `${product.product.title} went out of stock. Please remove from cart to checkout.`,
+                        ];
+                        // setShowErrorModal(true)
+                        // setError(true)
+                        // setErrorModalContent([...errorModalContent, `${product.product.title} went out of stock. Please remove from cart to checkout.`]);
+                        return (
+                          <div style={{ color: "red", marginTop: '10px' }}>
+                            This item went out of stock. Please remove from cart
+                            to checkout.
+                          </div>
+                        );
+                      } else if (
+                        selectedSize.quantity < product.selectedQuantity
+                      ) {
+                        // showError=true;
+                        // error=true;
+                        errorDetails = [
+                          ...errorDetails,
+                          { cartID: product.cartID, error: true },
+                        ];
+                        errorModalContent = [
+                          ...errorModalContent,
+                          `Only ${selectedSize.quantity} ${product.product.title} are left in stock. Please adjust quantity to checkout.`,
+                        ];
+
+                        // setShowErrorModal(true)
+                        // setError(true)
+                        // setErrorModalContent([...errorModalContent, `Only ${selectedSize.quantity} ${product.product.title} are left in stock. Please adjust quantity to checkout.`]);
+                        return (
+                          <div style={{ color: "red", marginTop: '10px' }}>
+                            Only {selectedSize.quantity} items are left in
+                            stock. Please adjust quantity to checkout.
+                          </div>
+                        );
+                      } else {
+                        errorDetails = errorDetails.filter(
+                          (item) => item.cartID === product.cartID
+                        );
+                      }
+                    }
+                  }
+                }
+                return null; // Return null if no error message is shown
+              })()}
+
+
+                      {
+                      products[product?.product?.category]?.find((item) => item?.id === product?.productId) &&
+                      product.selectedColor &&
+                      product.selectedSize &&
+                      products[product.product.category]?.find((item) => item.id === product?.productId)?.colors.find(
+                        (color) => color.name === product.selectedColor
+                      )?.sizes.find(
+                        (size) => size.name === product.selectedSize && size.quantity > product.selectedQuantity
+                      )
+                        ? null
+                        : 
+                        <>
+                       {errorDetails.find((item) => item.cartID === product.cartID) ? null : (
+                        <div style={{ flex: 1, textAlign: 'center', marginTop: '10px' }}>
+                          Stock limit reached
+                        </div>
+                      )}
+                        </>
+                        
+                      }
+              <div
+                className={classes.cartItem}
+                key={product.cartID}
+                style={{
+                  width: "100%",
+                  flex: 1,
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  textAlign: "left",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <span
+                  style={{
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                  }}
+                >
+                  <div
+                    style={{
+                      flexDirection: "row",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "flex-start",
+                      flex: 1,
+                    }}
+                  >
+                    {/* <button onClick={() => {CartRemoveItem(product.cartID)}} style={{margin: '0.5rem', background: 'none', border: 'none'}}>
                     <FontAwesomeIcon icon={faCircleXmark} size="1.5x" style={{fontSize: '1.2rem'}} />
                 </button> */}
-                <span style={{ marginRight: '10px' }}> <Link to={`/collection/${product.product.category}/${product.product.id}`}><IconButton style={{color: '#1e1e1e'}} >
-              <FontAwesomeIcon icon={faEye} size="1x" style={{color: '#1e1e1e'}} />
-                </IconButton></Link></span>
-                <div  className={classes.imageContainer}><img src={product.product.img[0]} alt="Image" height='100%' width="100%" style={{objectFit: 'cover'}} /></div>
-               
-               <span style={{marginLeft: '10px'}}>${product.price}</span>
-                 </div>
-              </span>
-
-              <span style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                <IconButton style={{color: '#1e1e1e', fontSize: '1rem'}} onClick={() => {CartAddItemHandler(product.cartID)}}><FontAwesomeIcon icon={faPlus} /></IconButton>
-                <div style={{ color: '#1e1e1e', margin: '5px', marginRight: '10px', marginLeft: '10px'}}>{product.selectedQuantity}</div>
-                <IconButton style={{color: '#1e1e1e', fontSize: '1rem'}} onClick={() => {CartRemoveItemHandler(product.cartID)}}><FontAwesomeIcon icon={faMinus} /></IconButton>
-
+                    <span style={{ marginRight: "10px" }}>
+                      {" "}
+                      <Link
+                        to={`/collection/${product.product.category}/${product.product.id}?color=${product.selectedColor}&size=${product.selectedSize}`}
+                      >
+                        <IconButton>
+                          <FontAwesomeIcon icon={faEye} size="1x" />
+                        </IconButton>
+                      </Link>
+                    </span>
+                    {!isMobile && 
+                    <div className={classes.imageContainer}>
+                      <img
+                        src={product.product.img[0]}
+                        alt="Image"
+                        height="100%"
+                        width="100%"
+                        style={{ objectFit: "cover" }}
+                      />
+                    </div>
+                  }
+                    <span style={{ marginLeft: "10px" }}>${product.price}</span>
+                  </div>
                 </span>
 
-              <span style={{ flex: 1 , justifyContent: 'center', alignItems: 'center', display: 'flex'}}>${product.selectedQuantity*product.price}</span>
+                <span
+                  style={{
+                    flex: 1,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: isMobile? "column-reverse" : 'row'
+                  }}
+                >
 
-              <span style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center', display: 'flex' }}>
-                
-              <IconButton style={{color: '#1e1e1e'}} onClick={() => {CartRemoveItem(product.cartID)}} aria-label="delete" size="small">
-  <DeleteIcon fontSize="large" />
-</IconButton> 
+                <IconButton
+                  disabled={product.selectedQuantity<=1}
+                    style={{ color: "#1e1e1e", fontSize: "1rem" }}
+                    onClick={() => {
+                      CartRemoveItemHandler(product.cartID);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faMinus} />
+                  </IconButton>
+                  <div
+                    style={{
+                      color: "#1e1e1e",
+                      margin: "5px",
+                      marginRight: "10px",
+                      marginLeft: "10px",
+                    }}
+                  >
+                    {product.selectedQuantity}
+                  </div>
 
-{/* <Link to={`/collection/${product.product.category}/${product.product.id}`}><button style={{background: 'none', border: 'none'}}>
+                  <IconButton
+                    disabled={
+                      products[product.product.category]?.find((item) => item.id === product?.productId) &&
+                      product.selectedColor &&
+                      product.selectedSize &&
+                      products[product.product.category]?.find((item) => item.id === product?.productId)?.colors.find(
+                        (color) => color.name === product.selectedColor
+                      )?.sizes.find(
+                        (size) => size.name === product.selectedSize && size.quantity > product.selectedQuantity
+                      )
+                        ? false
+                        : true
+                    }
+                    style={{ color: "#1e1e1e", fontSize: "1rem" }}
+                    onClick={() => {
+                      CartAddItemHandler(product.cartID);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faPlus} />
+                  </IconButton>
+                </span>
+
+                <span
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    display: "flex",
+                  }}
+                >
+                  ${product.selectedQuantity * product.price}
+                </span>
+
+                <span
+                  style={{
+                    flex: 1,
+                    justifyContent: "flex-end",
+                    alignItems: "center",
+                    display: "flex",
+                  }}
+                >
+                  <IconButton
+                    onClick={() => {
+                      CartRemoveItem(product.cartID);
+                    }}
+                    aria-label="delete"
+                    size="small"
+                  >
+                    <DeleteIcon fontSize="large" />
+                  </IconButton>
+
+                  {/* <Link to={`/collection/${product.product.category}/${product.product.id}`}><button style={{background: 'none', border: 'none'}}>
 
               <FontAwesomeIcon icon={faEye} size="1.5x" style={{fontSize: '1.2rem'}} />
                 </button></Link> */}
-                
                 </span>
-              
+              </div>
+              <div
+                style={{
+                  width: "100%",
+                  flex: 1,
+                  display: "flex",
+                  justifyContent: isMobile? "center" : "space-between",
+                  textAlign:isMobile? "center" :  "right",
+                  flexDirection: isMobile? "column" : "row",
+                }}
+              >
+                <p style={{marginTop: '0px'}} className="para">color: {product.selectedColor}</p>
+                <p style={{ marginTop: "0px" }} className="para">
+                  size: {product.selectedSize}
+                </p>
+                <p style={{ marginTop: "0px" }} className="para">
+                  id: {product.product.id}
+                </p>
+              </div>
             </div>
-            <div style={{borderBottom: '1px solid #ccc',width: "100%", flex: 1, display: 'flex', justifyContent: 'space-between', textAlign: 'right' }}>
-              {/* <p style={{marginTop: '0px'}} className="para">color: {product.selectedColor}</p> */}
-              <p style={{marginTop: '0px'}} className="para">size: {product.selectedSize}</p>
-              <p style={{marginTop: '0px'}} className="para">id: {product.product.id}</p>
-            </div>
-            </>
           ))}
 
-          {
-            Products.length > 0 && 
-            <div style={{flex: 1, alignItems: 'center', justifyContent: 'center', display: 'flex', marginTop: '2rem'}}>
-<Stack spacing={2}>
-      <Pagination  count={Math.ceil(Products?.length / itemsPerPage)}
-          page={currentPage}
-          onChange={handleChangePage} />
-    </Stack>
-    </div>
-          }
-
-              {Products.length > 0 && Object.keys(couponApplied).length === 0 && 
-<div className={classes.inputContainer}>
-            <input onChange={(e) => {setCouponInput(e.target.value)}} className={classes.input} placeholder="Coupon Code" />
-            <button style={{borderRadius: '0px'}} onClick={CouponCheckHandler} className={classes.button}> Apply Coupon </button>
+          {Products.length > 0 && (
+            <div
+              style={{
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+                display: "flex",
+                marginTop: "2rem",
+              }}
+            >
+              <Stack spacing={2}>
+                <Pagination
+                  count={Math.ceil(Products?.length / itemsPerPage)}
+                  page={currentPage}
+                  onChange={handleChangePage}
+                />
+              </Stack>
             </div>
-            }
+          )}
 
-</div>
-</div>
+          {Products.length > 0 && Object.keys(couponApplied).length === 0 && (
+            <div className={classes.inputContainer}>
+              <input
+                onChange={(e) => {
+                  setCouponInput(e.target.value);
+                }}
+                className={classes.input}
+                placeholder="Coupon Code"
+              />
+              <button
+                style={{ borderRadius: "0px" }}
+                onClick={CouponCheckHandler}
+                className={classes.button}
+              >
+                {" "}
+                Apply Coupon{" "}
+              </button>
+            </div>
+          )}
         </div>
-    );
-  }
+      </div>
+      <CustomModal
+        open={showErrorModal}
+        onClose={() => {
+          setShowErrorModal(false);
+        }}
+      >
+        <div>
+          <div>
+            <h2 style={{ marginTop: "0px", marginBottom: "0px" }}>
+              Please implement following to enable checkout
+            </h2>
+            <ul>
+              {errorModalContent.map((item, index) => (
+                <li key={index}>
+                  <p className="para">{item}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
 
-
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            gap: "10px",
+            marginTop: "1rem",
+          }}
+        >
+          <Button
+            onClick={() => {
+              setShowErrorModal(false);
+            }}
+            variant="contained"
+            type="submit"
+          >
+            Close
+          </Button>
+        </div>
+      </CustomModal>
+    </div>
+  );
+}
 
 export default FirstCard;
-
 
 //       id: Math.floor(10000000 + Math.random() * 90000000),
 //       img: [Image1, Image2, Image3, Image4, Image5],
@@ -224,7 +593,6 @@ export default FirstCard;
 //     }
 //   ]
 
-
 //     {
 //         id: Math.floor(10000000 + Math.random() * 90000000),
 //         img: [Image2, Image3, Image4, Image5, Image1, ],
@@ -241,7 +609,6 @@ export default FirstCard;
 //         packof: 1,
 //         description: "Talk digital shark heads-up door win involved turn timepoint bed. Room management exploratory they forward should reinvent field. Dunder buy-in first invested gave ipsum down email monday elephant. Please pushback deliverables dive best.\n\nCommitment are by world across ui first charts. 2 unit live whatever diarize when closing all know. Now anomalies shelf-ware you win-win-win me close plane. Don't stop then tomorrow work. Creep procrastinating break support sky.",
 //       },
-
 
 //       {
 //         id: Math.floor(10000000 + Math.random() * 90000000),
@@ -260,7 +627,6 @@ export default FirstCard;
 //         description: "Talk digital shark heads-up door win involved turn timepoint bed. Room management exploratory they forward should reinvent field. Dunder buy-in first invested gave ipsum down email monday elephant. Please pushback deliverables dive best.\n\nCommitment are by world across ui first charts. 2 unit live whatever diarize when closing all know. Now anomalies shelf-ware you win-win-win me close plane. Don't stop then tomorrow work. Creep procrastinating break support sky.",
 //       },
 
-
 //       {
 //         id: Math.floor(10000000 + Math.random() * 90000000),
 //         img: [Image4, Image5, Image1, Image2, Image3, ],
@@ -277,7 +643,6 @@ export default FirstCard;
 //         packof: 1,
 //         description: "Talk digital shark heads-up door win involved turn timepoint bed. Room management exploratory they forward should reinvent field. Dunder buy-in first invested gave ipsum down email monday elephant. Please pushback deliverables dive best.\n\nCommitment are by world across ui first charts. 2 unit live whatever diarize when closing all know. Now anomalies shelf-ware you win-win-win me close plane. Don't stop then tomorrow work. Creep procrastinating break support sky.",
 //       },
-
 
 //       {
 //         id: Math.floor(10000000 + Math.random() * 90000000),
@@ -296,7 +661,6 @@ export default FirstCard;
 //         description: "Talk digital shark heads-up door win involved turn timepoint bed. Room management exploratory they forward should reinvent field. Dunder buy-in first invested gave ipsum down email monday elephant. Please pushback deliverables dive best.\n\nCommitment are by world across ui first charts. 2 unit live whatever diarize when closing all know. Now anomalies shelf-ware you win-win-win me close plane. Don't stop then tomorrow work. Creep procrastinating break support sky.",
 //       },
 
-
 //       {
 //         id: Math.floor(10000000 + Math.random() * 90000000),
 //         img: [Image6, Image1, Image2, Image3, Image4, Image5],
@@ -314,5 +678,4 @@ export default FirstCard;
 //         description: "Talk digital shark heads-up door win involved turn timepoint bed. Room management exploratory they forward should reinvent field. Dunder buy-in first invested gave ipsum down email monday elephant. Please pushback deliverables dive best.\n\nCommitment are by world across ui first charts. 2 unit live whatever diarize when closing all know. Now anomalies shelf-ware you win-win-win me close plane. Don't stop then tomorrow work. Creep procrastinating break support sky.",
 //       },
 
-    
 //   ];

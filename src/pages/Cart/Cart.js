@@ -26,19 +26,18 @@ const navigate=useNavigate();
 
   const {cart, isUserLoggedIn} = useContext(ProductContext);
 
-    useEffect(() => {
-    if (!isUserLoggedIn) {
-      navigate("/login", { replace: true });
-    }
-  }, []);
+  //   useEffect(() => {
+  //   if (!isUserLoggedIn) {
+  //     navigate("/login", { replace: true });
+  //   }
+  // }, []);
 
-  const sortedCart = [...cart].sort((a, b) => {
-    const dateA = new Date(a.addedOn.seconds * 1000 + a.addedOn.nanoseconds / 1000000);
-    const dateB = new Date(b.addedOn.seconds * 1000 + b.addedOn.nanoseconds / 1000000);
-    return dateB - dateA;
-  });
+  // const sortedCart = [...cart].sort((a, b) => {
+  //   const dateA = new Date(a.addedOn.seconds * 1000 + a.addedOn.nanoseconds / 1000000);
+  //   const dateB = new Date(b.addedOn.seconds * 1000 + b.addedOn.nanoseconds / 1000000);
+  //   return dateB - dateA;
+  // });
 
-    console.log("SORTED CART", sortedCart)
 
   return (
     <React.Fragment>
@@ -46,9 +45,9 @@ const navigate=useNavigate();
         <Contact />
         <div className={classes.secondContainer}>
             
-          <FirstCard Products={sortedCart} />
+          <FirstCard Products={cart} />
 
-          <SecondCard Products={sortedCart} />
+          <SecondCard Products={cart} />
         </div>
       </div>
 

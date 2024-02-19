@@ -30,9 +30,15 @@ function GridView({ Products, category }) {
                 <h2 className="title" style={{fontSize: '1.5rem'}}>Related Items</h2>
             </div>
             <div className={classes.listContainer}>
-                {displayedSessions.map((product, index) => (
+                {displayedSessions.map((item, index) => (
                     <div key={index}>
-                        <ImageCard id={product?.id} category={category} image={product?.img[0]} price={product?.price} title={product?.title} discountedPrice={product?.discountedPrice} />
+                        <ImageCard 
+              category={item.category}
+              id={item.id}
+              image={item.colors[0]?.images[0]}
+              title={item.title}
+              price={item.colors[0]?.sizes[0]?.price}
+              discountedPrice={item.colors[0]?.sizes[0]?.discountedPrice}/>
                     </div>
                 ))}
             </div>

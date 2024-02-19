@@ -37,7 +37,11 @@ function CustomModal({ open, onClose, children }) {
             marginLeft: '10px'
           }}
         >
-        <div style={{ padding: "20px", flex: 1, overflow: 'auto' }}>
+        <div style={{ 
+          padding: "20px", 
+          flex: 1, 
+          overflow: 'auto',
+          }}>
           {children}
           </div>
         </div>
@@ -47,3 +51,5 @@ function CustomModal({ open, onClose, children }) {
 }
 
 export default CustomModal;
+
+

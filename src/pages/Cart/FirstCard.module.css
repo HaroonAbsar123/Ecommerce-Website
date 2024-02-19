@@ -15,6 +15,7 @@
 }
 
 .secondContainer {
+  border-radius: 10px;
   padding: 3rem;
   overflow-x: auto; /* enable horizontal scrollbar on secondContainer */
   flex: 1;
@@ -25,7 +26,8 @@
 .cartItem{
     /* border-bottom: 1px solid #ccc; */
     height: 7rem;
-    gap: 10px
+    gap: 10px;
+    /* color: #f3f3f3; */
 }
 
 

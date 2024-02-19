@@ -279,37 +279,39 @@ export function ContactInformation() {
           </>
         ) : (
           <Autocomplete
-  id="country-select-demo"
-  style={{ width: '100%', marginBottom: '1rem' }}
-  options={countries}
-  autoHighlight
-  onChange={(e, newValue) => {
-    setCountry(newValue);
-  }}
-  getOptionLabel={(option) => option.label}
-  renderOption={(props, option) => (
-    <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-      <img
+        id="controlled-demo"
+        sx={{ flex: 1 }}
+        style={{ width: '100%', marginBottom: '1rem' }}
+        options={countries}
+        autoHighlight
+        value={country} // Make sure `country` is one of the options in `countries`
+        onChange={(e, newValue) => {
+        setCountry(newValue);
+        }}
+        getOptionLabel={(option) => option.label}
+        renderOption={(props, option) => (
+        <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+        <img
         loading="lazy"
         width="20"
         src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
         srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
         alt=""
-      />
-      {option.label} ({option.code}) +{option.phone}
-    </Box>
-  )}
-  renderInput={(params) => (
-    <TextField
-      {...params}
-      label="Country"
-      inputProps={{
+        />
+        {option.label} ({option.code})
+        </Box>
+        )}
+        renderInput={(params) => (
+        <TextField
+        {...params}
+        label="Country"
+        inputProps={{
         ...params.inputProps,
         autoComplete: 'new-password', // disable autocomplete and autofill
-      }}
-    />
-  )}
-/>
+        }}
+        />
+        )}
+        />
 
         )}
       </div>

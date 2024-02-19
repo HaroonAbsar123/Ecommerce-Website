@@ -63,9 +63,11 @@ function ProductPage() {
 
   // console.log(category, products);
 
+
+
   return (
     <div>
-      <ItemOne Products={currentItem} />
+      <ItemOne Product={currentItem} />
 
       <ItemTwo Products={currentItem} />
 
@@ -78,3 +80,93 @@ function ProductPage() {
 }
 
 export default ProductPage;
+
+const newProducts=[
+  {
+    id: "123123123",
+    title: "Arm Chair",
+    colors: [
+      {
+        name: 'Red',
+        images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Red_Color.jpg/1536px-Red_Color.jpg", "blob:http://localhost:3000/d6d01831-19aa-4ab6-876c-bfeb2dccdf01", "blob:http://localhost:3000/506f2bbf-c72d-4f35-8b26-72f233535cc5", "https://upload.wikimedia.org/wikipedia/commons/e/e4/Color-blue.JPG"],
+        sizes: [{ name: 'S', price: 50, discountedPrice: 40, quantity: 10 }, { name: 'L', price: 30, discountedPrice: 25, quantity: 0 }],
+      },
+      {
+        name: 'Blue',
+        images: ["https://upload.wikimedia.org/wikipedia/commons/e/e4/Color-blue.JPG"],
+        sizes: [{ name: 'L', price: 30, discountedPrice: 25, quantity: 5 }],
+      },
+      {
+        name: 'Green',
+        images: ["https://www.shutterstock.com/image-illustration/background-green-screen-video-editing-260nw-1563651100.jpg"],
+        sizes: [{ name: 'L', price: 30, discountedPrice: 25, quantity: 0 }],
+      },
+    ],
+    description: "Lorem ipsum dolor si te",
+    category: "armchairs"
+  },
+  {
+    id: "123123125123",
+    title: "Sofa",
+    colors: [
+      {
+        name: 'Red',
+        images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Red_Color.jpg/1536px-Red_Color.jpg", "blob:http://localhost:3000/d6d01831-19aa-4ab6-876c-bfeb2dccdf01", "blob:http://localhost:3000/506f2bbf-c72d-4f35-8b26-72f233535cc5", "https://upload.wikimedia.org/wikipedia/commons/e/e4/Color-blue.JPG"],
+        sizes: [{ name: 'S', price: 50, discountedPrice: 40, quantity: 10 }, { name: 'L', price: 30, discountedPrice: 25, quantity: 0 }],
+      },
+      {
+        name: 'Blue',
+        images: ["https://upload.wikimedia.org/wikipedia/commons/e/e4/Color-blue.JPG"],
+        sizes: [{ name: 'L', price: 30, discountedPrice: 25, quantity: 0 }],
+      },
+      {
+        name: 'Green',
+        images: ["https://www.shutterstock.com/image-illustration/background-green-screen-video-editing-260nw-1563651100.jpg"],
+        sizes: [{ name: 'L', price: 30, discountedPrice: 25, quantity: 0 }],
+      },
+    ],
+    description: "Lorem ipsum dolor si te",
+    category: "sofas"
+  },
+  {
+    id: "1231232t3123",
+    title: "Lamp",
+    colors: [
+      {
+        name: 'Red',
+        images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Red_Color.jpg/1536px-Red_Color.jpg", "blob:http://localhost:3000/d6d01831-19aa-4ab6-876c-bfeb2dccdf01", "blob:http://localhost:3000/506f2bbf-c72d-4f35-8b26-72f233535cc5", "https://upload.wikimedia.org/wikipedia/commons/e/e4/Color-blue.JPG"],
+        sizes: [{ name: 'S', price: 50, discountedPrice: 40, quantity: 10 }, { name: 'L', price: 30, discountedPrice: 25, quantity: 0 }],
+      },
+      {
+        name: 'Blue',
+        images: ["https://upload.wikimedia.org/wikipedia/commons/e/e4/Color-blue.JPG"],
+        sizes: [{ name: 'L', price: 30, discountedPrice: 25, quantity: 0 }],
+      },
+      {
+        name: 'Green',
+        images: ["https://www.shutterstock.com/image-illustration/background-green-screen-video-editing-260nw-1563651100.jpg"],
+        sizes: [{ name: 'L', price: 30, discountedPrice: 25, quantity: 0 }],
+      },
+    ],
+    description: "Lorem ipsum dolor si te",
+    category: "lamps"
+  },
+  {
+    id: "13g93g32t3123",
+    title: "Cushions",
+    colors: [
+      {
+        name: 'Red',
+        images: ["https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Red_Color.jpg/1536px-Red_Color.jpg", "blob:http://localhost:3000/d6d01831-19aa-4ab6-876c-bfeb2dccdf01", "blob:http://localhost:3000/506f2bbf-c72d-4f35-8b26-72f233535cc5", "https://upload.wikimedia.org/wikipedia/commons/e/e4/Color-blue.JPG"],
+        sizes: [{ name: 'S', price: 50, discountedPrice: 40, quantity: 10 }, { name: 'L', price: 30, discountedPrice: 25, quantity: 0 }],
+      },
+      {
+        name: 'Blue',
+        images: ["https://upload.wikimedia.org/wikipedia/commons/e/e4/Color-blue.JPG"],
+        sizes: [{ name: 'L', price: 30, discountedPrice: 25, quantity: 0 }],
+      },
+    ],
+    description: "Lorem ipsum dolor si te",
+    category: "cushions"
+  }
+]
