@@ -1,8 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
 import classes from './Contact.module.css';
 import Plant from '../../Assets/plantSecond.png'
 
 function Contact() {
+
+  const [imageLoaded, setImageLoaded] = useState(false);
+
 
   return (
     <div className={classes.mainContainer}>
@@ -14,7 +17,7 @@ function Contact() {
         </div>
 
         <div style={{transform: 'translateY(-6rem)', flex: 1}}>
-          <img src={Plant} className={classes.image} alt="Plant" />
+          <img style={{display: imageLoaded ? "inherit" : 'none'}} src={Plant} className={classes.image} alt="" onLoad={() => setImageLoaded(true)} />
         </div>
       </div>
     </div>

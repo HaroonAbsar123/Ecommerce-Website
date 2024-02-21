@@ -7,6 +7,7 @@
 .innerContainer{
     padding: 3rem;
     flex: 1;
+    padding-bottom: 0rem;
 }
 
 .heading{
@@ -43,7 +44,8 @@
     display: flex;
     align-items: center;
     flex: 1;
-    padding: 1rem
+    padding: 1rem;
+    overflow: hidden;
 }
 
 
@@ -52,9 +54,11 @@
     grid-template-columns: repeat(4, 1fr); /* Creates 4 equal-width columns */
     align-items: center; /* Centers the grid vertically */
     justify-content: center; /* Centers the grid horizontally */
-    flex: 1;
+
     gap: 10px;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
+    position: relative;
+    margin-top: 2rem;
   }
   
   

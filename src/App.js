@@ -35,7 +35,6 @@ function App() {
       <Toaster />
       <NavBar />
       <ScrollToTop />
-        
       <Routes>
         <Route path="/" Component={Home} />
         <Route path="/collection" Component={Collection} />
@@ -52,7 +51,6 @@ function App() {
         <Route path="/contact" Component={ContactUs} />
         <Route path="/blog-1" Component={Blog} />
       </Routes>
-      
     
       {chatClosed ? (
         <div

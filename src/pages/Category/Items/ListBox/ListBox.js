@@ -8,6 +8,7 @@ import { faArrowCircleRight, faArrowCircleLeft } from "@fortawesome/free-solid-s
 
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import HomeProductCard from "./HomeProductCard";
 
 
 function ListBox({ Products, category }) {
@@ -35,31 +36,28 @@ function ListBox({ Products, category }) {
   
     return (
       <div className={classes.mainContainer}>
-        <>
+      <div 
+      style={{display: 'flex', flex: 1,  justifyContent: 'center'}}>
           <div className={classes.listContainer}>
             {displayedSessions.map((item, index) => (
-              <div key={index}>
-                
-                  <ImageCard
-                  
+                  <HomeProductCard
+                  key={index} 
               category={item.category}
               id={item.id}
-              image={item.colors[0]?.images[0]}
+              item={item}
               title={item.title}
               price={item.colors[0]?.sizes[0]?.price}
               discountedPrice={item.colors[0]?.sizes[0]?.discountedPrice} />
-                
-              </div>
             ))}
           </div>
-<div style={{flex: 1, alignItems: 'center', justifyContent: 'center', display: 'flex', marginTop: '2rem'}}>
+                </div>
+<div style={{flex: 1, alignItems: 'center', justifyContent: 'center', display: 'flex', marginTop: '1rem'}}>
 <Stack spacing={2}>
       <Pagination  count={Math.ceil(Products?.length / itemsPerPage)}
           page={currentPage}
           onChange={handleChangePage} />
     </Stack>
     </div>
-        </>
       </div>
     );
   };

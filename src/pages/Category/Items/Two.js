@@ -105,7 +105,7 @@ function Two() {
   const [isMobile, setIsMobile] = useState(false);
 
   const checkIsMobile = () => {
-    setIsMobile(window.innerWidth <= 900); // You can adjust the width threshold as needed
+    setIsMobile(window.innerWidth <= 1000); // You can adjust the width threshold as needed
   };
 
   useEffect(() => {
@@ -222,31 +222,29 @@ function Two() {
 </div>
 :
 <>
-<div style={{
+
+  <Accordion style={{
   background: 'rgba(255, 255, 255, 0.7)',
-  backdropFilter: 'blur(4px)', // Adjust the blur intensity as needed
-  WebkitBackdropFilter: 'blur(4px)', // For Safari support,
-  borderRadius: '10px',
-  padding: '10px',
+  backdropFilter: 'blur(4px)', 
+  WebkitBackdropFilter: 'blur(4px)',
   boxShadow: "0 6px 8px rgba(0, 0, 0, 0.2)",
 }}>
-  <Accordion style={{
-  background: 'rgba(255, 255, 255, 0)',
-  backdropFilter: 'blur(4px)', // Adjust the blur intensity as needed
-  WebkitBackdropFilter: 'blur(4px)', // For Safari support,
-  borderRadius: '10px',
-  marginBottom: '5px'
-}}>
 <AccordionSummary
-  expandIcon={<ExpandMoreIcon />}
   aria-controls="panel1-content"
   id="panel1-header"
   style={{padding: '0px', margin: '0px', marginLeft: '10px', marginRight: '10px'}}
 >
-  <div className={classes.title}>Collection</div>
+<Button disabled
+                onClick={() => navigate("/collection/hot")}
+                style={{  width: '100%',fontSize: '1rem', background: '#1e1e1e', marginBottom: '5px', color: 'white'   }}
+              >
+               Collection
+              </Button>
 </AccordionSummary>
 <AccordionDetails>
-  <div>
+
+ <div>
+
   <Button
                 onClick={() => navigate("/collection/hot")}
                 sx={{ color: '#1e1e1e', width: '100%',fontSize: '1rem', background: '#fff', marginBottom: '5px'   }}
@@ -285,36 +283,6 @@ function Two() {
 </AccordionDetails>
 </Accordion>
 
-{/* Filter component */}
-{/* <div className={classes.FilterContainer}>
-          <div className={classes.filterInputContainer}>
-            <label htmlFor="minPrice" className={classes.filterText}>
-              Min Price:
-            </label>
-            <input
-              type="number"
-              id="minPrice"
-              value={minPrice}
-              min={0}
-              max={maxPrice}
-              onChange={(e) => setMinPrice(e.target.value)}
-            />
-          </div>
-          <div className={classes.filterInputContainer}>
-            <label htmlFor="maxPrice" className={classes.filterText}>
-              Max Price:
-            </label>
-            <input
-              type="number"
-              id="maxPrice"
-              value={maxPrice}
-              min={minPrice}
-              max={10000}
-              onChange={(e) => setMaxPrice(e.target.value)}
-            />
-          </div>
-        </div> */}
-</div>
 
 
 </>

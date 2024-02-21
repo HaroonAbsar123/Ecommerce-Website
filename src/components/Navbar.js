@@ -27,6 +27,7 @@ import Cookies from 'universal-cookie';
 import Dialog from '@mui/material/Dialog';
 import { toast } from 'react-hot-toast';
 import CustomModal from './CustomModal';
+import LoginLogo from "../Assets/logo - Copy.png";
 
 const pages = ['Home', 'Collection', 'Contact'];
 const settings = ['Profile', 'Cart', 'Logout'];
@@ -285,12 +286,13 @@ function Navbar() {
             flexDirection: "column",
             maxHeight: "90vh",
             overflow: "hidden",
-            minWidth: '500px',
+            width: '500px',
             boxShadow: "0 6px 12px rgba(0, 0, 0, 0.3)",
             background: "rgba(255,255,255, 0.9)",
             borderRadius: "10px",
             marginRight:'10px',
-            marginLeft: '10px'
+            marginLeft: '10px',
+            maxWidth: '90vw'
           }}
         >
         <div style={{ 
@@ -298,13 +300,39 @@ function Navbar() {
           flex: 1, 
           overflow: 'auto',
           }}>
-           {settings.map((setting, index) => (
-            <div key={index}>
-                  <Button style={{width: '100%',paddingTop: '1rem', paddingBottom: '1rem', borderTop: index !== 0 ? '1px solid #ccc' : "none"}} key={setting} onClick={() => handleCloseUserMenu(setting)}>
-                    <Typography textAlign="center" style={{color: '#1e1e1e'}}>{setting}</Typography>
-                  </Button>
-                  </div>
-                ))}
+            <>
+  <div style={{display: 'flex', flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: '10px'}}>
+    <img src={LoginLogo} alt="Logo" style={{ height: "40px" }} />
+  </div>
+  <div style={{flex: 1, textAlign: 'center', fontSize: '1.5rem', fontWeight: 'bold'}} className='para'>
+    Hi, {userDetails.userName}!
+  </div>
+  <p style={{ marginBottom: '1rem', flex: 1, textAlign: 'center'}} className='para'>
+    Welcome back! We're excited to have you here.
+  </p>
+  {settings.map((setting, index) => (
+    <div key={index}>
+      <Button
+        style={{
+          width: '100%',
+          paddingTop: '5px',
+          paddingBottom: '5px',
+          borderTop: '1px solid #ccc'
+        }}
+        key={setting}
+        onClick={() => handleCloseUserMenu(setting)}
+      >
+        <Typography
+          textAlign="center"
+          style={{ color: setting === "Logout" ? "darkred" : '#1e1e1e' }}
+        >
+          {setting}
+        </Typography>
+      </Button>
+    </div>
+  ))}
+</>
+
           </div>
         </div>
       </div>
@@ -318,7 +346,7 @@ function Navbar() {
       >
         <div>
         <div>
-  <h2 style={{ marginTop: "0px", marginBottom: '0px' }}>
+  <h2 className='para' style={{ marginTop: "0px", marginBottom: '0px', fontSize: '1.5rem' }}>
     Are you sure you want to Log Out?
   </h2>
   <p className="para">
@@ -336,8 +364,9 @@ function Navbar() {
             }}
           >
             <Button
-              variant="contained"
-              color="error"
+              variant="outlined"
+              // color="error"
+              style={{color: '#1e1e1e', borderColor: '#ccc'}}
               onClick={() => {
                 setLogoutModal(false);
               }}
@@ -345,7 +374,7 @@ function Navbar() {
               Cancel
             </Button>
 
-      <Button onClick={() => {LogoutHandler()}} variant="contained" color="success" type="submit">Log Out</Button>
+      <Button onClick={() => {LogoutHandler()}} variant="contained" color="error" type="submit">Log Out</Button>
 
           </div>
         </div>
@@ -355,8 +384,6 @@ function Navbar() {
 
     <Modal
       open={loading}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
     >
       <div
           style={{
@@ -367,23 +394,16 @@ function Navbar() {
             height: "100%",
             display: "flex",
             justifyContent: "center",
-            alignItems: "center", // center the modal content vertically and horizontally
-            
-        backdropFilter: 'blur(10px)', // Adjust the blur intensity as needed
-        WebkitBackdropFilter: 'blur(10px)', // For Safari support,
+            alignItems: "center", 
+        backdropFilter: 'blur(10px)',
+        WebkitBackdropFilter: 'blur(10px)',
+        background: 'rgba(0,0,0,0.3)'
           }}
         >
         <div style={{flexDirection: 'column'}}
           >
          
-             <img src={logo} alt="logo" style={{margin: '10px', maxHeight: '60px'}}/>
-  
-             <div style={{flex: 1, display: 'flex', justifyContent: 'center'}}>
-     <CircularProgress sx={{
-    color: 'white',
-  }}
-/>
-     </div>
+         <div class="loader"></div>
         </div>
         </div>
     </Modal>

@@ -4,8 +4,15 @@
     flex-direction: row;
     display: flex;
     margin-top: 2rem;
+    max-width: 100vw;
 }
 
+@media (max-width: 1000px) {
+    
+  .mainContainer{
+    flex-direction: column-reverse;
+}
+}
 .title {
   font-size: 1.1rem;
   font-weight: bold;
@@ -36,6 +43,7 @@
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
+    margin-bottom: 2rem;
   }
   
   .FilterContainer {
@@ -102,12 +110,6 @@
   }
   .title {
     font-size: 1.5rem;
-  }
-  .Second {
-    margin-bottom: 2rem;
-  }
-  .mainContainer{
-    flex-direction: column-reverse;
   }
   .navLinks{
     text-align: center;

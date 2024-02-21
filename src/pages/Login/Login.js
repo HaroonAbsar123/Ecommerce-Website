@@ -22,6 +22,7 @@ import Cookies from 'universal-cookie';
 function Login() {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const cookies = new Cookies();
 
@@ -793,32 +794,32 @@ cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
       >
         
         {!isMobile && 
-        <div
-          style={{
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            paddingTop: "6rem",
-            background: "linear-gradient(to left, rgb(255, 244, 236), bisque)",
-            justifyContent: "center",
-            paddingBottom: "1rem"
-          }}
-        >
-          
-          <div >
-          <img
-            style={{
-              maxWidth: "100%",
-              maxHeight: "100%",
-              objectFit: "contain",
-              filter: 'drop-shadow(15px, 5px, 5px, #1e1e1e)'
-            }}
-            src={LoginImage}
-            alt="Image"
-          />
-          </div>
-        </div>
-
+         <div
+         style={{
+           flex: 1,
+           display: 'flex',
+           flexDirection: "column",
+           paddingTop: "6rem",
+           background: "linear-gradient(to left, rgb(255, 244, 236), bisque)",
+           justifyContent: "center",
+           paddingBottom: "1rem"
+         }}
+       >
+           <div>
+             <img
+               style={{
+                 maxWidth: "100%",
+                 maxHeight: "100%",
+                 objectFit: "contain",
+                 filter: 'drop-shadow(15px, 5px, 5px, #1e1e1e)',
+                 display: imageLoaded ? "inherit" : 'none',
+               }}
+               src={LoginImage}
+               alt=""
+               onLoad={() => setImageLoaded(true)}
+             />
+           </div>
+       </div>
       }
         <div
           style={{

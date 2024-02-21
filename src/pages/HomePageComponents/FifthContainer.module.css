@@ -27,7 +27,7 @@
 .columnsContainer {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* Creates 3 equal-width columns */
-    grid-gap: 20px; /* Adds a gap between columns */
+    grid-gap: 0px; /* Adds a gap between columns */
   }
 
 
@@ -35,7 +35,18 @@
   .column {
     height: 30rem;
     overflow: hidden;
+    width: 22vw;
   }
+
+  @media (max-width: 900px) {
+    .columnsContainer {
+      grid-gap: 20px; /* Adds a gap between columns */
+    }
+    .column{
+      width: 40vw;
+    }
+  }
+  
 
   .imageFirst {
     background-image: url("../../Assets/Home6.png");
@@ -47,8 +58,8 @@
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
-    transform: translateY(-2rem);
     position: relative; /* Add position relative to create stacking context for pseudo-element */
+    clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
   }
   
   .imageFirst::before {
@@ -58,13 +69,17 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Dark tint color with transparency */
-    opacity: 0; /* Initially transparent */
-    transition: opacity 0.3s ease-in-out; /* Add transition property for smooth effect */
+    background-color: transparent; /* Dark tint color with transparency */
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    transition: background-color 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, -webkit-backdrop-filter 0.3s ease-in-out;
+
   }
   
   .imageFirst:hover::before {
-    opacity: 1; /* Show the dark tint on hover */
+    background-color: rgba(0, 0, 0, 0.2); /* Dark tint color with transparency */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
   
   .imageFirstText {
@@ -80,24 +95,9 @@
     width: 90%;
   }
 
-  .imageFirstSecond {
-    position: absolute;
-    top: 50%;
-    bottom: 10%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: #ffffff;
-    font-size: 1.2rem;
-    font-weight: bold;
-    width: 90%;
-  }
-
-
-
 
   .imageSecond {
-    background-image: url("../../Assets/Home5.png");
+    background-image: url("../../Assets/armchair.jpg");
     height: 100%;
     width: 100%;
     flex-direction: row;
@@ -106,8 +106,8 @@
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
-    transform: translateY(2rem);
     position: relative; /* Add position relative to create stacking context for pseudo-element */
+    clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
   }
   
   .imageSecond::before {
@@ -117,19 +117,34 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Dark tint color with transparency */
-    opacity: 0; /* Initially transparent */
-    transition: opacity 0.3s ease-in-out; /* Add transition property for smooth effect */
+    background-color: transparent; /* Dark tint color with transparency */
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    transition: background-color 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, -webkit-backdrop-filter 0.3s ease-in-out;
+
   }
   
   .imageSecond:hover::before {
-    opacity: 1; /* Show the dark tint on hover */
+    background-color: rgba(0, 0, 0, 0.2); /* Dark tint color with transparency */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  .imageSecondText {
+    position: absolute;
+    top: 50%;
+    bottom: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 90%;
   }
 
-
-
   .imageThird {
-    background-image: url("../../Assets/Home6.png");
+    background-image: url("../../Assets/lamp.jpg");
     height: 100%;
     width: 100%;
     flex-direction: row;
@@ -138,8 +153,8 @@
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
-    transform: translateY(-2rem);
     position: relative; /* Add position relative to create stacking context for pseudo-element */
+    clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
   }
   
   .imageThird::before {
@@ -149,35 +164,100 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Dark tint color with transparency */
-    opacity: 0; /* Initially transparent */
-    transition: opacity 0.3s ease-in-out; /* Add transition property for smooth effect */
+    background-color: transparent; /* Dark tint color with transparency */
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    transition: background-color 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, -webkit-backdrop-filter 0.3s ease-in-out;
+
   }
   
   .imageThird:hover::before {
-    opacity: 1; /* Show the dark tint on hover */
+    background-color: rgba(0, 0, 0, 0.2); /* Dark tint color with transparency */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  .imageThirdText {
+    position: absolute;
+    top: 50%;
+    bottom: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 90%;
   }
 
+  
+  
+  .imageFourth {
+    background-image: url("../../Assets/cushion.jpg");
+    height: 100%;
+    width: 100%;
+    flex-direction: row;
+    display: flex;
+    align-items: center;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    position: relative; /* Add position relative to create stacking context for pseudo-element */
+    clip-path: polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%);
+  }
+  
+  .imageFourth::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent; /* Dark tint color with transparency */
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    transition: background-color 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, -webkit-backdrop-filter 0.3s ease-in-out;
+
+  }
+  
+  .imageFourth:hover::before {
+    background-color: rgba(0, 0, 0, 0.2); /* Dark tint color with transparency */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  .imageFourthText {
+    position: absolute;
+    top: 50%;
+    bottom: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 90%;
+  }
 
   .secondaryButton {
 
-    border: none;
+    border: 1px solid transparent;
     padding: 15px;
     min-width: 10rem;
     min-height: 2rem;
     font-size: large;
-    color: black;
-    background-color: rgb(255, 255, 255);
+    color: #fff;
+    background-color: #1e1e1e;
     cursor: pointer;
     border: none;
     border-radius: 0px;
+    box-shadow: inset 2px 3px 8px rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out;
   }
   
   .secondaryButton:hover {
-    background-color: transparent;
+    background-color: rgba(30, 30, 30, 0.5);
     color: white;
-    border: 1px solid white;
-    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out;
   }
 
 

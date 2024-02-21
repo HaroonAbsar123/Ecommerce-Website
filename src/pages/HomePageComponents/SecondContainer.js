@@ -69,7 +69,7 @@ function SecondContainer() {
               key={item.id}
               category={item.category}
               id={item.id}
-              image={item.colors[0]?.images[0]}
+              item={item}
               title={item.title}
               price={item.colors[0]?.sizes[0]?.price}
               discountedPrice={item.colors[0]?.sizes[0]?.discountedPrice}
