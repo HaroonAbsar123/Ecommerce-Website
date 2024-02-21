@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Header from "./components/Header";
 import Home from "./pages/HomePageComponents/Home";
 import Blog from "./pages/Blog";
@@ -23,15 +23,16 @@ import './App.css';
 import NavBar from "./components/Navbar";
 import Register from "./pages/Register/Register";
 import toast, { Toaster } from 'react-hot-toast';
+import ProductContext from "./Context/ProductContext";
 
 
 function App() {
-
+  const {isUserLoggedIn} = useContext(ProductContext)
   const [chatClosed, setChatClosed] = useState(true)
 
   return (
     <React.Fragment>
-      <ProductContextProvider>
+      {/* <ProductContextProvider> */}
       <Toaster />
       <NavBar />
       <ScrollToTop />
@@ -39,8 +40,9 @@ function App() {
         <Route path="/" Component={Home} />
         <Route path="/collection" Component={Collection} />
         <Route path="/collection/:category" exact Component={Category} />
+        {isUserLoggedIn && 
         <Route path="/profile" Component={Profile} />
-
+      }
 
         <Route path="/collection/:category/:id" Component={ProductPage} />
 
@@ -50,6 +52,8 @@ function App() {
 
         <Route path="/contact" Component={ContactUs} />
         <Route path="/blog-1" Component={Blog} />
+        
+        <Route path="*" Component={Home} />
       </Routes>
     
       {chatClosed ? (
@@ -72,7 +76,7 @@ function App() {
         </div>
       )}
       
-      </ProductContextProvider>
+      {/* </ProductContextProvider> */}
       </React.Fragment>
   );
 }

@@ -46,7 +46,7 @@ function Second() {
 
   var settings = {
 
-    dots: true,
+    dots: false,
     infinite: true,
     slidesToShow: slidesToShow,
     slidesToScroll: 1,

@@ -18,6 +18,7 @@ function Two() {
   const [minPrice, setMinPrice] = useState(0);
   const [maxPrice, setMaxPrice] = useState(0);
   const navigate=useNavigate();
+  const [loadingItems, setLoadingItems] = useState(true)
 
 
 
@@ -28,76 +29,58 @@ function Two() {
 
   const {category} = useParams();
 
-  const {products} = useContext(ProductContext);
+  const {products, userDetails} = useContext(ProductContext);
 
 
-    
-
-
-
-
-  // Helper functions to get the minimum and maximum price from the Products array
-  // function getMinPrice(products) {
-  //   if (products.length > 0) {
-  //   return Math.min(
-  //     ...products?.map(
-  //       (product) => product?.discountedPrice || product?.price
-  //     )
-  //   );
-  // } else {
-  //   return 0;
-  // }
-  // }
-
-  // function getMaxPrice(products) {
-  //   if (products.length > 0) {
-  //     return Math.max(
-  //       ...products.map(
-  //         (product) => product?.discountedPrice || product?.price
-  //       )
-  //     );
-  //   } else {
-  //     return 0;
-  //   }
-  // }
   
 
   useEffect(() => {
     let currentArray = [];
+    if(category === "hot" ||category === "wishlist" || category === "sofas" ||category === "armchairs" ||category === "lamps" ||category === "cushions"){
     if (category === 'hot') {
+      currentArray = [];
       for (const cat in products) {
         if (Array.isArray(products[cat])) {
-          // Find the products with hot === true in the current category
           const categoryProducts = products[cat].filter((item) => item?.hot === true);
-          // Add the hot products of the current category to the array
           currentArray.push(...categoryProducts);
+        }
+      }
+    } else if (category === 'wishlist') {
+      currentArray = [];
+      if (userDetails) {
+        for (const categoryKey in products) {
+          const categoryItems = products[categoryKey];
+          for (const categoryItem of categoryItems) {
+            if (userDetails.wishlist.includes(categoryItem.id)) {
+              currentArray.push(categoryItem);
+            }
+          }
         }
       }
     } else {
       currentArray = products[category];
     }
-  
-    // Check if currentArray is empty and category is not in products
-    if (!currentArray || currentArray.length === 0) {
-      setCurremtItems([]);
-      return;
-    }
+  }
   
     // Convert object to array
-    currentArray = Object.values(currentArray);
-  
-    console.log("currentArray", currentArray);
-  
-    setCurremtItems([]);
-    setCurremtItems(currentArray);
+    const newArray = Object.values(currentArray);
   
     // Update the min and max prices whenever the Products or category changes
-    // setMinPrice(getMinPrice(currentArray));
-    // setMaxPrice(getMaxPrice(currentArray));
-  
     setMinPrice(0);
     setMaxPrice(10000);
+  
+    const timeout = setTimeout(() => {
+      setCurremtItems([]);
+      setLoadingItems(true)
+      setTimeout(() => {
+        setCurremtItems(newArray);
+        setLoadingItems(false)
+      }, 1000);
+    }, 0);
+    return () => clearTimeout(timeout);
   }, [category, products]);
+  
+  
   
   
 
@@ -130,7 +113,7 @@ function Two() {
           // )}
 
           Products={currentItems}
-
+          loadingItems={loadingItems}
           category={category}
         />
       </div>
@@ -160,6 +143,15 @@ function Two() {
               >
                Hot Products
               </Button>
+              {
+                userDetails &&
+                <Button
+                onClick={() => navigate("/collection/wishlist")}
+                sx={{ color: '#1e1e1e', width: '100%',fontSize: '1rem', background: '#fff', marginBottom: '5px'   }}
+              >
+               Wish List
+              </Button>
+              }
 
               <Button
                 onClick={() => navigate("/collection/sofas")}
@@ -251,6 +243,15 @@ function Two() {
               >
                Hot Products
               </Button>
+              {
+                userDetails &&
+                <Button
+                onClick={() => navigate("/collection/wishlist")}
+                sx={{ color: '#1e1e1e', width: '100%',fontSize: '1rem', background: '#fff', marginBottom: '5px'   }}
+              >
+               Wish List
+              </Button>
+              }
 
               <Button
                 onClick={() => navigate("/collection/sofas")}
@@ -281,7 +282,7 @@ function Two() {
 
 </div>
 </AccordionDetails>
-</Accordion>
+  </Accordion>
 
 
 

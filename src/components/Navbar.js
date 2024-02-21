@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import logo from "../Assets/logo.png";
+import MobileLogo from "../Assets/logo - Copy.png";
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar';
@@ -28,9 +29,11 @@ import Dialog from '@mui/material/Dialog';
 import { toast } from 'react-hot-toast';
 import CustomModal from './CustomModal';
 import LoginLogo from "../Assets/logo - Copy.png";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 const pages = ['Home', 'Collection', 'Contact'];
-const settings = ['Profile', 'Cart', 'Logout'];
+const settings = ['Profile', 'wishlist', 'Cart', 'Logout'];
 
 function Navbar() {
   
@@ -107,6 +110,8 @@ function Navbar() {
     if (item !== "check") {
       if (item === "Logout") {
         setLogoutModal(true)
+      } else if(item === "wishlist"){
+        navigate(`/collection/${item.toLowerCase()}`);
       } else {
         navigate(`/${item.toLowerCase()}`);
       }
@@ -181,7 +186,7 @@ function Navbar() {
           {isMobile && 
           <div style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
         <NavLink to={"/"}>
-              <img src={logo} alt="logo" style={{margin: '10px', maxHeight: '30px', marginRight: '20px'}}/>
+              <img src={logo} alt="logo" style={{margin: '10px', maxHeight: '30px'}}/>
             </NavLink>
             </div>
             }
@@ -200,40 +205,59 @@ function Navbar() {
 
               {isUserLoggedIn ?
               
-              <Box sx={{ flexGrow: 0 }}>
-              <IconButton onClick={() => {navigate("/cart")}} style={{marginRight: '5px', fontSize: '15px'}} color="#1e1e1e" aria-label="add to shopping cart">
-                {totalItems}
-                <AddShoppingCartIcon />
+              <div style={{flex: 1, display: 'flex', flexWrap: 'nowrap', gap: '5px', alignItems: 'center', justifyContent: 'flex-end'}} >
+              <IconButton onClick={() => {navigate("collection/wishlist")}} style={{marginRight: isMobile? "2px" : '10px',fontSize: isMobile ? '20px' : '25px'}} color="#1e1e1e" aria-label="Shopping Cart">
+                {/* {totalItems} */}
+                <FontAwesomeIcon icon={faHeart} id='wishlist' style={{position: 'relative'}} />
+                <div style={{
+                  top: -5,
+                  right: -5,
+                  position: 'absolute',
+                  fontSize: isMobile? '10px' : '12px',
+                  padding: isMobile? '2px' : '3px',
+                  borderRadius: '50%',
+                  background: '#fff',
+                  minWidth: '12px',
+                  border: '1px solid darkgrey',
+                  color: '#1e1e1e',
+                  aspectRatio: '1/1',
+                  display: 'flex', justifyContent: 'center', alignItems: 'center',
+                  boxShadow: '0px 5px 10px rgba(0,0,0,0.2)'
+                }}>
+                    {userDetails?.wishlist ? userDetails?.wishlist?.length : 0}
+                </div>
               </IconButton>
+
+              <IconButton onClick={() => {navigate("/cart")}} style={{marginRight: '10px',fontSize: isMobile ? '20px' : '25px'}} color="#1e1e1e" aria-label="Shopping Cart">
+                {/* {totalItems} */}
+                <FontAwesomeIcon icon={faShoppingCart} id='cart-icon' style={{position: 'relative'}} />
+                <div style={{
+                  top: -5,
+                  right: -5,
+                  position: 'absolute',
+                  fontSize: isMobile? '10px' : '12px',
+                  padding: isMobile? '2px' : '3px',
+                  borderRadius: '50%',
+                  background: '#fff',
+                  minWidth: '12px',
+                  border: '1px solid darkgrey',
+                  color: '#1e1e1e',
+                  aspectRatio: '1/1',
+                  display: 'flex', justifyContent: 'center', alignItems: 'center',
+                  boxShadow: '0px 5px 10px rgba(0,0,0,0.2)'
+                }}>
+                    {totalItems}
+                </div>
+              </IconButton>
+
+ 
             
               <Tooltip title="Profile options">
                 <IconButton onClick={() => {setOpenProfileModal(true)}} sx={{ p: 0 }}>
                   <Avatar alt="User" src={userDetails.image} />
                 </IconButton>
               </Tooltip>
-              {/* <Menu
-                sx={{ mt: '45px' }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={() => handleCloseUserMenu("check")}
-              >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu> */}
-            </Box>
+            </div>
             
 
           :

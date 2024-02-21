@@ -11,20 +11,11 @@ import Stack from '@mui/material/Stack';
 import HomeProductCard from "./HomeProductCard";
 
 
-function ListBox({ Products, category }) {
+function ListBox({ Products, category, loadingItems }) {
 
   const itemsPerPage = 8;
   const [currentPage, setCurrentPage] = useState(1);
-  
-    if (!Products || Products.length === 0) {
-      return (
-        <div className={classes.mainContainer}>
-          <div className={classes.heading}>
-            No Products Available
-          </div>
-        </div>
-      );
-    }
+
   
     const handleChangePage = (event, newPage) => {
       setCurrentPage(newPage);
@@ -49,15 +40,34 @@ function ListBox({ Products, category }) {
               price={item.colors[0]?.sizes[0]?.price}
               discountedPrice={item.colors[0]?.sizes[0]?.discountedPrice} />
             ))}
+
           </div>
+          {loadingItems ? 
+            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1}}>
+            <div class="blackLoader"></div>
+         </div>
+          :
+          <>
+          {
+            Products.length === 0 && 
+            <div style={{flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center'}} className={classes.mainContainer}>
+          <div className={classes.heading}>
+            No Products Available
+          </div>
+        </div>
+          }
+          </>
+        }
                 </div>
-<div style={{flex: 1, alignItems: 'center', justifyContent: 'center', display: 'flex', marginTop: '1rem'}}>
+                {Products.length > 0 && 
+<div style={{flex: 1, alignItems: 'center', justifyContent: 'center', display: 'flex',  marginBottom: '2rem'}}>
 <Stack spacing={2}>
       <Pagination  count={Math.ceil(Products?.length / itemsPerPage)}
           page={currentPage}
           onChange={handleChangePage} />
     </Stack>
     </div>
+    }
       </div>
     );
   };

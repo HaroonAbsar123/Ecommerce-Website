@@ -1,0 +1,313 @@
+/* Login.module.css */
+
+/* Container */
+
+
+.backgroundColor{
+  background: linear-gradient(to left, rgb(255, 244, 236), bisque);
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 0.1rem;
+}
+
+.loginform {
+  min-width: 300px;
+  height: 100%;
+  /* margin: 50px auto;
+  background-color: #fff; */
+
+}
+
+/* Header */
+.headerTitle {
+  text-align: center;
+  padding: 2rem 0;
+  margin: 0;
+  font-size: 2rem;
+}
+
+/* Form */
+.row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 2rem;
+  width: 100%;
+}
+
+.rowRadio label {
+  color: rgba(61, 61, 61, 0.9);
+}
+
+.rowRadio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 2rem;
+  max-width: 100%;
+}
+
+.row label {
+  align-self: start;
+  padding-left: 4.5rem;
+  padding-bottom: 0.5rem;
+  color: rgba(187, 187, 187, 0.9);
+}
+
+.rowButton {
+  border-radius: 15px;
+  width: 100%;
+  font-size: 1.3rem;
+  color: white;
+  font-weight: 700;
+  background: rgb(255, 255, 255);
+  background: linear-gradient(109.6deg, rgb(192, 92, 87) 11.3%, rgb(145, 45, 39) 91.1%);
+  border: 0px;
+  cursor: pointer;
+  transition: opacity 0.25s ease-out;
+}
+
+.rowButton:hover {
+  opacity: 0.8;
+}
+
+/* Buttons */
+.button {
+  padding-bottom: 1.5rem;
+}
+
+/* Social Icons */
+.facebookIcon {
+  background-image: url("https://upload.wikimedia.org/wikipedia/en/0/04/Facebook_f_logo_%282021%29.svg");
+  background-repeat: no-repeat;
+  width: 3rem;
+  height: 3rem;
+}
+
+.twitterIcon {
+  background-image: url("https://image.flaticon.com/icons/svg/145/145812.svg");
+  background-repeat: no-repeat;
+  width: 3rem;
+  height: 3rem;
+}
+
+.googleIcon {
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/a/a5/Google_Chrome_icon_%28September_2014%29.svg");
+  background-repeat: no-repeat;
+  width: 3rem;
+  height: 3rem;
+}
+
+.iconGroup {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+  background-color: #ccc;
+}
+
+.iconGroup a {
+  margin: 0 0.6rem;
+}
+
+/* Alternative Login Methods */
+.alternativeLogin {
+  text-align: center;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  background-color: #ccc;
+  width: 100%
+}
+
+
+.mainProductImage{
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  filter: drop-shadow(15px, 5px, 5px, #1e1e1e);
+  transition: transform 0.3s ease-in-out;
+  margin-bottom: 2rem;
+  margin-top: 2rem;
+}
+
+.mainProductImage:hover{
+  transform: scale(1.05);
+
+}
+
+
+/* ____________________________________________________ */
+
+
+
+.mainImage{
+  background: linear-gradient(to left, rgb(231, 244, 255), white);
+  flex: 1;
+  padding-top: 5rem;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+.mainHeading{
+  font-size: 5rem;
+  padding-top: 2rem;
+  padding-left: 2rem;
+}
+
+
+@media (max-width: 900px) {
+  .mainHeading{
+    font-size: 5rem;
+    padding-top: 0rem;
+    padding-left: 0rem;
+  }
+}
+
+@media (max-width: 650px) {
+  .mainImage{
+    padding: 10px;
+  }
+}
+
+.mainImageComponent{
+  flex: 1;
+  padding-top: 3rem;
+}
+
+.mainProductImage{
+  height: auto;
+  max-height: 30rem;
+  width: 80%;
+  object-fit: contain;
+}
+
+.mainImageText{
+  padding: 5rem;
+  padding-top: 1rem;
+}
+
+
+
+.contactPage {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .header {
+    background-color: #1f42a0;
+    color: #ffffff;
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+  }
+  
+  .header h1 {
+    font-size: 2rem;
+  }
+  
+  .contactContent {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    max-width: 1500px;
+  }
+  
+  .contactInfo,
+  .contactForm,
+  .contactFormSecond {
+    flex: 1;
+    padding: 2rem;
+    padding-bottom: 0;
+  }
+  
+  .contactForm {
+    text-align: left;
+  }
+  .contactFormSecond {
+    text-align: left;
+  }
+  
+  .formGroup {
+    margin-bottom: 1rem;
+  }
+  
+  .formGroupLabel {
+    display: block;
+    font-weight: bold;
+  }
+  
+  .formGroup input,
+  .formGroup textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+  .formGroup textarea {
+    resize: vertical;
+  }
+  
+  
+  .contactImage {
+    width: 100%;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .radioGroup {
+    display: flex;
+    align-items: center;
+    margin: 0.5rem 0;
+  }
+  
+  .radioGroup input[type="radio"] {
+    margin-right: 0.5rem;
+  }
+
+  .additional{
+    background-color: #ffffff;
+    /* background-color: #fcedea; */
+    padding: 1rem;
+    margin: 1rem;
+    margin-top: 3rem;
+  }
+  
+  /* Add responsive styles for the contact form */
+  @media (max-width: 768px) {
+    .contactContent {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .contactForm {
+      margin-top: 2rem;
+      width: 90vw;
+      margin-bottom: 0rem;
+    }
+
+    .contactFormSecond {
+        margin-top: 0rem;
+        width: 90vw;
+        height: 100%;
+        background-color: #303030;
+      }
+  
+    .responsiveStudentsImage {
+      max-width: 80%;
+      height: auto;
+    }
+  
+    .formContainer {
+      width: 100%;
+    }
+  
+    .contactForm {
+      text-align: center;
+    }
+  }
+  

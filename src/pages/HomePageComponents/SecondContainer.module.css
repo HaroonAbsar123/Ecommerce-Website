@@ -39,7 +39,7 @@ flex: 1
   position: absolute;
   top: 50%;
   left: 0;
-  transform: translateY(-50%);
+  transform: translateX(0%) translateY(-50%);
   width: 70%;
   height: 60%;
   background-image: url("../../Assets/Home2.png");
@@ -47,8 +47,12 @@ flex: 1
   background-position: center center;
   background-size: contain;
   z-index: 2;
+  transition: transform 0.3s ease;
 }
 
+.firstHalfContainer:hover::before {
+  transform: translateX(5%) translateY(-50%);
+}
   
   .firstHalfContainer::after {
     content: "";
@@ -58,15 +62,23 @@ flex: 1
     right: 0;
     width: 60%;
     height: 100%;
+    transform: translateX(0%) translateY(0%);
     background-image: url("../../Assets/Home1.png");
     background-repeat: no-repeat;
     background-position: left bottom;
     background-size: cover;
     z-index: 1;
+    transition: transform 0.3s ease;
+  }
+
+  .firstHalfContainer:hover::after {
+    transform: translateX(-5%) translateY(0%);
   }
   
-
-
+  /* .firstHalfContainer:hover::after {
+    background-size: 110% 110%;
+  } 
+  */
 
 
 

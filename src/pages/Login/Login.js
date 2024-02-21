@@ -808,12 +808,9 @@ cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
            <div>
              <img
                style={{
-                 maxWidth: "100%",
-                 maxHeight: "100%",
-                 objectFit: "contain",
-                 filter: 'drop-shadow(15px, 5px, 5px, #1e1e1e)',
                  display: imageLoaded ? "inherit" : 'none',
                }}
+               className={styles.mainProductImage}
                src={LoginImage}
                alt=""
                onLoad={() => setImageLoaded(true)}

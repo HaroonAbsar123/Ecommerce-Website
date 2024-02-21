@@ -28,12 +28,13 @@ function srcset(image, size, rows = 1, cols = 1) {
 export default function Third() {
   return (
     <div className={styles.container}>
-      <div style={{flex: 1}}>
+<div style={{ flex: 1, overflow: 'hidden', height: '25rem' }}>
     <ImageList
-      sx={{ width: "100%", height: "25rem" }}
+      sx={{ width: "100%", height: '25rem'}}
+      style={{overflow: 'hidden',}}
       variant="quilted"
       cols={4}
-      rowHeight={300}
+      rowHeight={200}
     >
       {itemData.map((item) => (
         <ImageListItem key={item.img} cols={item.cols || 1} rows={item.rows || 1}>
@@ -45,7 +46,8 @@ export default function Third() {
         </ImageListItem>
       ))}
     </ImageList>
-    </div>
+</div>
+
 
     <div className={styles.innerContainer}>
       <div style={{flex: 1}}>

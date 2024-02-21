@@ -1,12 +1,9 @@
 .mainContainer{
     flex: 1;
     height: max-content;
-    /* animation: signatureEffect 1s ease-out; */
+    position: relative;
     background: linear-gradient(to left, rgb(255, 244, 236), bisque);
-    padding-top: 5rem;
-    padding-right: 3rem;
-    padding-left: 3rem;
-    padding-bottom: 3rem;
+    overflow: hidden;
 }
 
 
@@ -16,13 +13,21 @@
     text-align: center;
     flex-direction: row;
     display: flex;
-    align-items: center;
+    align-items: stretch;
+    justify-content: center;
 }
 
 .innerHeading{
   flex: 1;
   text-align: left;
-  padding: 10px
+  display: flex;
+  align-items: center;
+  
+    /* animation: signatureEffect 1s ease-out; */
+    padding-top: 5rem;
+    padding-right: 3rem;
+    padding-left: 3rem;
+    padding-bottom: 3rem;
 }
 
 @media (max-width: 1300px) {
@@ -70,15 +75,17 @@
     display: grid;
     grid-template-rows: repeat(2, 1fr);
     flex: 1;
-    row-gap: 1rem;
-    justify-content: center;
-
+    row-gap: 10px;
+    justify-content: flex-end;
+    background-color: #ccc;
   }
   
   .column {
-    height: 25rem;
+    /* height: 25rem; */
     width: 25rem;
     overflow: hidden;
+    background-color: #1e1e1e;
+    aspect-ratio: 1/1;
   }
 
   .image{
@@ -90,29 +97,31 @@
   .headingSecond{
     margin-top: 0rem;
     font-size: 4rem;
+    filter: drop-shadow(0px 5px 5px rgba(0,0,0,1));
   }
 
 
   .secondaryButton {
 
-    border: none;
+    border: 1px solid transparent;
     padding: 15px;
     min-width: 10rem;
     min-height: 2rem;
     font-size: large;
-    color: black;
-    background-color: rgb(255, 255, 255);
+    color: #fff;
+    background-color: #1e1e1e;
     cursor: pointer;
     border: none;
     border-radius: 0px;
+    box-shadow: inset 2px 3px 8px rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out;
   }
   
   .secondaryButton:hover {
-    background-color: transparent;
+    background-color: rgba(30, 30, 30, 0.5);
     color: white;
-    border: 1px solid white;
-    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s ease-in-out;
   }
+
 
   @media (max-width: 1200px) {
     .column {
@@ -204,8 +213,9 @@
   }
 
   .imageFirst {
-
+    /* background-image: url("../../Assets/Home6.png"); */
     height: 100%;
+    /* aspect-ratio: 2/3; */
     width: 100%;
     flex-direction: row;
     display: flex;
@@ -213,7 +223,9 @@
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
-    position: relative; /* Add position relative to create stacking context for pseudo-element */
+    position: relative;
+    clip-path: polygon(83% 0, 100% 50%, 83% 100%, 0% 100%, 13% 52%, 0% 0%);
+    overflow: hidden;
   }
   
   .imageFirst::before {
@@ -223,13 +235,29 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Dark tint color with transparency */
-    opacity: 0; /* Initially transparent */
-    transition: opacity 0.3s ease-in-out; /* Add transition property for smooth effect */
+    background-color: transparent;
+    transition: background-color 0.3s ease-in-out, backdrop-filter 0.3s ease-in-out, -webkit-backdrop-filter 0.3s ease-in-out;
+
+
   }
   
   .imageFirst:hover::before {
-    opacity: 1; /* Show the dark tint on hover */
+    background-color: rgba(0, 0, 0, 0.2); /* Dark tint color with transparency */
+
+  }
+
+  
+  .imageFirstText {
+    position: absolute;
+    top: 50%;
+    bottom: 20%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: bold;
+    width: 90%;
   }
   
   .imageFirstText {

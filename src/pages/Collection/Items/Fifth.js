@@ -17,10 +17,10 @@ import { useNavigate } from "react-router-dom";
 
 function Fifth(){
 
-    const [firstHovered, setFirstHovered] = useState(false);
-    const [secondHovered, setSecondHovered] = useState(false);
-    const [thirdHovered, setThirdHovered] = useState(false);
-    const [fourthHovered, setfourthHovered] = useState(false);
+    const [firstHovered, setFirstHovered] = useState(true);
+    const [secondHovered, setSecondHovered] = useState(true);
+    const [thirdHovered, setThirdHovered] = useState(true);
+    const [fourthHovered, setfourthHovered] = useState(true);
 
     
     const navigate=useNavigate();
@@ -29,32 +29,34 @@ function Fifth(){
         setFirstHovered(true);
     };
     function firstHoverExit(){
-        setFirstHovered(false);
+        // setFirstHovered(false);
     };
     function secondHoverEnter(){
         setSecondHovered(true);
     };
     function secondHoverExit(){
-        setSecondHovered(false);
+        // setSecondHovered(false);
     };
     function thirdHoverEnter(){
         setThirdHovered(true);
     };
     function thirdHoverExit(){
-        setThirdHovered(false);
+        // setThirdHovered(false);
     };
 
     function fourthHoverEnter(){
         setfourthHovered(true);
     };
     function fourthHoverExit(){
-        setfourthHovered(false);
+        // setfourthHovered(false);
     };
 
     const [isMobile, setIsMobile] = useState(false);
+    const [remPadding, setRemPadding] = useState(false);
     useEffect(() => {
       const handleResize = () => {
         setIsMobile(window.innerWidth < 900);
+        setRemPadding(window.innerWidth < 1300)
       };
   
       // Set initial value
@@ -78,16 +80,21 @@ function Fifth(){
 
 
 
-                    <div className={classes.innerHeading}>
+                    <div className={classes.innerHeading} style={{position: 'relative'}}>
+                        <div style={{display: 'flex', flexDirection: 'column', flex: 1}}>
                     <img src={Logo} alt="logo" className={classes.image}/>
                     <h2 className={classes.heading}>Premium Collections</h2>
                     <p className="para">Molestie vitae massa felis, aliquam lectus at. Ultricies et, quis sit fermentum aliquam et.</p>
                     <button onClick={() => {navigate("/contact")}} className="mainButton">Contact Us</button>
                     </div>
+                    
+                    </div>
 
 
-                <div style={{flex: 2, display: 'flex', justifyContent:'center', alignItems: 'center', flexWrap: isMobile? "wrap" : 'nowrap', gap: '1rem'}}>
-                        <div className={classes.columnsContainer}>
+                <div style={{transform: remPadding ? "none" : 'skewX(-10deg)' ,overflow: 'hidden' ,flex: 1, display: 'flex', justifyContent:'center', alignItems: 'center', flexWrap: isMobile? "wrap" : 'nowrap', background: '#1e1e1e', paddingTop: remPadding ? "1rem" : '3rem' }}>
+                       
+                        <div style={{display: 'flex',flexDirection: 'column', transform: remPadding ? "none" : 'skewX(10deg)' }} >
+
       <div className={classes.column}>
       
         <div className={classes.imageFirst} style={{ backgroundImage: `url(${Image1})` }} onMouseEnter={firstHoverEnter} onMouseLeave={firstHoverExit}>
@@ -125,7 +132,8 @@ function Fifth(){
 
 
 
-      <div className={classes.columnsContainer}>
+      <div style={{display: 'flex', justifyContent:'center', alignItems: 'center', flexDirection: 'column', transform: remPadding ? "none" : 'skewX(10deg)'}} >
+
       <div className={classes.column}>
       <div className={classes.imageFirst} style={{ backgroundImage: `url(${Image3})` }} onMouseEnter={thirdHoverEnter} onMouseLeave={thirdHoverExit}>
       {
@@ -163,7 +171,11 @@ function Fifth(){
 
 
                 </div>
-
+                <div class="custom-shape-divider-bottom-1708534212">
+    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <path d="M892.25 114.72L0 0 0 120 1200 120 1200 0 892.25 114.72z" class="shape-fill"></path>
+    </svg>
+</div>
         </div>
     );
 }

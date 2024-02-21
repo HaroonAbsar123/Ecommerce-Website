@@ -3,13 +3,13 @@ import classes from "./HomeProductCard.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 
-import dummyImage from "../../../../Assets/displayImage.png";
+import dummyImage from "../../../Assets/displayImage.png";
 import { IconButton } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
-import ProductContext from "../../../../Context/ProductContext";
+import ProductContext from "../../../Context/ProductContext";
 import { toast } from "react-hot-toast";
-import { db } from "../../../../firebase";
+import { db } from "../../../firebase";
 import { getDocs, collection, where, query, onSnapshot, doc, updateDoc, getDoc, setDoc, orderBy } from "firebase/firestore";
 
 function getAllImages(item) {

@@ -66,33 +66,48 @@ export default function ContactUs() {
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "center",
-            alignItems: "center",
+            alignItems: 'stretch',
             flexDirection: flexSet ? "column" : "row",
             flex: 1,
             gap: "20px",
-            paddingLeft: isMobile ? "1rem" : "3rem",
-            paddingRight: isMobile ? "1rem" : "3rem",
+            padding: isMobile ? "10px" : "20px",
+              boxShadow: "0 6px 12px rgba(0, 0, 0, 0.1)",
+              background: "rgba(255,255,255, 0.7)",
+              backdropFilter: "blur(10px)", // Adjust the blur intensity as needed
+              WebkitBackdropFilter: "blur(10px)",
+              borderRadius: "10px",
           }}
         >
-          <div style={{ flex: 1 }}>
+          <div style={{  
+              padding: "0.5rem",
+              marginTop: "0px",
+              flex: 1,
+              boxShadow: "0 6px 12px rgba(0, 0, 0, 0.4)",
+              background: "rgba(30, 30, 30, 0.9)",
+              backdropFilter: "blur(10px)", // Adjust the blur intensity as needed
+              WebkitBackdropFilter: "blur(10px)", // For Safari support,
+              padding: "10px",
+              borderRadius: "10px",
+              color: '#fff'
+              }}>
             <div
               style={{
-                fontSize: isMobile ? "1.5rem" : "3rem",
+                fontSize: isMobile ? "1.5rem" : "2.5rem",
                 marginBottom: "1rem",
               }}
             >
               <b>Get in Touch</b>
             </div>
 
-            <div style={{ fontSize: isMobile ? "1.2rem" : "1.3rem" }}>
-              <b>Email: intellicart@outlook.com</b>
+            <div style={{ fontSize: isMobile ? "1rem" : "1.2rem" }}>
+              Email: intellicart@outlook.com
             </div>
 
-            <div style={{ fontSize: isMobile ? "1.2rem" : "1.3rem" }}>
-              <b>Phone: +92 333 5469811</b>
+            <div style={{ fontSize: isMobile ? "1rem" : "1.2rem" }}>
+              Phone: +92 333 5469811
             </div>
 
-            <p style={{ fontSize: isMobile ? "1rem" : "1.3rem" }}>
+            <p style={{ fontSize: isMobile ? "1rem" : "1.2rem" }}>
               If you have any questions, suggestions, or feedback, please feel
               free to reach out to us. Our team is dedicated to providing you
               with the best shopping experience possible. Whether it's a product
@@ -105,11 +120,6 @@ export default function ContactUs() {
               padding: "0.5rem",
               marginTop: "0px",
               flex: 1,
-              height: "max-content",
-              boxShadow: "0 6px 12px rgba(0, 0, 0, 0.1)",
-              background: "rgba(255,255,255, 0.7)",
-              backdropFilter: "blur(10px)", // Adjust the blur intensity as needed
-              WebkitBackdropFilter: "blur(10px)", // For Safari support,
               padding: "10px",
               borderRadius: "10px",
             }}

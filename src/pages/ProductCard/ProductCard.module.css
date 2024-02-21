@@ -10,6 +10,7 @@
     aspect-ratio:  2 / 2.5;
     position: relative;
     z-index: 1;
+    cursor: pointer;
   }
 
   @media (max-width: 1100px) {

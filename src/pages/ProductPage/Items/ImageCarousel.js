@@ -160,6 +160,10 @@ function ImageCarousel({ Product, colorIndex, setColorIndex  }) {
         alt={`Product ${index + 1}`}
         className={`${imageLoaded ? classes.showImage : classes.hideImage}`}
         onLoad={handleImageLoaded}
+        style={{
+          width: '100%',
+          aspectRatio: '2/3'
+        }}
       />
     </div>
   ))}

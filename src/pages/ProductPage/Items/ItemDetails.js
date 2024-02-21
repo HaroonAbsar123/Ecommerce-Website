@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import classes from "./ItemDetails.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faHeart, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { faMinus } from "@fortawesome/free-solid-svg-icons";
 import { faTruck } from "@fortawesome/free-solid-svg-icons";
 import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
@@ -10,6 +10,10 @@ import ProductContext from "../../../Context/ProductContext";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button, IconButton } from "@mui/material";
 import toast from "react-hot-toast";
+import RegularHeart from '../../../Assets/heartRegular.svg';
+import { db } from "../../../firebase";
+import { getDocs, collection, where, query, onSnapshot, doc, updateDoc, getDoc, setDoc, orderBy } from "firebase/firestore";
+
 
 function ItemDetails({ Product, colorIndex, setColorIndex }) {
   const [selectedColor, setSelectedColor] = useState(
@@ -23,27 +27,146 @@ function ItemDetails({ Product, colorIndex, setColorIndex }) {
     useContext(ProductContext);
   const [selectedProduct, setSelectedProduct] = useState({});
   const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const [heartTrue, setHeartTrue] = useState(false);
   // const [isOutOfStock, setIsOutOfStock] = useState(false);
+  
 
+
+  const handleWishlistClick = async (e) => {
+    e.preventDefault();
+    setHeartTrue(true);
+  
+    if (userDetails) {
+      const userListRef = collection(db, 'userList');
+      const userDocQuery = query(userListRef, where('userId', '==', userDetails.userId));
+  
+      try {
+        const querySnapshot = await getDocs(userDocQuery);
+        if (querySnapshot.size === 1) {
+          const userDocRef = doc(db, 'userList', querySnapshot.docs[0].id);
+          const docSnapshot = await getDoc(userDocRef);
+  
+          if (docSnapshot.exists()) {
+            const userData = docSnapshot.data();
+            let updatedWishlist=[];
+            if(userData.wishlist){
+           updatedWishlist = userData.wishlist?.includes(Product.id)
+              ? userData.wishlist
+              : [...userData.wishlist, Product.id];
+            } else {
+              updatedWishlist=[Product.id]
+            }
+            await updateDoc(userDocRef, { wishlist: updatedWishlist });
+          }
+  
+          // toast.success(`${item.title} added to wishlist`);
+          setHeartTrue(true);
+        } else {
+          throw new Error('User document not found in Firestore');
+        }
+      } catch (error) {
+        toast.error(`Error adding${Product.title} added to wishlist`);
+        setHeartTrue(false);
+      }
+    } else {
+      navigate("/login");
+    }
+  };
+  
+  const handleWishlistRemove = async (e) => {
+    e.preventDefault();
+    setHeartTrue(false);
+  
+    if (userDetails) {
+      const userListRef = collection(db, 'userList');
+      const userDocQuery = query(userListRef, where('userId', '==', userDetails.userId));
+  
+      try {
+        const querySnapshot = await getDocs(userDocQuery);
+        if (querySnapshot.size === 1) {
+          const userDocRef = doc(db, 'userList', querySnapshot.docs[0].id);
+          const docSnapshot = await getDoc(userDocRef);
+  
+          if (docSnapshot.exists()) {
+            const userData = docSnapshot.data();
+            let updatedWishlist = [];
+  
+            if (userData.wishlist) {
+              updatedWishlist = userData.wishlist?.filter((id) => id !== Product.id);
+            }
+  
+            await updateDoc(userDocRef, { wishlist: updatedWishlist });
+          }
+  
+          // toast.success(`${item.title} removed from wishlist`);
+          setHeartTrue(false);
+        } else {
+          throw new Error('User document not found in Firestore');
+        }
+      } catch (error) {
+        toast.error(`Error removing ${Product.title} from wishlist`);
+        setHeartTrue(true);
+      }
+    } else {
+      navigate("/login");
+    }
+  };
+  
+    
+  const checkWishlist = () => {
+    if(userDetails){
+      if (userDetails.wishlist?.includes(Product.id)) {
+        setHeartTrue(true);
+      }
+    }
+  };
+  
+  // Call the function when the component mounts
+  useEffect(() => {
+    checkWishlist();
+  }, []);
 
 
   const navigate = useNavigate();
 
   const updateURL = (color, size) => {
-    const url = new URL(window.location.href);
-    if (color) {
-        url.searchParams.set('color', color);
+    const urlParams = new URLSearchParams(location.search);
+
+
+    // Update color parameter if provided or append to existing
+    if (color!==null) {
+        urlParams.set('color', color);
     }
-    if (size) {
-        url.searchParams.set('size', size);
+
+    // Update size parameter if provided or append to existing
+    if (size!==null) {
+        urlParams.set('size', size);
     }
-    window.history.pushState({}, '', url);
+
+    const newUrl = `${location.pathname}?${urlParams.toString()}`;
+    window.history.replaceState(null, '', newUrl);
 };
 
+
+
+
+
+  const [color, setColor] = useState("");
+  const [size, setSize] = useState("")
+
   const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const color = searchParams.get('color')
-  const size  =searchParams.get('size')
+
+   useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const currColor = urlParams.get('color');
+    const currSize = urlParams.get('size');
+    if (currColor) {
+      setColor(currColor);
+    }
+    if (currSize) {
+      setSize(currSize);
+    }
+  }, [location]);
 
 
   const findColorIndex = (colorName) => {
@@ -61,10 +184,10 @@ useEffect(() => {
   const index = findColorIndex(color);
   if (index >= 0) {
       setColorIndex(index);
-      updateURL(color);
+      updateURL(color, selectedSize);
   } else {
       // toast(`${color} color not available`);
-      updateURL(Product.colors[0].name);
+      updateURL(Product.colors[0].name, selectedSize);
   }
 }, [color]);
 
@@ -77,14 +200,14 @@ const findSizeIndex = () => {
 
 useEffect(() => {
   const index = findSizeIndex();
-  console.log("SIZE INDEX", index)
+  // console.log("SIZE INDEX", index)
   if (index >= 0) {
       setSelectedSize(Product.colors[colorIndex].sizes[index].name);
-      updateURL(null, Product.colors[colorIndex].sizes[index].name);
+      updateURL(Product.colors[colorIndex].name, Product.colors[colorIndex].sizes[index].name);
   } else {
       const defaultSize = Product.colors[colorIndex].sizes[0].name;
       setSelectedSize(defaultSize);
-      updateURL(null, defaultSize);
+      updateURL(Product.colors[colorIndex].name, defaultSize);
       
   }
 }, [size, colorIndex]);
@@ -92,12 +215,12 @@ useEffect(() => {
 
 const handleColorChange = (color, index) => {
   setColorIndex(index);
-  updateURL(color);
+  updateURL(color, selectedSize);
 };
 
 const handleSizeChange = (size) => {
   setSelectedSize(size);
-  updateURL(null, size);
+  updateURL(selectedColor, size);
 };
 
 
@@ -358,7 +481,7 @@ const handleSizeChange = (size) => {
               <>
                 {maxQty<=selectedQuantity ? (
                   <>{selectedAvailability?.quantity} items in stock
-                  <span style={{ color: "red",  marginLeft: '5px' }}>
+                  <span style={{ color: "red",  marginLeft: '5px', fontSize: '1rem' }}><br/>
                     (Max stock quantity reached. Cart items included)
                   </span>
                   </>
@@ -369,7 +492,8 @@ const handleSizeChange = (size) => {
               </>
             )}
           </div>
-          <div className={classes.quantity}>
+          {/* PREVIOUS BUTTONS SETTING */}
+          {/* <div className={classes.quantity}>
             <div className={classes.quantityTitle}>
               <b>Quantity:</b> {selectedQuantity}
             </div>
@@ -449,8 +573,105 @@ const handleSizeChange = (size) => {
             disabled={isOutOfStock}
           >
             Buy Now
-          </Button>
+          </Button> */}
 
+<div className={classes.quantity}>
+            <div className={classes.quantityTitle}>
+              <b>Quantity:</b> {selectedQuantity}
+            </div>
+            <div style={{ display: "flex", alignItems: "center" }}>
+                <IconButton
+                  disabled={isOutOfStock}
+                  style={{
+                    backgroundColor: isOutOfStock ? "#ccc" : "#1e1e1e",
+                    color: "#fff",
+                    overflow: "hidden",
+                    fontSize: "1rem",
+                  }}
+                  onClick={() => {
+                    selectedQuantity > 1 &&
+                      setSelectedQuantity((prev) => prev - 1);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faMinus} size="1x" />
+                </IconButton>
+                <div
+                  style={{
+                    color: isOutOfStock ? "#ccc" : "#1e1e1e",
+                    marginLeft: "10px",
+                    marginRight: "10px",
+                  }}
+                >
+                  {selectedQuantity}
+                </div>
+                <IconButton
+                  disabled={
+                    isOutOfStock ||
+                        maxQty<=selectedQuantity
+                  }
+                  style={{
+                    backgroundColor:
+                      (isOutOfStock ||
+                        maxQty<=selectedQuantity)
+                        ? "#ccc"
+                        : "#1e1e1e",
+                    color: "#fff",
+                    overflow: "hidden",
+                    fontSize: "1rem",
+                  }}
+                  onClick={() => {
+                    setSelectedQuantity((prev) => prev + 1);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faPlus} size="1x" />
+                </IconButton>
+              </div>
+
+            <div className={classes.buttonsContainer} style={{marginTop: '1rem'}}>
+
+            {
+    heartTrue ?
+              <IconButton
+              onClick={handleWishlistRemove}
+                variant="outlined"
+                style={{
+                  color:"#1e1e1e",
+                  border: '1px solid #1e1e1e',
+                  borderRadius: '5px'
+                }}
+              >
+                <FontAwesomeIcon icon={faHeart} style={{height: '25px'}}/>
+              </IconButton>
+              :
+              <IconButton
+              onClick={handleWishlistClick}
+              variant="outlined"
+              style={{
+                color:"#1e1e1e",
+                border: '1px solid #1e1e1e',
+                borderRadius: '5px'
+              }}
+            >
+<img src={RegularHeart} alt="wishlist" height={'25px'} />
+            </IconButton>
+  }
+
+              <Button
+            style={{
+              backgroundColor: (isOutOfStock || maxQty<=0) ? "#ccc" : "#1e1e1e",
+              color: "#fff",
+              flex: 1,
+              width: "100%",
+            }}
+            variant="contained"
+            onClick={handleAddToCart}
+            disabled={isOutOfStock || maxQty<=0}
+          >
+            Add to Cart
+          </Button>
+            </div>
+          </div>
+          
           <div
             style={{
               borderBottom: "1px solid #ccc",
@@ -477,13 +698,13 @@ const handleSizeChange = (size) => {
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
-              justifyContent: "space-between",
+              justifyContent: "flex-end",
             }}
           >
-            <p className="para">
+            {/* <p className="para">
               <b>ID: </b>
               {Product.id}
-            </p>
+            </p> */}
             <p className="para">
               <b>Category: </b>
               {Product.category}

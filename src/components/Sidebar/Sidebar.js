@@ -72,6 +72,9 @@ const Sidebar = ({currentUrl, setCurrentUrl}) => {
               </Link>
             </li>
           )}
+          {userType==='admin' &&
+          <>
+          
           <li>
             <Link to="#" onClick={() => {setCurrentUrl("contactInformation")}} className={currentUrl === "contactInformation" ? "selected" : ""}>
               <FontAwesomeIcon icon={faTachometerAlt} />
@@ -106,7 +109,20 @@ const Sidebar = ({currentUrl, setCurrentUrl}) => {
               {(windowWidth > 768 || isSidebarExpanded) && <span style={{ marginLeft: "5px" }}>Add Admin</span>}
             </Link>
           </li>
+          </>
+          }
+                  {userType==='user' &&
+          <>
           
+          <li>
+            <Link to="#" onClick={() => {setCurrentUrl("contactInformation")}} className={currentUrl === "contactInformation" ? "selected" : ""}>
+              <FontAwesomeIcon icon={faTachometerAlt} />
+              {(windowWidth > 768 || isSidebarExpanded) && <span style={{ marginLeft: "5px" }}>Contact Info</span>}
+            </Link>
+          </li>
+
+          </>
+          }
         </ul>
 
 </div>

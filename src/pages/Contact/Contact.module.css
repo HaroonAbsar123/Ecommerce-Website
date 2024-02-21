@@ -20,7 +20,7 @@
       flex: 1;
       display: flex;
       justify-content: space-between;
-      max-height: 7rem;
+      max-height: 6rem;
     }
   
     .image {
@@ -33,7 +33,7 @@
       .secondContainer {
           padding-left: 1rem;
           padding-right: 1rem;
-          max-height: 6rem;
+          max-height: 5rem;
         }
   
         .image {
@@ -51,6 +51,11 @@
   @media (max-width: 500px) {
       .mainHeading{
           font-size: 3rem;
+      }
+      .secondContainer {
+        padding-left: 1rem;
+        padding-right: 1rem;
+        max-height: 4rem;
       }
   }
   

@@ -16,6 +16,7 @@ import Image8 from "../Assets/Products/8.png";
 import Image9 from "../Assets/Products/9.png";
 import { onValue, ref } from "firebase/database";
 import Cookies from 'universal-cookie';
+import { toast } from "react-hot-toast";
 
 
 const initialCoupons = [
@@ -187,8 +188,23 @@ function ProductContextProvider({ children }) {
   const userId = cookies.get("userId");
   const [isCartFetched, setIsCartFetched] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [dataFetched, setDataFetched] = useState(false);
   
   const [initialCart, setInitialCart] = useState(null);
+
+  useEffect(() => {
+    // Set loading to true when component mounts
+    setLoading(true);
+
+    // Set loading to false after 3 seconds
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+
+    // Clean up the timer to prevent memory leaks
+    return () => clearTimeout(timer);
+  }, []); 
+
   useEffect(() => {
     fetchDataHandler();
   }, []); // Run only once on component mount
@@ -215,17 +231,16 @@ function ProductContextProvider({ children }) {
             setCart(cartData);
             setInitialCart(cartData);
             setIsCartFetched(true);
-            setLoading(false); // Set loading to false when data is fetched
-            // console.log("USER DATA FETCHEDDDDDDDDDDDDDDDD");
+            setDataFetched(true);
           });
         } else {
           console.log('User not found in Firestore');
-          setLoading(false); // Set loading to false if user is not found
+          setDataFetched(true);
         }
       }, (error) => {
         console.error('Error fetching user details: ', error);
-        setLoading(false); // Set loading to false if there's an error
-        alert("Error fetching user details");
+        toast.error("Error fetching data. Please try again");
+        setDataFetched(true);
       });
 
       return () => {
@@ -233,7 +248,6 @@ function ProductContextProvider({ children }) {
       };
     } else {
       setIsUserLoggedIn(false);
-      setLoading(false); // Set loading to false if user is not logged in
     }
   }
 
@@ -292,6 +306,7 @@ const DEBOUNCE_DELAY = 1000; // Adjust the debounce delay as needed
 
 
   
+  
   // updateData();
 
   return (
@@ -308,6 +323,8 @@ const DEBOUNCE_DELAY = 1000; // Adjust the debounce delay as needed
         cartError,
         showErrorModal,
         firstTime, 
+        dataFetched,
+        setDataFetched,
         setFirstTime,
         setCouponApplied,
         CartAddItem,

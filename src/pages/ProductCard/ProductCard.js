@@ -1,8 +1,13 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, {useCallback, useEffect, useRef, useState, useContext} from "react";
 import classes from "./ProductCard.module.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import dummyImage from '../../Assets/displayImage.png';
 import Slider from "react-slick";
+import ProductContext from "../../Context/ProductContext";
+import { toast } from "react-hot-toast";
+import { db } from "../../firebase";
+import { getDocs, collection, where, query, onSnapshot, doc, updateDoc, getDoc, setDoc, orderBy } from "firebase/firestore";
+
 
 function getAllImages(item) {
   let images = [];
@@ -14,16 +19,19 @@ function getAllImages(item) {
 
 function ProductCard({ item, title, price, discountedPrice, category, id }) {
   const [imageLoaded, setImageLoaded] = useState(false);
+  const [heartTrue, setHeartTrue] = useState(false);
 
-  const handleImageLoaded = () => {
-    setImageLoaded(true);
-  };
+  const { userDetails } =
+    useContext(ProductContext);
+  console.log("userDetails", userDetails.userId)
 
   const allImages = getAllImages(item);
+  const navigate=useNavigate();
+
+  console.log("item", item)
 
   const settings = {
     className: "slider variable-width",
-    // dots: true,
     lazyLoad: true,
     infinite: true,
     slidesToShow: 1,
@@ -32,9 +40,152 @@ function ProductCard({ item, title, price, discountedPrice, category, id }) {
     autoplaySpeed: 2000,
   };
 
+const handleWishlistClick = async (e) => {
+  e.preventDefault();
+  setHeartTrue(true);
+
+  if (userDetails) {
+    const userListRef = collection(db, 'userList');
+    const userDocQuery = query(userListRef, where('userId', '==', userDetails.userId));
+
+    try {
+      const querySnapshot = await getDocs(userDocQuery);
+      if (querySnapshot.size === 1) {
+        const userDocRef = doc(db, 'userList', querySnapshot.docs[0].id);
+        const docSnapshot = await getDoc(userDocRef);
+
+        if (docSnapshot.exists()) {
+          const userData = docSnapshot.data();
+          let updatedWishlist=[];
+          if(userData.wishlist){
+         updatedWishlist = userData.wishlist.includes(item.id)
+            ? userData.wishlist
+            : [...userData.wishlist, item.id];
+          } else {
+            updatedWishlist=[item.id]
+          }
+          await updateDoc(userDocRef, { wishlist: updatedWishlist });
+        }
+
+        // toast.success(`${item.title} added to wishlist`);
+        setHeartTrue(true);
+      } else {
+        throw new Error('User document not found in Firestore');
+      }
+    } catch (error) {
+      toast.error(`Error adding${item.title} added to wishlist`);
+      setHeartTrue(false);
+    }
+  } else {
+    navigate("/login");
+  }
+};
+
+const handleWishlistRemove = async (e) => {
+  e.preventDefault();
+  setHeartTrue(false);
+
+  if (userDetails) {
+    const userListRef = collection(db, 'userList');
+    const userDocQuery = query(userListRef, where('userId', '==', userDetails.userId));
+
+    try {
+      const querySnapshot = await getDocs(userDocQuery);
+      if (querySnapshot.size === 1) {
+        const userDocRef = doc(db, 'userList', querySnapshot.docs[0].id);
+        const docSnapshot = await getDoc(userDocRef);
+
+        if (docSnapshot.exists()) {
+          const userData = docSnapshot.data();
+          let updatedWishlist = [];
+
+          if (userData.wishlist) {
+            updatedWishlist = userData.wishlist.filter((id) => id !== item.id);
+          }
+
+          await updateDoc(userDocRef, { wishlist: updatedWishlist });
+        }
+
+        // toast.success(`${item.title} removed from wishlist`);
+        setHeartTrue(false);
+      } else {
+        throw new Error('User document not found in Firestore');
+      }
+    } catch (error) {
+      toast.error(`Error removing ${item.title} from wishlist`);
+      setHeartTrue(true);
+    }
+  } else {
+    navigate("/login");
+  }
+};
+
+  
+const checkWishlist = () => {
+  if(userDetails){
+    if (userDetails.wishlist?.includes(item.id)) {
+      setHeartTrue(true);
+    }
+  }
+};
+
+// Call the function when the component mounts
+useEffect(() => {
+  checkWishlist();
+}, []);
+
+
   return (
     <NavLink to={`/collection/${category}/${id}`} className={classes.nav} >
-    <div className={classes.productCard}>
+    <div 
+    // onClick={() => {navigate(`/collection/${category}/${id}`)}}
+     className={classes.productCard}>
+
+{
+    heartTrue ?
+    <button 
+    className="heartButton"
+onClick={handleWishlistRemove}
+style={{ 
+  position: "absolute", 
+  top: "10px", 
+  right: "10px", 
+  zIndex: "1", 
+  // background: "none", 
+  border: "none", 
+  padding: "10px", 
+  cursor: "pointer",
+  borderRadius: '50%'
+}}
+>
+    <svg height="32" width="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 0H24V24H0z" fill="none"></path>
+    <path d="M16.5 3C19.538 3 22 5.5 22 9c0 7-7.5 11-10 12.5C9.5 20 2 16 2 9c0-3.5 2.5-6 5.5-6C9.36 3 11 4 12 5c1-1 2.64-2 4.5-2z"></path>
+  </svg>
+  </button>
+  :
+  <button 
+  className="heartButton"
+onClick={handleWishlistClick}
+style={{ 
+position: "absolute", 
+top: "10px", 
+right: "10px", 
+zIndex: "1", 
+// background: "none", 
+border: "none", 
+padding: "10px", 
+cursor: "pointer",
+borderRadius: '50%'
+}}
+>
+  <svg height="32" width="32" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <path d="M0 0H24V24H0z" fill="none"></path>
+  <path d="M16.5 3C19.538 3 22 5.5 22 9c0 7-7.5 11-10 12.5C9.5 20 2 16 2 9c0-3.5 2.5-6 5.5-6C9.36 3 11 4 12 5c1-1 2.64-2 4.5-2z" fill="transparent" stroke="rgb(255, 110, 110)" strokeWidth="2"></path>
+</svg>
+</button>
+  }
+
       <div className={classes.productImageContainer}>
       <Slider {...settings}>
             {allImages.map((item) => (

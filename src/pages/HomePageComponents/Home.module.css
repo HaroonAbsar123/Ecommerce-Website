@@ -10,14 +10,13 @@
     background: linear-gradient(to left, rgb(255, 244, 236), bisque);
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: stretch;
     flex: 1;
     flex-wrap: wrap;
     justify-content: center;
-    padding-top: 7rem;
-    padding-bottom: 2rem;
     min-height: 70vh;
     position: relative;
+    overflow: hidden;
 }
 
 .mainHeading{
@@ -27,17 +26,35 @@
     padding-top: 0px;
 }
 
-.mainImageComponent{
+.mainTextComponent{
+    padding-top: 7rem;
+    padding-bottom: 3rem;
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
+.mainImageComponent{
+    padding-top: 7rem;
+    padding-bottom: 3rem;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1e1e1e;
+}
+
 .mainProductImage{
     height: auto;
-    width: 80%;
+    width: 90%;
     min-width: 300px;
+    transform: scale(1) skewX(10deg);
+    transition: all .3s ease-in-out;
+}
+
+.mainProductImage:hover{
+    transform: scale(1.05) skewX(10deg);
 }
 
 .mainImageText{
@@ -50,6 +67,15 @@
     .mainHeading{
         font-size: 4rem;
 
+    }
+    .mainImageComponent{
+        padding-top: 2rem;
+    }
+    .mainProductImage{
+        transform: scale(1) skewX(0deg);
+    }
+    .mainProductImage:hover{
+        transform: scale(1.05) skewX(0deg);
     }
     .mainImage{
         flex-direction: column;
