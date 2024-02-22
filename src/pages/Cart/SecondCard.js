@@ -157,7 +157,7 @@ function SecondCard({ Products }) {
               color: "white",
             }}
           >
-            Proceed to Checkout
+            PLACE ORDER
           </Button>
           {cartError && (
             <div style={{ marginTop: "10px", color: "red" }}>

@@ -7,79 +7,75 @@ import ProductContext from "../../Context/ProductContext";
 import { toast } from "react-hot-toast";
 import { db } from "../../firebase";
 import { getDocs, collection, where, query, onSnapshot, doc, updateDoc, getDoc, setDoc, orderBy } from "firebase/firestore";
+import Login from "../Login/Login";
 
 
-function getAllImages(item) {
-  let images = [];
-  item.colors.forEach((color) => {
-    images = [...images, ...color.images];
-  });
-  return images;
-}
+// function getAllImages(item) {
+//   let images = [];
+//   item.colors.forEach((color) => {
+//     images = [...images, ...color.images];
+//   });
+//   return images;
+// }
 
 function ProductCard({ item, title, price, discountedPrice, category, id }) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [heartTrue, setHeartTrue] = useState(false);
+  const [isLogin, setIsLogin] = useState(false)
+  const [showLoginModal, setShowLoginModal] = useState(false)
 
-  const { userDetails } =
-    useContext(ProductContext);
-  console.log("userDetails", userDetails.userId)
+  const { userDetails } = useContext(ProductContext);
 
-  const allImages = getAllImages(item);
   const navigate=useNavigate();
 
-  console.log("item", item)
 
-  const settings = {
-    className: "slider variable-width",
-    lazyLoad: true,
-    infinite: true,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2000,
-  };
+  // const allImages = getAllImages(item);
 
-const handleWishlistClick = async (e) => {
-  e.preventDefault();
-  setHeartTrue(true);
+  // const settings = {
+  //   className: "slider variable-width",
+  //   lazyLoad: true,
+  //   infinite: true,
+  //   slidesToShow: 1,
+  //   slidesToScroll: 1,
+  //   autoplay: true,
+  //   autoplaySpeed: 2000,
+  // };
 
-  if (userDetails) {
-    const userListRef = collection(db, 'userList');
-    const userDocQuery = query(userListRef, where('userId', '==', userDetails.userId));
-
-    try {
-      const querySnapshot = await getDocs(userDocQuery);
-      if (querySnapshot.size === 1) {
-        const userDocRef = doc(db, 'userList', querySnapshot.docs[0].id);
-        const docSnapshot = await getDoc(userDocRef);
-
-        if (docSnapshot.exists()) {
-          const userData = docSnapshot.data();
-          let updatedWishlist=[];
-          if(userData.wishlist){
-         updatedWishlist = userData.wishlist.includes(item.id)
-            ? userData.wishlist
-            : [...userData.wishlist, item.id];
-          } else {
-            updatedWishlist=[item.id]
+  const handleWishlistClick = async (e) => {
+    e.preventDefault();
+  
+    if (userDetails) {
+      setHeartTrue(true);
+      const userListRef = collection(db, 'userList');
+      const userDocQuery = query(userListRef, where('userId', '==', userDetails.userId));
+  
+      try {
+        const querySnapshot = await getDocs(userDocQuery);
+        if (querySnapshot.size === 1) {
+          const userDocRef = doc(db, 'userList', querySnapshot.docs[0].id);
+          const docSnapshot = await getDoc(userDocRef);
+  
+          if (docSnapshot.exists()) {
+            const userData = docSnapshot.data();
+            let updatedWishlist=[...userData?.wishlist, item.id];
+            await updateDoc(userDocRef, { wishlist: updatedWishlist });
           }
-          await updateDoc(userDocRef, { wishlist: updatedWishlist });
+  
+          // toast.success(`${item.title} added to wishlist`);
+          setHeartTrue(true);
+        } else {
+          throw new Error('User document not found in Firestore');
         }
-
-        // toast.success(`${item.title} added to wishlist`);
-        setHeartTrue(true);
-      } else {
-        throw new Error('User document not found in Firestore');
+      } catch (error) {
+        toast.error(`Error adding${item.title} added to wishlist`);
+        setHeartTrue(false);
       }
-    } catch (error) {
-      toast.error(`Error adding${item.title} added to wishlist`);
-      setHeartTrue(false);
+    } else {
+      toast("Please login to add items to wishlist")
+      setIsLogin(true)
+      setShowLoginModal(true)
     }
-  } else {
-    navigate("/login");
-  }
-};
+  };
 
 const handleWishlistRemove = async (e) => {
   e.preventDefault();
@@ -136,6 +132,9 @@ useEffect(() => {
 
 
   return (
+    <>
+    
+
     <NavLink to={`/collection/${category}/${id}`} className={classes.nav} >
     <div 
     // onClick={() => {navigate(`/collection/${category}/${id}`)}}
@@ -187,11 +186,15 @@ borderRadius: '50%'
   }
 
       <div className={classes.productImageContainer}>
-      <Slider {...settings}>
+      {/* <Slider {...settings}>
             {allImages.map((item) => (
               <img key={item} src={item} alt="" className={classes.productImage} />
             ))}
-          </Slider>
+          </Slider> */}
+              <>
+                {!imageLoaded && <img src={dummyImage} alt="" className={classes.productImage} />}
+                <img key={item} src={item?.colors[0]?.images[0]} alt="" className={classes.productImage} onLoad={() => setImageLoaded(true)} />
+              </>
       </div>
       <h3 className={classes.productTitle}>{title}</h3>
       {discountedPrice ? (
@@ -204,6 +207,8 @@ borderRadius: '50%'
       )}
     </div>
     </NavLink>
+    <Login loginTrue={isLogin ? true : false} onClose={() => {setShowLoginModal(false)}} open={showLoginModal} />
+    </>
   );
 }
 

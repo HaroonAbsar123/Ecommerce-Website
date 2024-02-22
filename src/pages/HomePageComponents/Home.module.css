@@ -42,19 +42,19 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #1e1e1e;
+    /* background-color: #1e1e1e; */
 }
 
 .mainProductImage{
     height: auto;
     width: 90%;
     min-width: 300px;
-    transform: scale(1) skewX(10deg);
+    transform: scale(1) ;
     transition: all .3s ease-in-out;
 }
 
 .mainProductImage:hover{
-    transform: scale(1.05) skewX(10deg);
+    transform: scale(1.05) ;
 }
 
 .mainImageText{
@@ -68,14 +68,18 @@
         font-size: 4rem;
 
     }
+    .mainTextComponent{
+        padding-bottom: 1rem;
+    }
     .mainImageComponent{
-        padding-top: 2rem;
+        padding-top: 0rem;
+        padding-bottom: 5rem;
     }
     .mainProductImage{
-        transform: scale(1) skewX(0deg);
+        transform: scale(1) ;
     }
     .mainProductImage:hover{
-        transform: scale(1.05) skewX(0deg);
+        transform: scale(1.05) ;
     }
     .mainImage{
         flex-direction: column;

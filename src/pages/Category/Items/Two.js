@@ -36,6 +36,7 @@ function Two() {
 
   useEffect(() => {
     let currentArray = [];
+    if(products){
     if(category === "hot" ||category === "wishlist" || category === "sofas" ||category === "armchairs" ||category === "lamps" ||category === "cushions"){
     if (category === 'hot') {
       currentArray = [];
@@ -61,7 +62,7 @@ function Two() {
       currentArray = products[category];
     }
   }
-  
+}
     // Convert object to array
     const newArray = Object.values(currentArray);
   

@@ -8,6 +8,7 @@ import ProfileAndFinanceStudent from './profileAndFinance/ProfileAndFinanceStude
 import AddProducts from './AddProducts';
 import AdminProductSection from './AdminProductSection';
 import Register from './Register/Register';
+import AdminOrderSection from './AdminOrderSection';
 
 function AdminProfile(){
   const location = useLocation();
@@ -61,6 +62,10 @@ function AdminProfile(){
             {
               currentUrl === "viewInventory" &&
               <AdminProductSection />
+            }
+            {
+              currentUrl === "orders" &&
+              <AdminOrderSection />
             }
 
 {

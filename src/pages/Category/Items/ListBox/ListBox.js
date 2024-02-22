@@ -43,7 +43,7 @@ function ListBox({ Products, category, loadingItems }) {
 
           </div>
           {loadingItems ? 
-            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1}}>
+            <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', flex: 1, marginBottom: '2rem'}}>
             <div class="blackLoader"></div>
          </div>
           :

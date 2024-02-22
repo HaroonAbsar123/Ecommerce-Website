@@ -40,6 +40,21 @@ function ProductContextProvider({ children }) {
   const [cartError, setCartError] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [firstTime, setFirstTime] = useState(false);
+  const [orders, setOrders] = useState([])
+
+
+
+  
+
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
+  const [userDetails, setUserDetails] = useState("")
+  const [userType, setUserType] = useState("")
+  const userId = cookies.get("userId");
+  const [isCartFetched, setIsCartFetched] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [dataFetched, setDataFetched] = useState(false);
+  
+  const [initialCart, setInitialCart] = useState(null);
 
   function CartUpdateItem(product) {
     
@@ -95,6 +110,34 @@ function ProductContextProvider({ children }) {
   function DisplayProducts() {
     // console.log("Products", products);
   }
+
+  const fetchOrders = () => {
+    try {
+      // Use onSnapshot to listen for real-time updates
+      const userListRef = collection(db, 'orders');
+      const unsubscribe = onSnapshot(
+        query(userListRef, orderBy('submittedOn', 'desc')), // Order by 'createdAt' field in descending order
+        (querySnapshot) => {
+          const orders = querySnapshot.docs
+            .map((doc) => ({ id: doc.id, ...doc.data() }))
+            console.log("products" , orders)
+            setOrders(orders);
+        }
+      );
+  
+      // Return the unsubscribe function to stop listening when the component unmounts
+      return unsubscribe;
+    } catch (e) {
+      console.error('Error fetching data:', e);
+    }
+  };
+
+  useEffect(() => {
+    if(userType==='admin'){
+      fetchOrders();
+    }
+
+  }, [userDetails])
 
   
   const fetchProducts = () => {
@@ -182,16 +225,6 @@ function ProductContextProvider({ children }) {
 
 
 
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false)
-  const [userDetails, setUserDetails] = useState("")
-  const [userType, setUserType] = useState("")
-  const userId = cookies.get("userId");
-  const [isCartFetched, setIsCartFetched] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [dataFetched, setDataFetched] = useState(false);
-  
-  const [initialCart, setInitialCart] = useState(null);
-
   useEffect(() => {
     // Set loading to true when component mounts
     setLoading(true);
@@ -203,7 +236,7 @@ function ProductContextProvider({ children }) {
 
     // Clean up the timer to prevent memory leaks
     return () => clearTimeout(timer);
-  }, []); 
+  }, [isUserLoggedIn]); 
 
   useEffect(() => {
     fetchDataHandler();
@@ -324,6 +357,7 @@ const DEBOUNCE_DELAY = 1000; // Adjust the debounce delay as needed
         showErrorModal,
         firstTime, 
         dataFetched,
+        orders,
         setDataFetched,
         setFirstTime,
         setCouponApplied,
@@ -338,7 +372,8 @@ const DEBOUNCE_DELAY = 1000; // Adjust the debounce delay as needed
         setUserType,
         updateData,
         setCartError,
-        setShowErrorModal
+        setShowErrorModal,
+        setCart
       }}
     >
       {children}

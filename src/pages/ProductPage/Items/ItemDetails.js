@@ -13,6 +13,7 @@ import toast from "react-hot-toast";
 import RegularHeart from '../../../Assets/heartRegular.svg';
 import { db } from "../../../firebase";
 import { getDocs, collection, where, query, onSnapshot, doc, updateDoc, getDoc, setDoc, orderBy } from "firebase/firestore";
+import Login from "../../Login/Login";
 
 
 function ItemDetails({ Product, colorIndex, setColorIndex }) {
@@ -30,13 +31,15 @@ function ItemDetails({ Product, colorIndex, setColorIndex }) {
   const [heartTrue, setHeartTrue] = useState(false);
   // const [isOutOfStock, setIsOutOfStock] = useState(false);
   
+  const [isLogin, setIsLogin] = useState(false)
+  const [showLoginModal, setShowLoginModal] = useState(false)
 
 
   const handleWishlistClick = async (e) => {
     e.preventDefault();
-    setHeartTrue(true);
   
     if (userDetails) {
+      setHeartTrue(true);
       const userListRef = collection(db, 'userList');
       const userDocQuery = query(userListRef, where('userId', '==', userDetails.userId));
   
@@ -48,14 +51,7 @@ function ItemDetails({ Product, colorIndex, setColorIndex }) {
   
           if (docSnapshot.exists()) {
             const userData = docSnapshot.data();
-            let updatedWishlist=[];
-            if(userData.wishlist){
-           updatedWishlist = userData.wishlist?.includes(Product.id)
-              ? userData.wishlist
-              : [...userData.wishlist, Product.id];
-            } else {
-              updatedWishlist=[Product.id]
-            }
+            let updatedWishlist=[...userData?.wishlist, Product.id];
             await updateDoc(userDocRef, { wishlist: updatedWishlist });
           }
   
@@ -69,7 +65,9 @@ function ItemDetails({ Product, colorIndex, setColorIndex }) {
         setHeartTrue(false);
       }
     } else {
-      navigate("/login");
+      // toast("Please login to add items to wishlist")
+      setIsLogin(true)
+      setShowLoginModal(true)
     }
   };
   
@@ -108,7 +106,8 @@ function ItemDetails({ Product, colorIndex, setColorIndex }) {
         setHeartTrue(true);
       }
     } else {
-      navigate("/login");
+      setIsLogin(true)
+      setShowLoginModal(true)
     }
   };
   
@@ -296,10 +295,12 @@ const handleSizeChange = (size) => {
 
       CartAddItem(ProductData);
 
-      toast.success(`${ProductData.product.title} added to cart`);
+      // toast.success(`${ProductData.product.title} added to cart`);
     } else {
-      toast("Please login to add items to cart");
-      navigate("/login");
+      // toast("Please login to add items to cart");
+      // navigate("/login");
+      setIsLogin(true)
+      setShowLoginModal(true)
     }
   };
 
@@ -308,8 +309,10 @@ const handleSizeChange = (size) => {
       handleAddToCart();
       navigate("/cart");
     } else {
-      toast("Please login to buy products");
-      navigate("/login");
+      // toast("Please login to buy products");
+      // navigate("/login");
+      setIsLogin(true)
+      setShowLoginModal(true)
     }
   };
 
@@ -711,6 +714,7 @@ const handleSizeChange = (size) => {
             </p>
           </div>
         </div>
+        <Login loginTrue={isLogin ? true : false} onClose={() => {setShowLoginModal(false)}} open={showLoginModal} />
       </div>
     );
   };

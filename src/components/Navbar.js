@@ -31,6 +31,7 @@ import CustomModal from './CustomModal';
 import LoginLogo from "../Assets/logo - Copy.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import Login from '../pages/Login/Login';
 
 const pages = ['Home', 'Collection', 'Contact'];
 const settings = ['Profile', 'wishlist', 'Cart', 'Logout'];
@@ -46,6 +47,9 @@ function Navbar() {
 
   const [logoutModal, setLogoutModal] = useState(false)
   const [totalItems, setTotalItems] = useState(0);
+
+  const [isLogin, setIsLogin] = useState(false)
+  const [showLoginModal, setShowLoginModal] = useState(false)
 
   useEffect(() => {
     // Update the totalItems whenever the cart changes
@@ -129,7 +133,7 @@ function Navbar() {
       setUserType('');
       setLogoutModal(false)
       navigate('/login', { replace: true });
-      toast.success("Logged out successfully");
+      // toast.success("Logged out successfully");
     } catch (error) {
       console.error('Error occurred during logout:', error);
     }
@@ -263,13 +267,17 @@ function Navbar() {
           :
 <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
 <Button
-               onClick={() => {navigate("/login")}}
+               onClick={() => {
+                setIsLogin(true)
+                setShowLoginModal(true)}}
                 sx={{ my: 2, color: '#1e1e1e', display: 'block' }}
               >
                 Login
               </Button>
               <Button
-               onClick={() => {navigate("/register")}}  style={{backgroundColor: '#1e1e1e', }}
+               onClick={() => {
+                setIsLogin(false)
+                setShowLoginModal(true)}}  style={{backgroundColor: '#1e1e1e', }}
                 sx={{ my: 2, display: 'block', color: 'white' }}
               >
                 Register
@@ -280,6 +288,9 @@ function Navbar() {
       </Container>
     </AppBar>
     <Sidebar showSidebar={showSidebar} setShowSidebar={setShowSidebar}/>
+
+          <Login loginTrue={isLogin ? true : false} onClose={() => {setShowLoginModal(false)}} open={showLoginModal} />
+         
 
     <Dialog
       open={openProfileModal}
@@ -431,6 +442,7 @@ function Navbar() {
         </div>
         </div>
     </Modal>
+
     </>
   );
 }

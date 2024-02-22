@@ -1,0 +1,49 @@
+.message {
+    background: #ccc;
+    font-size: medium;
+    border-radius: 5px;
+    padding: 10px;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.5);
+    width: 70%;
+    align-self: flex-start;
+    text-align: left;
+  }
+  
+  .date {
+    background: #949494;
+    flex: 1;
+    height: 20px;
+    border-radius: 5px;
+    animation: loadingAnimation 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    background: linear-gradient(90deg, #949494 25%, #b2b2b2 50%, #949494 75%);
+    background-size: 200% 100%;
+  }
+  
+  .text {
+    background: #949494;
+    width: 50%;
+    height: 15px;
+    border-radius: 5px;
+    margin-top: 5px;
+    animation: loadingAnimation 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    background: linear-gradient(90deg, #949494 25%, #b2b2b2 50%, #949494 75%);
+    background-size: 200% 100%;
+  }
+  
+  @keyframes loadingAnimation {
+    0% {
+      background-position: 0 0;
+    }
+    50% {
+      background-position: 100% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+  
+  .animate {
+    animation: loadingAnimation 1s linear infinite;
+    background: linear-gradient(90deg, #949494 25%, #ccc 50%, #949494 75%);
+    background-size: 200% 100%;
+  }

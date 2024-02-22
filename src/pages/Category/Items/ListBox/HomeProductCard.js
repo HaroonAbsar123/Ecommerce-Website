@@ -11,42 +11,45 @@ import ProductContext from "../../../../Context/ProductContext";
 import { toast } from "react-hot-toast";
 import { db } from "../../../../firebase";
 import { getDocs, collection, where, query, onSnapshot, doc, updateDoc, getDoc, setDoc, orderBy } from "firebase/firestore";
+import Login from "../../../Login/Login";
 
-function getAllImages(item) {
-  let images = [];
-  item.colors.forEach((color) => {
-    images = [...images, ...color.images];
-  });
-  return images;
-}
+// function getAllImages(item) {
+//   let images = [];
+//   item.colors.forEach((color) => {
+//     images = [...images, ...color.images];
+//   });
+//   return images;
+// }
 
 function HomeProductCard({ item, title, price, discountedPrice, category, id }) {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [heartTrue, setHeartTrue] = useState(false);
+  const [isLogin, setIsLogin] = useState(false)
+  const [showLoginModal, setShowLoginModal] = useState(false)
 
-  const { userDetails } =
-    useContext(ProductContext);
-  console.log("userDetails", userDetails.userId)
+  const { userDetails } = useContext(ProductContext);
 
-  const allImages = getAllImages(item);
   const navigate=useNavigate();
 
 
-  const settings = {
-    className: "slider variable-width",
-    lazyLoad: true,
-    infinite: true,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2000,
-  };
+  
+  // const allImages = getAllImages(item);
+
+  // const settings = {
+  //   className: "slider variable-width",
+  //   lazyLoad: true,
+  //   infinite: true,
+  //   slidesToShow: 1,
+  //   slidesToScroll: 1,
+  //   autoplay: true,
+  //   autoplaySpeed: 2000,
+  // };
 
 const handleWishlistClick = async (e) => {
   e.preventDefault();
-  setHeartTrue(true);
 
   if (userDetails) {
+    setHeartTrue(true);
     const userListRef = collection(db, 'userList');
     const userDocQuery = query(userListRef, where('userId', '==', userDetails.userId));
 
@@ -58,18 +61,11 @@ const handleWishlistClick = async (e) => {
 
         if (docSnapshot.exists()) {
           const userData = docSnapshot.data();
-          let updatedWishlist=[];
-          if(userData.wishlist){
-         updatedWishlist = userData.wishlist.includes(item.id)
-            ? userData.wishlist
-            : [...userData.wishlist, item.id];
-          } else {
-            updatedWishlist=[item.id]
-          }
+          let updatedWishlist=[...userData?.wishlist, item.id];
           await updateDoc(userDocRef, { wishlist: updatedWishlist });
         }
 
-        //toast.success(`${item.title} added to wishlist`);
+        // toast.success(`${item.title} added to wishlist`);
         setHeartTrue(true);
       } else {
         throw new Error('User document not found in Firestore');
@@ -79,7 +75,9 @@ const handleWishlistClick = async (e) => {
       setHeartTrue(false);
     }
   } else {
-    navigate("/login");
+    toast("Please login to add items to wishlist")
+    setIsLogin(true)
+    setShowLoginModal(true)
   }
 };
 
@@ -108,7 +106,7 @@ const handleWishlistRemove = async (e) => {
           await updateDoc(userDocRef, { wishlist: updatedWishlist });
         }
 
-       // toast.success(`${item.title} removed from wishlist`);
+        // toast.success(`${item.title} removed from wishlist`);
         setHeartTrue(false);
       } else {
         throw new Error('User document not found in Firestore');
@@ -131,6 +129,7 @@ const checkWishlist = () => {
   }
 };
 
+// Call the function when the component mounts
 useEffect(() => {
   checkWishlist();
 }, []);
@@ -138,6 +137,7 @@ useEffect(() => {
 
 
   return (
+    <>
     <Link to={`/collection/${category}/${id}`} className="nolinkstyle">
       <div
        className={classes.productCard} style={{ position: "relative" }}>
@@ -189,14 +189,18 @@ borderRadius: '50%'
   }
 
         <div className={classes.productImageContainer}>
-          <Slider {...settings}>
+          {/* <Slider {...settings}>
             {allImages.map((item) => (
               <>
                 {!imageLoaded && <img src={dummyImage} alt="" className={classes.productImage} />}
                 <img key={item} src={item} alt="" className={classes.productImage} onLoad={() => setImageLoaded(true)} />
               </>
             ))}
-          </Slider>
+          </Slider> */}
+           <>
+                {!imageLoaded && <img src={dummyImage} alt="" className={classes.productImage} />}
+                <img key={item} src={item?.colors[0]?.images[0]} alt="" className={classes.productImage} onLoad={() => setImageLoaded(true)} />
+              </>
         </div>
         <h3 className={classes.productTitle}>{title}</h3>
         {discountedPrice !== ("" || 0) ? (
@@ -211,6 +215,8 @@ borderRadius: '50%'
 
       </div>
     </Link>
+    <Login loginTrue={isLogin ? true : false} onClose={() => {setShowLoginModal(false)}} open={showLoginModal} />
+        </>
   );
 }
 

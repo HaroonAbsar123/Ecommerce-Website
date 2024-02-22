@@ -501,7 +501,7 @@ cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
           setIsUserLoggedIn(true);
           setUserDetails(userData); // Set user details in context
           // Navigate to home page
-          navigate("/", { replace: true });
+          // navigate("/", { replace: true });
           console.log("User signed up successfully");
         } catch (error) {
           console.error("Error signing up user: ", error);
@@ -822,7 +822,7 @@ cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
         <div
           style={{
             flex: 1,
-            marginTop: '3rem',
+            // marginTop: '3rem',
             display: "flex",
             flexDirection: "column",
             alignItems: "center", // Center content horizontally
@@ -832,7 +832,7 @@ cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
           }}
           className={styles.loginform}
         >
-          <img src={LoginLogo} alt="Logo" style={{ height: "3rem" }} />
+          {/* <img src={LoginLogo} alt="Logo" style={{ height: "3rem" }} /> */}
           {/* Center image using margin auto */}
           <h2
             style={{

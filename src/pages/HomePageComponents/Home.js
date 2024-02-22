@@ -53,16 +53,11 @@ function Home() {
         <div
           className={classes.mainImageComponent}
           style={{
-            transform: isMobile ? "none"  : "skewX(-10deg)",
-            boxShadow: "inset 0px 10px 20px rgba(0,0,0,1)",
+            // transform: isMobile ? "none"  : "skewX(-10deg)",
+            // boxShadow: "inset 0px 10px 20px rgba(0,0,0,1)",
           }}
         >
           <img
-            style={{
-              display: imageLoaded ? "inherit" : "none",
-              // transform: isMobile ? "none"  :"skewX(10deg)",
-              
-            }}
             src={MainProduct}
             alt=""
             className={classes.mainProductImage}

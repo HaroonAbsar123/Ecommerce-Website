@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import styles from "./Login.module.css";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -18,10 +18,20 @@ import GoogleImage from "../../Assets/R.png";
 
 import AboveLogo from "../../Assets/logo.png";
 import Cookies from 'universal-cookie';
+import CustomModal from "../../components/CustomModal";
+import { Modal } from "@mui/material";
+import { toast } from "react-hot-toast";
+import { TapasTwoTone } from "@mui/icons-material";
 
-function Login() {
+function Login({loginTrue, open, onClose, }) {
   const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(true);
+  // const isFirstLogin = useRef(true);
+  const [isLogin, setIsLogin] = useState(loginTrue);
+
+  useEffect(() => {
+    
+      setIsLogin(loginTrue);
+  }, [loginTrue]);
   const [imageLoaded, setImageLoaded] = useState(false);
 
   const cookies = new Cookies();
@@ -31,8 +41,8 @@ function Login() {
 
   useEffect(() => {
     // Fetch the 'isUserLoggedIn' value from local storage
-    if (isUserLoggedIn === "true") {
-      navigate("/", { replace: true });
+    if (isUserLoggedIn === true) {
+      onClose()
     }
   }, []);
 
@@ -101,15 +111,16 @@ cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
               setUserType(userType); // Set user type in context
 
               // Navigate to home page
-              navigate("/", { replace: true });
-              console.log("User logged in successfully");
+              // navigate("/", { replace: true });
+              // console.log("User logged in successfully");
+              onClose();
             });
           } else {
             alert("User doesn't exist");
           }
         } catch (error) {
           console.error("Error logging in user: ", error);
-          alert("Error logging in user", error);
+          toast.error("Error logging in");
         }
       }
     };
@@ -265,13 +276,14 @@ cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
             color: "#1e1e1e",
             fontWeight: "bold",
             marginTop: "2rem",
-            marginBottom: isMobile ? "1rem" : "2rem",
           }}
         >
           Don't have an account?{" "}
           <span
             onClick={() => {
-              navigate("/register");
+              // navigate("/register");
+              
+              setIsLogin(false);
             }}
             style={{ color: "#912d27", cursor: "pointer" }}
           >
@@ -325,15 +337,16 @@ cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
           setUserDetails(userData); // Set user details in context
   
           // Navigate to home page
-          navigate("/", { replace: true });
-          console.log("User logged in successfully with Google");
+          // navigate("/", { replace: true });
+          // console.log("User logged in successfully with Google");
+          onClose();
         });
       } else {
         alert("User doesn't exist.");
       }
     } catch (error) {
       console.error("Error logging in user with Google: ", error);
-      alert("Error logging in user with Google");
+      toast.error("Error logging in user with Google");
     }
   };
   
@@ -366,22 +379,47 @@ cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
 
       // If user doesn't exist, create a new document in the "userList" collection
       if (querySnapshot.empty) {
-        await addDoc(userListRef, {
+         await addDoc(userListRef, {
           userId,
           userName: userCredential.user.displayName,
           email: userCredential.user.email,
           type: "user",
+          image: userCredential.user.photoURL,
+          phone: userCredential.user.phoneNumber
         });
 
-        console.log("User signed up successfully with Google");
-        setIsLogin(true);
+        const userData={
+          userId,
+          userName: userCredential.user.displayName,
+          email: userCredential.user.email,
+          type: "user",
+          image: userCredential.user.photoURL,
+          phone: userCredential.user.phoneNumber
+        }
+
+          // Store data in Local Storage
+          // localStorage.setItem("userId", userId);
+          // localStorage.setItem("isLoggedIn", "true");
+          
+  // Store data in cookies
+cookies.set("userId", userId, { secure: true, sameSite: 'strict' });
+cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
+  
+          // Update context state
+          setIsUserLoggedIn(true);
+          setUserDetails(userData); // Set user details in context
+  
+          onClose();
+          // Navigate to home page
+          // navigate("/", { replace: true });
       } else {
         console.log("User already exists in the database");
-        setIsLogin(true); // You may want to handle this case differently based on your use case
+        // Navigate to home page
+        // navigate("/", { replace: true });
       }
     } catch (error) {
       console.error("Error signing up user with Google: ", error);
-      alert("Error signing up user");
+      toast.error("Error signing up");
     }
   };
 
@@ -470,14 +508,35 @@ cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
             userName: signUpUserName,
             email: signUpEmail,
             type: "user",
-            status: "pending",
+            // status: "pending",
           });
 
-          console.log("User signed up successfully");
-          setIsLogin(true);
+          const userData={
+            userId,
+            userName: signUpUserName,
+            email: signUpEmail,
+            type: "user",
+          }
+          // Store data in Local Storage
+          // localStorage.setItem("userId", userId);
+          // localStorage.setItem("isLoggedIn", "true");
+          
+
+  // Store data in cookies
+  cookies.set("userId", userId, { secure: true, sameSite: 'strict' });
+  cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
+  
+          // Update context state
+          setIsUserLoggedIn(true);
+          setUserDetails(userData); // Set user details in context
+          // Navigate to home page
+          // navigate("/", { replace: true });
+          // console.log("User signed up successfully");
+          
+          onClose();
         } catch (error) {
           console.error("Error signing up user: ", error);
-          alert("Error signing up user");
+          toast.error("Error signing up");
         }
       }
     };
@@ -721,7 +780,6 @@ cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
             color: "#1e1e1e",
             fontWeight: "bold",
             marginTop: "2rem",
-            marginBottom: isMobile ? "1rem" : "2rem",
           }}
         >
           Already have an account?{" "}
@@ -781,53 +839,56 @@ cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
   }, []);
 
   return (
-    <>
+    <Modal
+      open={open}
+      // onClose={onClose}
+    >
       <div
         style={{
-          display: "flex",
-          flex: 1,
+          position: "fixed",
+          top: "0",
+          left: "0",
+          width: "100%",
           height: "100%",
+          display: "flex",
           justifyContent: "center",
-          alignItems: "stretch", // Ensure children stretch to full height
-          flexDirection: isMobile ? "column" : "row",
+          alignItems: "center", // center the modal content vertically and horizontally
+          backdropFilter: "blur(10px)", // Adjust the blur intensity as needed
+          WebkitBackdropFilter: "blur(10px)", // For Safari support,
+        //   background: "rgba(0,0,0, 0.2)",
         }}
+        onClick={onClose}
       >
-        
-        {!isMobile && 
-         <div
-         style={{
-           flex: 1,
-           display: 'flex',
-           flexDirection: "column",
-           paddingTop: "6rem",
-           background: "linear-gradient(to left, rgb(255, 244, 236), bisque)",
-           justifyContent: "center",
-           paddingBottom: "1rem"
-         }}
-       >
-           <div>
-             <img
-               style={{
-                 display: imageLoaded ? "inherit" : 'none',
-               }}
-               className={styles.mainProductImage}
-               src={LoginImage}
-               alt=""
-               onLoad={() => setImageLoaded(true)}
-             />
-           </div>
-       </div>
-      }
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            width: "600px",
+            maxWidth: '90vw',
+            maxHeight: "90vh",
+            overflow: "hidden",
+            boxShadow: "0 6px 12px rgba(0, 0, 0, 0.3)",
+            background: "rgba(255,255,255, 0.9)",
+            borderRadius: "10px",
+            marginRight:'10px',
+            marginLeft: '10px'
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+        <div style={{ 
+          flex: 1, 
+          overflow: 'auto',
+          }}>
         <div
           style={{
             flex: 1,
-            marginTop: '4rem',
+            // marginTop: '4rem',
             display: "flex",
             flexDirection: "column",
             alignItems: "center", // Center content horizontally
-            padding: isMobile ? "20px" : "2rem",
-            background: "white",
-            height: "100%",
+            padding: isMobile ? "30px" : "2rem",
+            background: "rgba(255,255,255,0.5)",
+            height: "100%"
           }}
           className={styles.loginform}
         >
@@ -851,10 +912,10 @@ cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
 
           {isLogin ? <LoginForm /> : <SignUpForm />}
         </div>
-      </div>
-
-      <Footer />
-    </>
+        </div>
+        </div>
+        </div>
+        </Modal>
   );
 }
 

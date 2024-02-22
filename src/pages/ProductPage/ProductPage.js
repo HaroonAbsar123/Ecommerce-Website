@@ -38,7 +38,7 @@ function ProductPage() {
             ? categoryProducts.filter((item) => item?.hot === true)
             : Object.values(categoryProducts || {}).filter((item) => item?.hot === true)
         );
-  
+        setCurrentItem({})
         setCurrentItem(hotProducts.find((item) => item?.id === id)); // Compare ID as string
         setRelatedProducts(hotProducts.filter((item) => item?.id !== id));
       } else {

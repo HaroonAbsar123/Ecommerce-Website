@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Header from "./components/Header";
 import Home from "./pages/HomePageComponents/Home";
 import Blog from "./pages/Blog";
@@ -24,11 +24,29 @@ import NavBar from "./components/Navbar";
 import Register from "./pages/Register/Register";
 import toast, { Toaster } from 'react-hot-toast';
 import ProductContext from "./Context/ProductContext";
+import ChatBox from "./pages/ChatBox/ChatBox";
+import ChatBoxRenderer from "./pages/ChatBox/ChatBoxRenderer";
+import Logo from './Assets/logo - Copy - Copy.png';
 
 
 function App() {
   const {isUserLoggedIn} = useContext(ProductContext)
   const [chatClosed, setChatClosed] = useState(true)
+  const [opacity, setOpacity] = useState(1);
+
+  useEffect(() => {
+    if(!chatClosed){
+      setOpacity(1);
+    }
+
+  }, [chatClosed])
+
+  const handleClose = () => {
+    setOpacity(0);
+    setTimeout(() => {
+      setChatClosed(true);
+    }, 400); // 0.4s
+  };
 
   return (
     <React.Fragment>
@@ -46,8 +64,8 @@ function App() {
 
         <Route path="/collection/:category/:id" Component={ProductPage} />
 
-        <Route path="/login" Component={Login} />
-        <Route path="/register" Component={Register} />
+        {/* <Route path="/login" Component={Login} />
+        <Route path="/register" Component={Register} /> */}
         <Route path="/cart" Component={Cart} />
 
         <Route path="/contact" Component={ContactUs} />
@@ -62,17 +80,16 @@ function App() {
           onClick={() => setChatClosed(false)}
         >
           <div>
-            <FontAwesomeIcon icon={faHeadset} size="1x" />
+            {/* <FontAwesomeIcon icon={faHeadset} size="1x" /> */}
+            <img src={Logo} alt="" style={{width: '50px'}} />
           </div>
         </div>
       ) : (
         <div
           className="chat-box chat-open"
-          onClick={() => setChatClosed(true)}
+          style={{padding: '5px'}}
         >
-          <div>
-             <FontAwesomeIcon icon={faHeadset} size="1x" />
-          </div>
+          <ChatBoxRenderer setChatClosed={setChatClosed} />
         </div>
       )}
       

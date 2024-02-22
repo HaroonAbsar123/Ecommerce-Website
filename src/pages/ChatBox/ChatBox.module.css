@@ -1,0 +1,12 @@
+.chatBoxAppear {
+    opacity: 1;
+    transition: opacity 0.4s;
+  }
+  
+  .chatBoxHidden {
+    opacity: 0;
+  }
+
+  .chatBoxClosing{
+    opacity: 1;
+  }

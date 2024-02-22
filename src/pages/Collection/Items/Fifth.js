@@ -56,7 +56,7 @@ function Fifth(){
     useEffect(() => {
       const handleResize = () => {
         setIsMobile(window.innerWidth < 900);
-        setRemPadding(window.innerWidth < 1300)
+        setRemPadding(window.innerWidth < 1200)
       };
   
       // Set initial value
@@ -82,18 +82,18 @@ function Fifth(){
 
                     <div className={classes.innerHeading} style={{position: 'relative'}}>
                         <div style={{display: 'flex', flexDirection: 'column', flex: 1}}>
-                    <img src={Logo} alt="logo" className={classes.image}/>
+                    <img src={Logo} alt="logo" className={classes.image} style={{alignSelf: remPadding ? 'center' : "flex-start"}}/>
                     <h2 className={classes.heading}>Premium Collections</h2>
                     <p className="para">Molestie vitae massa felis, aliquam lectus at. Ultricies et, quis sit fermentum aliquam et.</p>
-                    <button onClick={() => {navigate("/contact")}} className="mainButton">Contact Us</button>
+                    <button style={{alignSelf: remPadding ? 'center' : "flex-start"}} onClick={() => {navigate("/contact")}} className="mainButton">Contact Us</button>
                     </div>
                     
                     </div>
 
 
-                <div style={{transform: remPadding ? "none" : 'skewX(-10deg)' ,overflow: 'hidden' ,flex: 1, display: 'flex', justifyContent:'center', alignItems: 'center', flexWrap: isMobile? "wrap" : 'nowrap', background: '#1e1e1e', paddingTop: remPadding ? "1rem" : '3rem' }}>
+                <div style={{transform: remPadding ? "none" : 'skewX(-10deg)' ,overflow: 'hidden' ,flex: 1, display: 'flex', justifyContent:'center', alignItems: 'center', flexWrap: isMobile? "wrap" : 'nowrap', paddingTop: remPadding ? "1rem" : '3rem' }}>
                        
-                        <div style={{display: 'flex',flexDirection: 'column', transform: remPadding ? "none" : 'skewX(10deg)' }} >
+                        <div style={{display: 'flex', flexDirection: 'column', transform: remPadding ? "none" : 'skewX(10deg)' }} >
 
       <div className={classes.column}>
       

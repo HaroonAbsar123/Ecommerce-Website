@@ -30,7 +30,7 @@
     padding-bottom: 3rem;
 }
 
-@media (max-width: 1300px) {
+@media (max-width: 1200px) {
   .innerContainer {
       flex-direction: column;
 }
@@ -38,6 +38,7 @@
   text-align: center;
   padding: 10px;
   padding-bottom: 30px;
+  padding-top: 6rem;
 }
 .mainContainer{
   
@@ -84,7 +85,6 @@
     /* height: 25rem; */
     width: 25rem;
     overflow: hidden;
-    background-color: #1e1e1e;
     aspect-ratio: 1/1;
   }
 
@@ -159,9 +159,10 @@
 
   @media (max-width: 600px) {
     .column {
-      height: 12rem;
-      width: 12rem;
+      height: auto;
+      width: 40vw;
       overflow: hidden;
+      aspect-ratio: 2/2;
     }
     .image{
       max-width: 10rem;
@@ -179,20 +180,9 @@
   }
 
   
-  @media (max-width: 500px) {
-    .column {
-      height: 10rem;
-      width: 10rem;
-      overflow: hidden;
-    }
-  }
 
   @media (max-width: 370px) {
-    .column {
-      height: 8rem;
-      width: 8rem;
-      overflow: hidden;
-    }
+ 
     
     .headingSecond{
       font-size: 1rem;
@@ -227,6 +217,7 @@
     clip-path: polygon(83% 0, 100% 50%, 83% 100%, 0% 100%, 13% 52%, 0% 0%);
     overflow: hidden;
   }
+
   
   .imageFirst::before {
     content: "";

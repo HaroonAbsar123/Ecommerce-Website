@@ -39,10 +39,8 @@ function ImageCarousel({ Product, colorIndex, setColorIndex  }) {
   const { products } = useContext(ProductContext);
 
   useEffect(() => {
-    
-  console.log("COLORS", Product.colors)
       setSelectedImage(Product.colors[colorIndex].images[0]);
-  }, [id]);
+  }, [id, Product]);
 
   const handleImageClick = (image) => {
     setSelectedImage(image);
@@ -112,7 +110,8 @@ function ImageCarousel({ Product, colorIndex, setColorIndex  }) {
                   backgroundColor: "#1e1e1e",
                   color: "white",
                   borderRadius: '0px',
-                  maxHeight: '30px'
+                  maxHeight: '30px',
+                  
                 }}
                 
                   onClick={() => zoomOut()}

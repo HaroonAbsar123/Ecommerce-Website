@@ -21,10 +21,17 @@ import {
   faAddressCard,
   faChalkboardUser,
   faUser,
+  faContactCard,
+  faEye,
+  faEdit,
+  faContactBook,
+  faCartShopping,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { useContext, useState, useEffect } from "react";
 import ProductContext from "../../Context/ProductContext";
+import { faProductHunt } from "@fortawesome/free-brands-svg-icons";
+import { faRegistered } from "@fortawesome/free-regular-svg-icons";
 
 const Sidebar = ({currentUrl, setCurrentUrl}) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -77,35 +84,42 @@ const Sidebar = ({currentUrl, setCurrentUrl}) => {
           
           <li>
             <Link to="#" onClick={() => {setCurrentUrl("contactInformation")}} className={currentUrl === "contactInformation" ? "selected" : ""}>
-              <FontAwesomeIcon icon={faTachometerAlt} />
+              <FontAwesomeIcon icon={faContactCard} />
               {(windowWidth > 768 || isSidebarExpanded) && <span style={{ marginLeft: "5px" }}>Contact Info</span>}
             </Link>
           </li>
 
           <li>
             <Link to="#" onClick={() => {setCurrentUrl("addProducts")}} className={currentUrl === "addProducts" ? "selected" : ""}>
-              <FontAwesomeIcon icon={faTachometerAlt} />
+              <FontAwesomeIcon icon={faProductHunt} />
               {(windowWidth > 768 || isSidebarExpanded) && <span style={{ marginLeft: "5px" }}>Add Products</span>}
             </Link>
           </li>
 
           <li>
             <Link to="#" onClick={() => {setCurrentUrl("viewInventory")}} className={currentUrl === "viewInventory" ? "selected" : ""}>
-              <FontAwesomeIcon icon={faTachometerAlt} />
+              <FontAwesomeIcon icon={faEye} />
               {(windowWidth > 768 || isSidebarExpanded) && <span style={{ marginLeft: "5px" }}>View Inventory</span>}
             </Link>
           </li>
 
-          <li>
+          {/* <li>
             <Link to="#" onClick={() => {setCurrentUrl("editProducts")}} className={currentUrl === "editProducts" ? "selected" : ""}>
-              <FontAwesomeIcon icon={faTachometerAlt} />
+              <FontAwesomeIcon icon={faEdit} />
               {(windowWidth > 768 || isSidebarExpanded) && <span style={{ marginLeft: "5px" }}>Edit Products</span>}
+            </Link>
+          </li> */}
+
+          <li>
+            <Link to="#" onClick={() => {setCurrentUrl("orders")}} className={currentUrl === "orders" ? "selected" : ""}>
+              <FontAwesomeIcon icon={faCartShopping} />
+              {(windowWidth > 768 || isSidebarExpanded) && <span style={{ marginLeft: "5px" }}>Orders</span>}
             </Link>
           </li>
 
           <li>
             <Link to="#" onClick={() => {setCurrentUrl("addAdmin")}} className={currentUrl === "addAdmin" ? "selected" : ""}>
-              <FontAwesomeIcon icon={faTachometerAlt} />
+              <FontAwesomeIcon icon={faRegistered} />
               {(windowWidth > 768 || isSidebarExpanded) && <span style={{ marginLeft: "5px" }}>Add Admin</span>}
             </Link>
           </li>
@@ -116,7 +130,7 @@ const Sidebar = ({currentUrl, setCurrentUrl}) => {
           
           <li>
             <Link to="#" onClick={() => {setCurrentUrl("contactInformation")}} className={currentUrl === "contactInformation" ? "selected" : ""}>
-              <FontAwesomeIcon icon={faTachometerAlt} />
+              <FontAwesomeIcon icon={faContactBook} />
               {(windowWidth > 768 || isSidebarExpanded) && <span style={{ marginLeft: "5px" }}>Contact Info</span>}
             </Link>
           </li>

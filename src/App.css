@@ -13,7 +13,7 @@
     right: 20px;
     bottom: 20px;
     z-index: 999;
-    background-color: rgb(78, 78, 78);
+    background-color: #1e1e1e;
     color: white;
     font-size: 2rem;
     font-weight: bold;
@@ -24,7 +24,7 @@
     cursor: pointer;
     user-select: none;
     -webkit-user-select: none;
-    box-shadow: 0 0px 50px rgba(83, 83, 83, 0.4);
+    box-shadow: 0 0px 50px rgb(0, 0, 0, 0.5);
     border-radius: 50%;
     width: 80px;
     height: 80px;
@@ -34,28 +34,15 @@
   
   .chat-open {
     max-width: 350px;
-    height: 500px;
+    height: 600px;
     border-radius: 10px;
     font-size: 3rem;
-    width: 90vw;
+    width: 80vw;
     max-height: 80vh;
+    z-index: 9999;
+    cursor:auto;
   }
 
 
   
-body::-webkit-scrollbar {
-  width: 5px;
-}
-
-body::-webkit-scrollbar-track {
-  background: #ffffff;
-}
-
-body::-webkit-scrollbar-thumb {
-  background: #1e1e1e;
-}
-
-body::-webkit-scrollbar-thumb:hover {
-  background: #1e1e1e;
-}
 

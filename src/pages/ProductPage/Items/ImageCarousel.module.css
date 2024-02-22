@@ -29,8 +29,10 @@
     justify-content: center;
     cursor: move;
     background-color: white;
-    height: 25rem;
-    border: 2px solid #1e1e1e
+    /* height: 25rem; */
+    border: 2px solid #1e1e1e;
+    max-width: 600px;
+    aspect-ratio: 2/2.5;
   }
   
   

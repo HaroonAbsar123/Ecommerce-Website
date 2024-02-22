@@ -7,11 +7,15 @@ import ProductContext from "../../Context/ProductContext";
 import { Email, EmailOutlined } from "@mui/icons-material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShippingFast, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-
+import { database, db } from "../../firebase";
+import { getDocs, collection, where, query, onSnapshot, doc, updateDoc, getDoc, setDoc, orderBy, addDoc } from "firebase/firestore";
+import LoadingButton from '@mui/lab/LoadingButton';
+import SaveIcon from '@mui/icons-material/Save';
+import { toast } from "react-hot-toast";
 
 function Form({total,shipping, quantity, handleClose, shippingPercentage}){
 
-  const {userDetails} = useContext(ProductContext)
+  const {userDetails, cart, setCart} = useContext(ProductContext)
 
   const [name, setName] = useState(userDetails?.userName);
   const [email, setEmail] = useState(userDetails?.email);
@@ -21,14 +25,60 @@ function Form({total,shipping, quantity, handleClose, shippingPercentage}){
   const [country, setCountry] = useState(userDetails?.country ? userDetails?.country : {});
   const [zip, setZip] = useState(userDetails?.zip);
   const [phone, setPhone] = useState(userDetails?.phone);
+  const [note, setNote] = useState("");
+
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async () => {
+    if (
+    !name || !email ||!address ||!apartment ||!city ||!country ||!zip ||!name ||!phone
+    ) {
+      toast('Please fill all fields');
+    } else {
+      try{
+        setSubmitting(true)
+    const orderDetails = { 
+      name,
+      email,
+      address,
+      city,
+      country,
+      zip,
+      phone,
+      note,
+      cart,
+      submittedOn: new Date
+    };
+
+    const userListRef = collection(db, "orders");
+    const docRef = await addDoc(userListRef, orderDetails);
+
+    const docId = docRef.id;
+
+    await updateDoc(docRef, { id: docId });
+    toast.success(`Your order is submitted`)
+    setCart([]);
+    handleClose();
+    setNote("")
+
+    } catch(error){
+      toast.error("Error Ocurred")
+      console.log("Error Ocurred", error)
+    } finally{
+      setSubmitting(false);
+    }
+    }
+};
+
 
     return (
         <div style={{width: '100%'}} >
           
-          <div style={{flex: 1, textAlign: 'center', marginTop: '1rem', marginBottom: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px'}}>
+          <div style={{flex: 1, textAlign: 'center', marginTop: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '5px'}}>
               
           <FontAwesomeIcon icon={faShoppingCart} /><h2 style={{textAlign: 'center'}}>Checkout Form</h2>
           </div>
+          <p style={{marginBottom: '2rem', flex: 1, textAlign: 'center', fontSize: '1.2rem', marginTop: '0px'}}>Payment on Delivery</p>
 
         <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: '1rem', gap: '1rem', flex: 1, flexWrap: 'wrap'}}>
             <TextField style={{flex: 1}} value={name} onChange={(e) => {setName(e.target.value)}} id="outlined-basic" label="Full Name" variant="outlined" />
@@ -89,6 +139,7 @@ function Form({total,shipping, quantity, handleClose, shippingPercentage}){
         
         <TextField
           id="outlined-multiline-flexible"
+          value={note} onChange={(e) => {setNote(e.target.value)}} 
           label="Notes about your order, e.g. special notes for delivery."
           style={{width: '100%', marginBottom: '1rem'}}
           multiline
@@ -121,10 +172,11 @@ function Form({total,shipping, quantity, handleClose, shippingPercentage}){
             </div>
 
 
-            <div style={{width: '100%', borderBottom: '1px solid #ccc', flexDirection: 'row', display: 'flex', justifyContent: 'space-between', marginBottom: '1rem'}}>
+            <div style={{width: '100%', borderBottom: '1px solid #ccc', flexDirection: 'row', display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', textAlign: 'right'}}>
                 <p className="para">Total</p>
                 <div>
                 <p className="para">${(total + shipping).toFixed(2)}</p>
+                <p className="para">Payment on Delivery</p>
                 </div>
             </div>
 
@@ -132,9 +184,20 @@ function Form({total,shipping, quantity, handleClose, shippingPercentage}){
         <Button onClick={handleClose} variant="contained" color="error" >
             Cancel
         </Button>
-        <Button variant="contained" style={{backgroundColor: '#1e1e1e', color: 'white'}}>
-            Place Order
-        </Button>
+        {!submitting ? 
+      <Button onClick={handleSubmit} variant="contained" style={{backgroundColor: '#1e1e1e', color: 'white'}}>
+      Place Order
+  </Button>
+:
+      <LoadingButton
+        loading
+        loadingPosition="start"
+        startIcon={<SaveIcon />}
+        variant="outlined"
+      >
+        submitting
+      </LoadingButton>
+      }
         </div>
 
 </div>
