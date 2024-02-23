@@ -4,6 +4,7 @@ import Modal from '@mui/material/Modal';
 function CustomModal({ open, onClose, children }) {
   return (
     <Modal
+    style={{zIndex: 99999}}
       open={open}
       onClose={onClose}
     >

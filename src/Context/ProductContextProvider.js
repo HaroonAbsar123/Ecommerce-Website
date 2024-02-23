@@ -2,7 +2,7 @@ import ProductContext from "./ProductContext";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { database, db } from "../firebase";
-import { getDocs, collection, where, query, onSnapshot, doc, updateDoc, getDoc, setDoc, orderBy } from "firebase/firestore";
+import { getDocs, collection, where, query, onSnapshot, doc, updateDoc, getDoc, setDoc, orderBy, addDoc } from "firebase/firestore";
 
 import { debounce } from 'lodash';
 import Image1 from "../Assets/Products/1.png";
@@ -17,6 +17,7 @@ import Image9 from "../Assets/Products/9.png";
 import { onValue, ref } from "firebase/database";
 import Cookies from 'universal-cookie';
 import { toast } from "react-hot-toast";
+import { useId } from "react";
 
 
 const initialCoupons = [
@@ -41,7 +42,7 @@ function ProductContextProvider({ children }) {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [firstTime, setFirstTime] = useState(false);
   const [orders, setOrders] = useState([])
-
+  const [productsArray, setProductsArray] = useState([])
 
 
   
@@ -55,6 +56,52 @@ function ProductContextProvider({ children }) {
   const [dataFetched, setDataFetched] = useState(false);
   
   const [initialCart, setInitialCart] = useState(null);
+
+  const [messagesFetched, setMessagesFetched] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [newMessageLoading, setNewMessageLoading] = useState(false);
+  const DEBOUNCE_DELAY = 1000; // Adjust the debounce delay as needed
+  
+  
+  
+
+  useEffect(() => {
+    async function fetchDataHandler() {
+      const thisChatId = cookies.get("chatId");
+  
+      if (userDetails.userId || thisChatId) {
+        const chatId = userDetails.userId ? userDetails.userId : thisChatId;
+        console.log("THIS CHAT ID", chatId)
+        try {
+          const chatDocRef = doc(db, 'chat', chatId);
+          const chatDocSnapshot = await getDoc(chatDocRef);
+
+          if (chatDocSnapshot.exists()) {
+            const chatData = chatDocSnapshot.data();
+            setMessages(chatData.messages);
+            // Access the data from chatData object
+            console.log("Chat data:", chatData);
+          } else {
+            setMessages([]);
+            console.log("Chat document does not exist");
+          }
+
+        } catch (error) {
+          console.error('Error fetching chat: ', error);
+          setMessages([]);
+        }
+        setMessagesFetched(true);
+      } else {
+        setMessages([]);
+        setMessagesFetched(true);
+      }
+    }
+  
+    fetchDataHandler();
+  }, [userDetails]);
+  
+
+
 
   function CartUpdateItem(product) {
     
@@ -147,15 +194,15 @@ function ProductContextProvider({ children }) {
       const unsubscribe = onSnapshot(
         query(userListRef, orderBy('createdAt', 'desc')), // Order by 'createdAt' field in descending order
         (querySnapshot) => {
-          const products = querySnapshot.docs
+          const thisProducts = querySnapshot.docs
             .map((doc) => ({ id: doc.id, ...doc.data() })) // Include the document id in the data
   
-          if (!Array.isArray(products)) {
-            console.error('Products is not an array:', products);
+          if (!Array.isArray(thisProducts)) {
+            console.error('Products is not an array:', thisProducts);
             return;
           }
   
-          const itemsObject = products.reduce((acc, curr) => {
+          const itemsObject = thisProducts.reduce((acc, curr) => {
             const { category, ...rest } = curr;
             if (!acc[category]) {
               acc[category] = [];
@@ -164,9 +211,9 @@ function ProductContextProvider({ children }) {
             return acc;
           }, {});
   
-  
+          setProductsArray(thisProducts)
           setProducts(itemsObject);
-          console.log("products", itemsObject);
+          console.log("products", thisProducts);
         }
       );
   
@@ -285,7 +332,6 @@ function ProductContextProvider({ children }) {
   }
 
   
-const DEBOUNCE_DELAY = 1000; // Adjust the debounce delay as needed
 
   const [shouldPostCart, setShouldPostCart] = useState(false);
 
@@ -358,6 +404,7 @@ const DEBOUNCE_DELAY = 1000; // Adjust the debounce delay as needed
         firstTime, 
         dataFetched,
         orders,
+        productsArray,messages, setMessages, newMessageLoading, setNewMessageLoading, messagesFetched,
         setDataFetched,
         setFirstTime,
         setCouponApplied,

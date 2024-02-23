@@ -27,6 +27,7 @@ import ProductContext from "./Context/ProductContext";
 import ChatBox from "./pages/ChatBox/ChatBox";
 import ChatBoxRenderer from "./pages/ChatBox/ChatBoxRenderer";
 import Logo from './Assets/logo - Copy - Copy.png';
+// import { AIChatBox } from "./pages/AIChatBox/AIChatBox";
 
 
 function App() {
@@ -81,7 +82,7 @@ function App() {
         >
           <div>
             {/* <FontAwesomeIcon icon={faHeadset} size="1x" /> */}
-            <img src={Logo} alt="" style={{width: '50px'}} />
+            <img src={Logo} alt="" style={{width: '40px'}} />
           </div>
         </div>
       ) : (
@@ -89,6 +90,7 @@ function App() {
           className="chat-box chat-open"
           style={{padding: '5px'}}
         >
+          {/* <AIChatBox setChatClosed={setChatClosed} /> */}
           <ChatBoxRenderer setChatClosed={setChatClosed} />
         </div>
       )}

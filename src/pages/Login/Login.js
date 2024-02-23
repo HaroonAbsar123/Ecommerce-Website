@@ -22,6 +22,8 @@ import CustomModal from "../../components/CustomModal";
 import { Modal } from "@mui/material";
 import { toast } from "react-hot-toast";
 import { TapasTwoTone } from "@mui/icons-material";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function Login({loginTrue, open, onClose, }) {
   const navigate = useNavigate();
@@ -871,7 +873,8 @@ cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
             background: "rgba(255,255,255, 0.9)",
             borderRadius: "10px",
             marginRight:'10px',
-            marginLeft: '10px'
+            marginLeft: '10px',
+            position: 'relative'
           }}
           onClick={(e) => e.stopPropagation()}
         >
@@ -913,6 +916,28 @@ cookies.set("isLoggedIn", "true", { secure: true, sameSite: 'strict' });
           {isLogin ? <LoginForm /> : <SignUpForm />}
         </div>
         </div>
+        
+        <button
+          onClick={onClose}
+          style={{
+            top: 0,
+            right: 0,
+            position: "absolute",
+            fontSize: "1rem",
+            background: "#eee",
+            borderRadius: '0px',
+            filter: "drop-shadow(0px 5px 10px rgba(0,0,0,0.4))",
+            borderBottomLeftRadius: '5px'
+          }}
+        >
+          <FontAwesomeIcon
+            icon={faXmark}
+            style={{
+              color: "#fff",
+              color: "#1e1e1e"
+            }}
+          />
+        </button>
         </div>
         </div>
         </Modal>

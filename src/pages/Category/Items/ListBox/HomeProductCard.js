@@ -27,7 +27,7 @@ function HomeProductCard({ item, title, price, discountedPrice, category, id }) 
   const [isLogin, setIsLogin] = useState(false)
   const [showLoginModal, setShowLoginModal] = useState(false)
 
-  const { userDetails } = useContext(ProductContext);
+  const { userDetails, isUserLoggedIn } = useContext(ProductContext);
 
   const navigate=useNavigate();
 
@@ -132,7 +132,7 @@ const checkWishlist = () => {
 // Call the function when the component mounts
 useEffect(() => {
   checkWishlist();
-}, []);
+}, [isUserLoggedIn]);
 
 
 
